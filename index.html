@@ -1,107 +1,28 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Giới thiệu Công Cụ AI</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-        }
-
-        h1 {
-            background: #222;
-            color: white;
-            padding: 20px;
-            margin: 0;
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            padding: 30px;
-        }
-
-        .tool {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-        }
-
-        .tool:hover {
-            transform: scale(1.05);
-        }
-
-        .tool img {
-            width: 80px;
-            height: 80px;
-        }
-
-        .info {
-            display: none;
-            margin-top: 10px;
-            font-size: 14px;
-            color: #333;
-        }
-
-        .tool.active .info {
-            display: block;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Giới thiệu AI</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>🚀 Các Công Cụ AI Phổ Biến</h1>
-
-<div class="container">
-
-    <div class="tool" onclick="toggleInfo(this)">
-        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
-        <h3>ChatGPT</h3>
-        <div class="info">
-            ChatGPT là AI hỗ trợ trả lời câu hỏi, viết nội dung, lập trình và học tập.
-        </div>
-    </div>
-
-    <div class="tool" onclick="toggleInfo(this)">
-        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png">
-        <h3>Midjourney</h3>
-        <div class="info">
-            Midjourney giúp tạo hình ảnh từ mô tả văn bản bằng AI.
-        </div>
-    </div>
-
-    <div class="tool" onclick="toggleInfo(this)">
-        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712054.png">
-        <h3>Copilot</h3>
-        <div class="info">
-            GitHub Copilot hỗ trợ lập trình viên viết code nhanh hơn.
-        </div>
-    </div>
-
-    <div class="tool" onclick="toggleInfo(this)">
-        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712133.png">
-        <h3>Canva AI</h3>
-        <div class="info">
-            Canva AI hỗ trợ thiết kế đồ họa và tạo nội dung dễ dàng.
-        </div>
-    </div>
-
+<div class="menu">
+  <a href="index.html">Trang chủ</a>
+  <a href="ai.html">AI phổ biến</a>
 </div>
 
-<script>
-    function toggleInfo(element) {
-        element.classList.toggle("active");
-    }
-</script>
+<h1>Trí tuệ nhân tạo (AI)</h1>
+
+<p>
+AI (Artificial Intelligence) là công nghệ giúp máy tính
+biết suy nghĩ, học tập và hỗ trợ con người.
+</p>
+
+<p>
+Ngày nay AI được dùng rất nhiều trong học tập, làm việc,
+thiết kế, viết văn, trò chuyện...
+</p>
 
 </body>
 </html>
