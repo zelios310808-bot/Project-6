@@ -1,117 +1,201 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Artificial Intelligence Systems</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <title>Artificial Intelligence</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- CSS riêng cho trang AI -->
+  <style>
+    .ai-container {
+      max-width: 1100px;
+      margin: 60px auto;
+      padding: 0 20px;
+    }
+
+    .ai-title {
+      text-align: center;
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    .ai-desc {
+      text-align: center;
+      color: #666;
+      margin-bottom: 50px;
+    }
+
+    .ai-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+    }
+
+    .ai-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .ai-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .ai-basic {
+      text-align: center;
+    }
+
+    .ai-basic img {
+      width: 90px;
+      height: 90px;
+      object-fit: contain;
+      margin-bottom: 15px;
+    }
+
+    .ai-basic h3 {
+      margin: 5px 0;
+      font-size: 20px;
+    }
+
+    .ai-short {
+      color: #777;
+      font-size: 14px;
+    }
+
+    .ai-detail {
+      margin-top: 15px;
+      font-size: 14px;
+      line-height: 1.6;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+
+    .ai-card.active .ai-detail {
+      max-height: 500px;
+    }
+
+    .ai-link {
+      display: inline-block;
+      margin-top: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      color: #1a73e8;
+    }
+  </style>
 </head>
+
 <body>
 
-<header class="navbar">
-  <div class="nav-left">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" class="logo-img">
-    <span class="logo-text">AI GROUP</span>
-  </div>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="artificialintelligence.html">What is AI?</a>
-    <a href="information.html">Applications</a>
-    <a href="minigame.html">Minigame</a>
-  </nav>
-</header>
+  <!-- NAVBAR -->
+  <header>
+    <nav class="navbar">
+      <a href="index.html">Home</a>
+      <a href="artificialintelligence.html" class="active">AI</a>
+      <a href="gtvapcnv.html">Author</a>
+    </nav>
+  </header>
 
-<main class="ai-blog">
+  <!-- CONTENT -->
+  <section class="ai-container">
+    <h1 class="ai-title">Artificial Intelligence</h1>
+    <p class="ai-desc">
+      Các hệ thống trí tuệ nhân tạo tiêu biểu đang ảnh hưởng mạnh mẽ đến công nghệ và xã hội hiện nay.
+    </p>
 
-  <h1 class="page-title">FAMOUS AI SYSTEMS</h1>
+    <div class="ai-grid">
 
-  <!-- ===== CATEGORY ===== -->
-  <h2 class="ai-category"><i class="fa-solid fa-comments"></i> Conversational AI</h2>
-
-  <div class="ai-item" onclick="toggleAI(this)">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg">
-    <div>
-      <h3>ChatGPT</h3>
-      <p class="ai-short">Advanced conversational AI developed by OpenAI.</p>
-
-      <div class="ai-content">
-        <p><b>Overview:</b> ChatGPT is a large language model capable of understanding and generating human-like text.</p>
-        <p><b>Applications:</b> Education, programming, writing, customer support.</p>
-        <p><b>Strengths:</b> Natural conversation, fast responses, broad knowledge.</p>
-        <p><b>Coverage:</b> Used globally by millions of users.</p>
+      <!-- ChatGPT -->
+      <div class="ai-card" onclick="toggleAI(this)">
+        <div class="ai-basic">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg">
+          <h3>ChatGPT</h3>
+          <p class="ai-short">AI hội thoại thông minh</p>
+        </div>
+        <div class="ai-detail">
+          <p><b>Giới thiệu:</b> Mô hình ngôn ngữ lớn do OpenAI phát triển.</p>
+          <p><b>Công dụng:</b> Trò chuyện, học tập, lập trình, viết nội dung.</p>
+          <p><b>Điểm mạnh:</b> Phản hồi tự nhiên, tư duy logic.</p>
+          <p><b>Độ bao phủ:</b> Hàng trăm triệu người dùng toàn cầu.</p>
+          <a class="ai-link" href="https://chat.openai.com" target="_blank">🌐 Trang chủ ChatGPT</a>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <!-- ===== CATEGORY ===== -->
-  <h2 class="ai-category"><i class="fa-solid fa-brain"></i> Strategic & Research AI</h2>
-
-  <div class="ai-item" onclick="toggleAI(this)">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Google_DeepMind_logo.svg">
-    <div>
-      <h3>AlphaGo</h3>
-      <p class="ai-short">AI system created by DeepMind to master the game of Go.</p>
-
-      <div class="ai-content">
-        <p><b>Overview:</b> AlphaGo demonstrated that AI can outperform humans in complex strategic tasks.</p>
-        <p><b>Applications:</b> Game AI, research, optimization problems.</p>
-        <p><b>Strengths:</b> Self-learning, strategic reasoning.</p>
-        <p><b>Coverage:</b> Internationally recognized breakthrough AI.</p>
+      <!-- Gemini -->
+      <div class="ai-card" onclick="toggleAI(this)">
+        <div class="ai-basic">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/Google_Gemini_logo.svg">
+          <h3>Gemini</h3>
+          <p class="ai-short">AI đa phương thức của Google</p>
+        </div>
+        <div class="ai-detail">
+          <p><b>Giới thiệu:</b> AI do Google DeepMind phát triển.</p>
+          <p><b>Công dụng:</b> Xử lý văn bản, hình ảnh, code.</p>
+          <p><b>Điểm mạnh:</b> Tích hợp hệ sinh thái Google.</p>
+          <p><b>Độ bao phủ:</b> Người dùng Google trên toàn thế giới.</p>
+          <a class="ai-link" href="https://deepmind.google/technologies/gemini/" target="_blank">🌐 Trang chủ Gemini</a>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <!-- ===== CATEGORY ===== -->
-  <h2 class="ai-category"><i class="fa-solid fa-car"></i> Autonomous Systems</h2>
-
-  <div class="ai-item" onclick="toggleAI(this)">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Tesla_logo.png">
-    <div>
-      <h3>Tesla Autopilot</h3>
-      <p class="ai-short">AI-powered autonomous driving technology.</p>
-
-      <div class="ai-content">
-        <p><b>Overview:</b> Tesla Autopilot assists drivers using computer vision and deep learning.</p>
-        <p><b>Applications:</b> Self-driving cars, traffic safety.</p>
-        <p><b>Strengths:</b> Real-time decision making.</p>
-        <p><b>Coverage:</b> Deployed in many countries worldwide.</p>
+      <!-- Claude -->
+      <div class="ai-card" onclick="toggleAI(this)">
+        <div class="ai-basic">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Anthropic_logo.svg">
+          <h3>Claude</h3>
+          <p class="ai-short">AI phân tích & viết học thuật</p>
+        </div>
+        <div class="ai-detail">
+          <p><b>Giới thiệu:</b> AI do Anthropic phát triển.</p>
+          <p><b>Công dụng:</b> Viết báo cáo, phân tích dữ liệu.</p>
+          <p><b>Điểm mạnh:</b> Văn phong rõ ràng, an toàn.</p>
+          <p><b>Độ bao phủ:</b> Người dùng doanh nghiệp & học thuật.</p>
+          <a class="ai-link" href="https://www.anthropic.com" target="_blank">🌐 Trang chủ Claude</a>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <!-- ===== CATEGORY ===== -->
-  <h2 class="ai-category"><i class="fa-solid fa-eye"></i> Computer Vision</h2>
-
-  <div class="ai-item" onclick="toggleAI(this)">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2d/OpenCV_Logo_with_text_svg_version.svg">
-    <div>
-      <h3>OpenCV AI</h3>
-      <p class="ai-short">Computer vision AI library.</p>
-
-      <div class="ai-content">
-        <p><b>Overview:</b> OpenCV enables machines to interpret visual information.</p>
-        <p><b>Applications:</b> Face recognition, medical imaging, surveillance.</p>
-        <p><b>Strengths:</b> High performance, real-time processing.</p>
-        <p><b>Coverage:</b> Widely used in academia and industry.</p>
+      <!-- DeepSeek -->
+      <div class="ai-card" onclick="toggleAI(this)">
+        <div class="ai-basic">
+          <img src="https://avatars.githubusercontent.com/u/148291120?s=200&v=4">
+          <h3>DeepSeek</h3>
+          <p class="ai-short">AI mã nguồn mở</p>
+        </div>
+        <div class="ai-detail">
+          <p><b>Giới thiệu:</b> AI tập trung vào reasoning và lập trình.</p>
+          <p><b>Công dụng:</b> Viết code, phân tích logic.</p>
+          <p><b>Điểm mạnh:</b> Hiệu quả cao, cộng đồng dev lớn.</p>
+          <p><b>Độ bao phủ:</b> Phổ biến trong giới lập trình.</p>
+          <a class="ai-link" href="https://www.deepseek.com" target="_blank">🌐 Trang chủ DeepSeek</a>
+        </div>
       </div>
+
+      <!-- Copilot -->
+      <div class="ai-card" onclick="toggleAI(this)">
+        <div class="ai-basic">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/GitHub_Copilot_logo.svg">
+          <h3>GitHub Copilot</h3>
+          <p class="ai-short">AI hỗ trợ lập trình</p>
+        </div>
+        <div class="ai-detail">
+          <p><b>Giới thiệu:</b> AI do GitHub & OpenAI phát triển.</p>
+          <p><b>Công dụng:</b> Gợi ý code trong IDE.</p>
+          <p><b>Điểm mạnh:</b> Tăng tốc độ viết code.</p>
+          <p><b>Độ bao phủ:</b> Dev toàn cầu.</p>
+          <a class="ai-link" href="https://github.com/features/copilot" target="_blank">🌐 Trang chủ Copilot</a>
+        </div>
+      </div>
+
     </div>
-  </div>
+  </section>
 
-</main>
-
-<footer>
-  © 2026 • Artificial Intelligence Presentation
-</footer>
-
-<script>
-  function toggleAI(item) {
-    item.classList.toggle("active");
-  }
-</script>
+  <script>
+    function toggleAI(card) {
+      card.classList.toggle("active");
+    }
+  </script>
 
 </body>
 </html>
-
