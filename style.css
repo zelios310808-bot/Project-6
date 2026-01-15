@@ -383,6 +383,28 @@ footer {
   margin-top: 12px;
 }
 
+.ai-card img {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  margin-bottom: 12px;
+   
+}
+.ai-detail {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.ai-card.active .ai-detail {
+  max-height: 400px;
+}
+
+
+
+
+
+
 
 
 
