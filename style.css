@@ -281,4 +281,41 @@ footer {
   transform: translateY(-6px) scale(1.2);
   text-shadow: 0 0 15px #38bdf8;
 }
+/* =======================
+   SOCIAL / CONTACT
+======================= */
+.social {
+  text-align: center;
+  padding: 80px 0;
+  background: #020617;
+  border-top: 1px solid #1e293b;
+}
+
+.social h3 {
+  font-size: 32px;
+  letter-spacing: 3px;
+  margin-bottom: 40px;
+  color: #38bdf8;
+  text-shadow: 0 0 15px #38bdf855;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+}
+
+.social-icons a {
+  font-size: 48px; /* TO HƠN */
+  color: #38bdf8;
+  transition: 0.3s;
+}
+
+.social-icons a:hover {
+  color: white;
+  transform: translateY(-8px) scale(1.25);
+  text-shadow: 0 0 25px #38bdf8;
+}
+
+
 
