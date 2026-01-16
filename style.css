@@ -425,6 +425,35 @@ footer {
       transparent 6px
     ),
     repe
+/* ===== FIX FAQ TOGGLE ===== */
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.5s ease;
+}
+
+.faq-answer img {
+  width: 100%;
+  max-height: 260px;
+  object-fit: cover;
+  border-radius: 14px;
+  margin-bottom: 15px;
+}
+
+.faq-answer p {
+  color: #cfd8ff;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* Khi mở */
+.faq-item.open .faq-answer {
+  max-height: 1000px;
+  opacity: 1;
+  margin-top: 15px;
+}
+
 
 
 
