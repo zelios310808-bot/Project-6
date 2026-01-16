@@ -368,6 +368,76 @@ footer {
   max-height: 500px;
   padding-bottom: 20px;
 }
+/* ======================
+   FAQ FIX (IMAGE + TEXT)
+====================== */
+
+.faq-item {
+  background: rgba(255,255,255,0.03);
+  border-radius: 14px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.faq-question {
+  cursor: pointer;
+  padding: 18px 22px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #7df9ff;
+}
+
+.faq-question i {
+  transition: transform 0.3s ease;
+}
+
+/* MẶC ĐỊNH ẨN */
+.faq-answer {
+  display: none;
+  padding: 20px 22px 26px;
+  animation: fadeIn 0.35s ease;
+}
+
+/* KHI MỞ */
+.faq-item.open .faq-answer {
+  display: block;
+}
+
+.faq-item.open .faq-question i {
+  transform: rotate(180deg);
+}
+
+/* ẢNH FAQ */
+.faq-answer img {
+  width: 100%;
+  max-height: 260px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 14px;
+  display: block;
+}
+
+/* TEXT FAQ */
+.faq-answer p {
+  color: #dcefff;
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+/* ANIMATION */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 /* ===== GLOSSARY ===== */
 .glossary-section {
@@ -425,34 +495,7 @@ footer {
       transparent 6px
     ),
     repe
-/* ===== FIX FAQ TOGGLE ===== */
-.faq-answer {
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition: all 0.5s ease;
-}
 
-.faq-answer img {
-  width: 100%;
-  max-height: 260px;
-  object-fit: cover;
-  border-radius: 14px;
-  margin-bottom: 15px;
-}
-
-.faq-answer p {
-  color: #cfd8ff;
-  font-size: 15px;
-  line-height: 1.7;
-}
-
-/* Khi mở */
-.faq-item.open .faq-answer {
-  max-height: 1000px;
-  opacity: 1;
-  margin-top: 15px;
-}
 
 
 
