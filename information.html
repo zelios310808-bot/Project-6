@@ -1,1 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Applications</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS chung -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: radial-gradient(circle at top, #0a0f2c, #050816);
+            color: #e6e6ff;
+        }
+
+        .section {
+            padding: 80px 8%;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: #7df9ff;
+            text-shadow: 0 0 15px rgba(125,249,255,0.6);
+        }
+
+        /* ===== AI CARDS ===== */
+        .ai-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 25px;
+        }
+
+        .ai-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(125,249,255,0.2);
+            border-radius: 18px;
+            padding: 25px;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ai-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 25px rgba(125,249,255,0.3);
+        }
+
+        .ai-card h3 {
+            color: #7df9ff;
+            margin-bottom: 10px;
+        }
+
+        .ai-info {
+            max-height: 0;
+            overflow: hidden;
+            transition: 0.4s ease;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .ai-card.active .ai-info {
+            max-height: 300px;
+            margin-top: 15px;
+        }
+
+        /* ===== APPLICATIONS ===== */
+        .app-item {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 40px;
+            align-items: center;
+            margin-bottom: 80px;
+        }
+
+        .app-item img {
+            width: 100%;
+            border-radius: 18px;
+            box-shadow: 0 0 30px rgba(125,249,255,0.25);
+        }
+
+        .app-text h3 {
+            color: #7df9ff;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            border-top: 1px solid rgba(125,249,255,0.2);
+            color: #aaa;
+        }
+
+        @media (max-width: 900px) {
+            .app-item {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ===== NAVBAR (GIỮ NGUYÊN STRUCTURE CŨ) ===== -->
+<header class="navbar">
+    <h2 class="logo">AI World</h2>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="artificialintelligence.html">AI</a>
+        <a href="information.html" class="active">Applications</a>
+        <a href="minigame.html">Mini Game</a>
+    </nav>
+</header>
+
+<!-- ===== POPULAR AI ===== -->
+<section class="section">
+    <h2 class="section-title">Popular AI Systems</h2>
+
+    <div class="ai-grid">
+
+        <div class="ai-card" onclick="toggle(this)">
+            <h3>ChatGPT</h3>
+            <div class="ai-info">
+                <p><b>Strength:</b> Natural language, fast responses</p>
+                <p><b>Weakness:</b> May hallucinate</p>
+                <p><b>Use:</b> Chatbot, learning, writing</p>
+            </div>
+        </div>
+
+        <div class="ai-card" onclick="toggle(this)">
+            <h3>Midjourney</h3>
+            <div class="ai-info">
+                <p><b>Strength:</b> High-quality AI art</p>
+                <p><b>Weakness:</b> No free version</p>
+                <p><b>Use:</b> Digital art, concept design</p>
+            </div>
+        </div>
+
+        <div class="ai-card" onclick="toggle(this)">
+            <h3>DALL·E</h3>
+            <div class="ai-info">
+                <p><b>Strength:</b> Image generation from text</p>
+                <p><b>Weakness:</b> Limited realism</p>
+                <p><b>Use:</b> Illustration, creativity</p>
+            </div>
+        </div>
+
+        <div class="ai-card" onclick="toggle(this)">
+            <h3>Google Gemini</h3>
+            <div class="ai-info">
+                <p><b>Strength:</b> Multi-modal AI</p>
+                <p><b>Weakness:</b> Still evolving</p>
+                <p><b>Use:</b> Search, assistant</p>
+            </div>
+        </div>
+
+        <div class="ai-card" onclick="toggle(this)">
+            <h3>Siri</h3>
+            <div class="ai-info">
+                <p><b>Strength:</b> Voice control</p>
+                <p><b>Weakness:</b> Limited context</p>
+                <p><b>Use:</b> Smart assistant</p>
+            </div>
+        </div>
+
+        <div class="ai-card" onclick="toggle(this)">
+            <h3>Alexa</h3>
+            <div class="ai-info">
+                <p><b>Strength:</b> Smart home control</p>
+                <p><b>Weakness:</b> Privacy concerns</p>
+                <p><b>Use:</b> IoT, home automation</p>
+            </div>
+        </div>
+
+        <div class="ai-card" onclick="toggle(this)">
+            <h3>Tesla Autopilot</h3>
+            <div class="ai-info">
+                <p><b>Strength:</b> Autonomous driving</p>
+                <p><b>Weakness:</b> Needs supervision</p>
+                <p><b>Use:</b> Self-driving cars</p>
+            </div>
+        </div>
+
+        <div class="ai-card" onclick="toggle(this)">
+            <h3>IBM Watson</h3>
+            <div class="ai-info">
+                <p><b>Strength:</b> Data analytics</p>
+                <p><b>Weakness:</b> Complex setup</p>
+                <p><b>Use:</b> Healthcare, business</p>
+            </div>
+        </div>
+
+        <div class="ai-card" onclick="toggle(this)">
+            <h3>DeepL</h3>
+            <div class="ai-info">
+                <p><b>Strength:</b> Accurate translation</p>
+                <p><b>Weakness:</b> Limited languages</p>
+                <p><b>Use:</b> Language translation</p>
+            </div>
+        </div>
+
+        <div class="ai-card" onclick="toggle(this)">
+            <h3>Grammarly</h3>
+            <div class="ai-info">
+                <p><b>Strength:</b> Writing correction</p>
+                <p><b>Weakness:</b> Style limits</p>
+                <p><b>Use:</b> Grammar & writing</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ===== APPLICATIONS ===== -->
+<section class="section">
+    <h2 class="section-title">AI in Daily Life</h2>
+
+    <div class="app-item">
+        <img src="https://images.unsplash.com/photo-1605902711622-cfb43c4437b5">
+        <div class="app-text">
+            <h3>Smart Assistants</h3>
+            <p>AI helps users manage schedules, reminders, and voice commands.</p>
+        </div>
+    </div>
+
+    <div class="app-item">
+        <img src="https://images.unsplash.com/photo-1581092919535-7146a5e9b7f4">
+        <div class="app-text">
+            <h3>Healthcare</h3>
+            <p>AI assists doctors in diagnosis, medical imaging, and patient care.</p>
+        </div>
+    </div>
+
+    <div class="app-item">
+        <img src="https://images.unsplash.com/photo-1559526324-593bc073d938">
+        <div class="app-text">
+            <h3>Finance</h3>
+            <p>AI detects fraud, manages investments, and analyzes market trends.</p>
+        </div>
+    </div>
+
+    <div class="app-item">
+        <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d">
+        <div class="app-text">
+            <h3>Education</h3>
+            <p>Personalized learning paths and AI tutors improve education.</p>
+        </div>
+    </div>
+
+    <div class="app-item">
+        <img src="https://images.unsplash.com/photo-1492724441997-5dc865305da7">
+        <div class="app-text">
+            <h3>Entertainment</h3>
+            <p>AI recommends movies, music, and creates digital content.</p>
+        </div>
+    </div>
+
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+    © 2026 • Created by Nhomnaymanh
+</footer>
+
+<script>
+    function toggle(card) {
+        card.classList.toggle("active");
+    }
+</script>
+
+</body>
+</html>
 
