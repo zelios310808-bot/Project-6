@@ -1,91 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Artificial Intelligence</title>
-  <link rel="stylesheet" href="style.css">
- </head>
+  <meta charset="UTF-8">
+  <title>Artificial Intelligence | FAQ & Glossary</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
 <body>
 
-  <!-- NAVBAR -->
-  <header>
-    <div class="navbar">
-      <div class="logo">AI</div>
-      <nav>
-        <a href="index.html">Home</a>
-        <a href="author.html">Author</a>
-        <a href="artificialintelligence.html">AI</a>
-        <a href="applications.html">Applications</a>
-        <a href="minigame.html">Minigame</a>      
-      </nav>
-    </div>
-  </header>
+<!-- =======================
+     NAVBAR (GIỮ NGUYÊN)
+======================== -->
+<header class="navbar">
+  <div class="nav-left">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" class="logo-img">
+    <span class="logo-text">NhomNayManh</span>
+  </div>
 
-  <!-- MAIN CONTENT -->
-  <main>
-    <section class="ai-section">
-      <h1 class="ai-title">Artificial Intelligence</h1>
-      <p class="ai-desc">
-        Popular artificial intelligence systems that are shaping the modern world
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="gtvapcnv.html">Author</a>
+    <a href="artificialintelligence.html" class="active">AI</a>
+    <a href="information.html">Applications</a>
+    <a href="minigame.html">Minigame</a>
+  </nav>
+</header>
+
+<!-- =======================
+     FAQ SECTION
+======================== -->
+<section class="faq-section">
+  <h1 class="section-title">AI Frequently Asked Questions</h1>
+
+  <div class="faq-item">
+    <button class="faq-question">What is Artificial Intelligence (AI)?</button>
+    <div class="faq-answer">
+      <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995">
+      <p>
+        Artificial Intelligence (AI) is a branch of computer science that aims to create systems capable of performing tasks that typically require human intelligence, such as visual perception, speech recognition, decision-making, and language translation.
       </p>
+    </div>
+  </div>
 
-      <div class="ai-grid">
+  <div class="faq-item">
+    <button class="faq-question">What is the difference between AI and Machine Learning?</button>
+    <div class="faq-answer">
+      <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c">
+      <p>
+        AI is the broad concept of machines being able to act intelligently.
+        Machine Learning (ML) is a subset of AI that allows systems to learn from data, identify patterns, and improve automatically.
+      </p>
+    </div>
+  </div>
 
-        <div class="ai-card">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" alt="ChatGPT">
-          <h3>ChatGPT</h3>
-          <p>
-            A conversational AI developed by OpenAI, capable of understanding and generating human-like text.
-          </p>
-          <a href="https://chat.openai.com" target="_blank">Official Website</a>
-        </div>
+  <div class="faq-item">
+    <button class="faq-question">What is Generative AI?</button>
+    <div class="faq-answer">
+      <img src="https://images.unsplash.com/photo-1686191128892-3e0f5f6fbb8d">
+      <p>
+        Generative AI is capable of generating text, images, music, or code based on prompts. Examples include ChatGPT and Midjourney.
+      </p>
+    </div>
+  </div>
 
-        <div class="ai-card">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Google_Gemini_logo.svg" alt="Gemini">
-          <h3>Gemini</h3>
-          <p>
-            Google’s multimodal AI designed to work with text, images, code, and more.
-          </p>
-          <a href="https://gemini.google.com" target="_blank">Official Website</a>
-        </div>
+  <div class="faq-item">
+    <button class="faq-question">How does AI learn?</button>
+    <div class="faq-answer">
+      <img src="https://images.unsplash.com/photo-1504639725590-34d0984388bd">
+      <p>
+        AI learns through training. Large datasets are processed to discover patterns, allowing the system to make predictions or generate new content.
+      </p>
+    </div>
+  </div>
 
-        <div class="ai-card">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Claude_AI_logo.svg" alt="Claude">
-          <h3>Claude</h3>
-          <p>
-            An AI assistant focused on reasoning, analysis, and academic writing.
-          </p>
-          <a href="https://claude.ai" target="_blank">Official Website</a>
-        </div>
+  <div class="faq-item">
+    <button class="faq-question">Can AI replace human jobs?</button>
+    <div class="faq-answer">
+      <img src="https://images.unsplash.com/photo-1605902711622-cfb43c44367f">
+      <p>
+        AI can automate repetitive tasks but also creates new job opportunities and enhances human productivity instead of fully replacing people.
+      </p>
+    </div>
+  </div>
 
-        <div class="ai-card">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/GitHub_Copilot_logo.svg" alt="GitHub Copilot">
-          <h3>GitHub Copilot</h3>
-          <p>
-            An AI-powered coding assistant that helps developers write code faster.
-          </p>
-          <a href="https://github.com/features/copilot" target="_blank">Official Website</a>
-        </div>
+  <div class="faq-item">
+    <button class="faq-question">What are "Hallucinations" in AI?</button>
+    <div class="faq-answer">
+      <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485">
+      <p>
+        Hallucinations occur when an AI generates answers that appear confident and logical but are factually incorrect or meaningless.
+      </p>
+    </div>
+  </div>
 
-        <div class="ai-card">
-          <img src="https://avatars.githubusercontent.com/u/148330874?s=200&v=4" alt="DeepSeek">
-          <h3>DeepSeek</h3>
-          <p>
-            An open-source AI model focused on reasoning, research, and transparency.
-          </p>
-          <a href="https://www.deepseek.com" target="_blank">Official Website</a>
-        </div>
+  <div class="faq-item">
+    <button class="faq-question">Is AI dangerous?</button>
+    <div class="faq-answer">
+      <img src="https://images.unsplash.com/photo-1600267165477-6d4f66e9e9a6">
+      <p>
+        AI carries risks such as bias, privacy concerns, and misuse, but ethical guidelines and regulations are being developed to ensure safe usage.
+      </p>
+    </div>
+  </div>
 
-      </div>
-    </section>
-  </main>
+  <div class="faq-item">
+    <button class="faq-question">What is a Prompt?</button>
+    <div class="faq-answer">
+      <img src="https://images.unsplash.com/photo-1581091215367-59ab6b6c1c68">
+      <p>
+        A prompt is an instruction given to an AI model. The quality of the output depends heavily on how clear and detailed the prompt is.
+      </p>
+    </div>
+  </div>
+</section>
 
-  <!-- FOOTER -->
-  <footer>
-    © 2026 Artificial Intelligence Website | Educational Project
-  </footer>
+<!-- =======================
+     GLOSSARY SECTION
+======================== -->
+<section class="glossary-section">
+  <h1 class="section-title">AI Glossary</h1>
+
+  <div class="glossary-grid">
+    <div class="term-card">
+      <h3>Neural Network</h3>
+      <p>
+        A system inspired by the human brain, consisting of connected nodes that process and learn from data.
+      </p>
+    </div>
+
+    <div class="term-card">
+      <h3>Dataset</h3>
+      <p>
+        A collection of structured or unstructured data used to train AI models.
+      </p>
+    </div>
+
+    <div class="term-card">
+      <h3>Algorithm</h3>
+      <p>
+        A set of instructions that an AI system follows to solve problems or make decisions.
+      </p>
+    </div>
+
+    <div class="term-card">
+      <h3>Deep Learning</h3>
+      <p>
+        A subset of Machine Learning that uses deep neural networks to model complex patterns.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- =======================
+     FOOTER
+======================== -->
+<footer>
+  © 2026 • Artificial Intelligence • Created by NhomNayManh
+</footer>
 
 </body>
 </html>
