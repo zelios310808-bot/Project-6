@@ -1,266 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>How AI Thinks</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>How AI Thinks | Mini Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-body{
-    background: radial-gradient(circle at top, #0a0f2c, #050816);
-    color:#e6e6ff;
-    margin:0;
-}
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 
-/* ===== GAME ===== */
-.game-container{
-    max-width:900px;
-    margin:120px auto 80px;
-    padding:40px;
-    background:rgba(255,255,255,0.04);
-    border-radius:20px;
-    border:1px solid rgba(125,249,255,0.2);
-    box-shadow:0 0 30px rgba(125,249,255,0.15);
-}
+  <style>
+    body {
+      background: radial-gradient(circle at top, #0a0f2c, #050816);
+      color: #e6e6ff;
+    }
 
-.game-title{
-    text-align:center;
-    font-size:32px;
-    color:#7df9ff;
-    margin-bottom:20px;
-}
+    .game-container {
+      max-width: 900px;
+      margin: 140px auto 80px;
+      padding: 40px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(125,249,255,0.2);
+      border-radius: 20px;
+      box-shadow: 0 0 40px rgba(125,249,255,0.2);
+    }
 
-.timer{
-    text-align:center;
-    font-size:18px;
-    margin-bottom:25px;
-    color:#ffb347;
-}
+    .game-title {
+      text-align: center;
+      color: #7df9ff;
+      font-size: 2.6rem;
+      margin-bottom: 10px;
+      text-shadow: 0 0 15px rgba(125,249,255,0.6);
+    }
 
-.question{
-    font-size:20px;
-    margin-bottom:25px;
-}
+    .game-desc {
+      text-align: center;
+      opacity: 0.85;
+      margin-bottom: 30px;
+    }
 
-.options{
-    display:grid;
-    gap:15px;
-}
+    .start-screen { text-align: center; }
 
-.option{
-    padding:15px 20px;
-    border-radius:12px;
-    border:1px solid rgba(125,249,255,0.3);
-    background:rgba(0,0,0,0.3);
-    cursor:pointer;
-    transition:.3s;
-}
+    .start-btn {
+      padding: 14px 40px;
+      font-size: 1.1rem;
+      border-radius: 30px;
+      border: none;
+      background: linear-gradient(135deg,#7df9ff,#4facfe);
+      color: #000;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 0 20px rgba(125,249,255,0.6);
+    }
 
-.option:hover{
-    background:rgba(125,249,255,0.15);
-}
+    .question { font-size: 1.3rem; margin-bottom: 25px; }
 
-.option.correct{
-    background:rgba(0,255,150,0.25);
-    border-color:#00ff99;
-}
+    .options { display: grid; gap: 15px; }
 
-.option.wrong{
-    background:rgba(255,80,80,0.25);
-    border-color:#ff5050;
-}
+    .option {
+      padding: 14px 20px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(125,249,255,0.25);
+      cursor: pointer;
+      transition: 0.3s;
+    }
 
-.next-btn, .start-btn{
-    margin-top:30px;
-    padding:14px 30px;
-    font-size:16px;
-    border:none;
-    border-radius:30px;
-    cursor:pointer;
-    background:#7df9ff;
-    color:#000;
-    display:none;
-}
+    .option:hover { background: rgba(125,249,255,0.15); }
+    .option.correct { background: rgba(0,255,170,0.25); border-color: #00ffb3; }
+    .option.wrong { background: rgba(255,80,80,0.25); border-color: #ff5050; }
 
-.start-btn{
-    display:block;
-    margin:40px auto 0;
-}
+    .timer { margin-bottom: 15px; color: #7df9ff; font-weight: bold; }
 
-.end-screen{
-    text-align:center;
-}
+    .explanation {
+      margin-top: 25px;
+      padding: 20px;
+      border-left: 4px solid #7df9ff;
+      background: rgba(125,249,255,0.08);
+      display: none;
+    }
 
-.score{
-    font-size:36px;
-    color:#7df9ff;
-    margin:20px 0;
-}
-</style>
+    .next-btn {
+      margin-top: 25px;
+      padding: 10px 28px;
+      border-radius: 25px;
+      border: none;
+      cursor: pointer;
+      background: #7df9ff;
+      color: #000;
+      font-weight: bold;
+      display: none;
+    }
+
+    .final-score {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 1.4rem;
+      color: #7df9ff;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      border-top: 1px solid rgba(125,249,255,0.2);
+      color: #aaa;
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- ===== NAVBAR (Y CHANG INDEX.HTML) ===== -->
 <header class="navbar">
-    <h2 class="logo">AI World</h2>
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="artificialintelligence.html">AI</a>
-        <a href="information.html">Applications</a>
-        <a href="minigame.html" class="active">Mini Game</a>
-    </nav>
+  <div class="nav-left">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" class="logo-img">
+    <span class="logo-text">NhomNayManh</span>
+  </div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="gtvapcnv.html">Author</a>
+    <a href="artificialintelligence.html">AI</a>
+    <a href="information.html">Applications</a>
+    <a href="minigame.html" class="active">Minigame</a>
+  </nav>
 </header>
 
-<div class="game-container" id="game">
-    <h2 class="game-title">How AI Thinks</h2>
-    <p style="text-align:center;opacity:.85">
-        Explore how AI reasons through logic and real-world dilemmas.
-    </p>
-    <button class="start-btn" onclick="startGame()">Start</button>
+<div class="game-container">
+  <h1 class="game-title">How AI Thinks</h1>
+  <p class="game-desc">Understand how AI reasons in logic problems and real-world ethical situations.</p>
+
+  <div class="start-screen">
+    <button class="start-btn" onclick="startGame()">Start Game</button>
+  </div>
+
+  <div class="game-screen" style="display:none">
+    <div class="timer">Time left: <span id="time">12</span>s</div>
+    <div class="question" id="question"></div>
+    <div class="options" id="options"></div>
+    <div class="explanation" id="explanation"></div>
+    <button class="next-btn" onclick="nextQuestion()">Next</button>
+  </div>
 </div>
 
 <footer>
-    © 2026 • Created by Nhomnaymanh
+  © 2026 • Artificial Intelligence • Created by NhomNayManh
 </footer>
 
 <script>
-const questions = [
-/* ===== 8 TÌNH HUỐNG ===== */
-{
-q:"A self-driving car detects a child suddenly crossing the road. What will AI prioritize?",
-options:["Speed up to pass quickly","Apply emergency braking","Ignore due to rules","Ask passenger"],
-answer:1
-},
-{
-q:"AI moderates social media and finds harmful content. What should it do?",
-options:["Delete everything","Report and limit spread","Ignore","Expose user"],
-answer:1
-},
-{
-q:"An AI doctor detects early cancer with 70% certainty. What is the best action?",
-options:["Ignore result","Suggest further tests","Announce publicly","Auto treatment"],
-answer:1
-},
-{
-q:"AI controls traffic lights and detects an ambulance. What should it do?",
-options:["Keep normal flow","Stop all traffic","Prioritize ambulance","Turn off lights"],
-answer:2
-},
-{
-q:"AI hiring system notices bias in past data. What is the ethical choice?",
-options:["Use data anyway","Adjust algorithm","Fire HR","Stop hiring"],
-answer:1
-},
-{
-q:"AI surveillance sees suspicious behavior but no crime yet. What happens?",
-options:["Arrest immediately","Monitor further","Ignore","Public alert"],
-answer:1
-},
-{
-q:"AI chatbot senses emotional distress from a user. What is best?",
-options:["End chat","Provide support resources","Diagnose illness","Record data"],
-answer:1
-},
-{
-q:"AI predicts high accident risk on a road. What should it do?",
-options:["Block road","Warn drivers","Ignore","Call police"],
-answer:1
-},
+let index = 0;
+let score = 0; // ✅ THÊM ĐIỂM
+let timer;
+let timeLeft = 12;
 
-/* ===== 4 LOGIC AI ===== */
-{
-q:"Why does AI need training data?",
-options:["To learn patterns","To replace humans","For storage","For decoration"],
-answer:0
-},
-{
-q:"What happens if AI data is biased?",
-options:["Better results","Unfair decisions","Faster speed","No effect"],
-answer:1
-},
-{
-q:"Why can't AI fully replace humans?",
-options:["No electricity","Lacks emotions & ethics","Too slow","Too expensive"],
-answer:1
-},
-{
-q:"AI decisions are usually based on?",
-options:["Feelings","Rules & probability","Luck","Random guessing"],
-answer:1
-}
-];
-
-let index=0, score=0, timer, timeLeft=12;
-
-const game=document.getElementById("game");
-
-function startGame(){
-    index=0; score=0;
-    loadQuestion();
+function startGame() {
+  index = 0;
+  score = 0;
+  document.querySelector(".start-screen").style.display = "none";
+  document.querySelector(".game-screen").style.display = "block";
+  loadQuestion();
 }
 
-function loadQuestion(){
-    clearInterval(timer);
-    timeLeft=12;
+function loadQuestion() {
+  const q = questions[index];
+  document.getElementById("question").innerText = q.q;
+  const options = document.getElementById("options");
+  options.innerHTML = "";
+  document.getElementById("explanation").style.display = "none";
+  document.querySelector(".next-btn").style.display = "none";
 
-    const q=questions[index];
-    game.innerHTML=`
-        <div class="timer">Time left: <span id="time">${timeLeft}</span>s</div>
-        <div class="question">${index+1}. ${q.q}</div>
-        <div class="options">
-            ${q.options.map((o,i)=>`<div class="option" onclick="select(${i},this)">${o}</div>`).join("")}
-        </div>
-        <button class="next-btn" onclick="next()">Next</button>
-    `;
-    timer=setInterval(countdown,1000);
-}
+  q.o.forEach((text, i) => {
+    const btn = document.createElement("div");
+    btn.className = "option";
+    btn.innerText = text;
+    btn.onclick = () => selectAnswer(btn, i);
+    options.appendChild(btn);
+  });
 
-function countdown(){
+  timeLeft = 12;
+  document.getElementById("time").innerText = timeLeft;
+  timer = setInterval(() => {
     timeLeft--;
-    document.getElementById("time").textContent=timeLeft;
-    if(timeLeft<=0){
-        clearInterval(timer);
-        document.querySelector(".next-btn").style.display="block";
+    document.getElementById("time").innerText = timeLeft;
+    if (timeLeft === 0) {
+      clearInterval(timer);
+      revealAnswer();
     }
+  }, 1000);
 }
 
-function select(i,el){
-    clearInterval(timer);
-    const q=questions[index];
-    document.querySelectorAll(".option").forEach(o=>o.style.pointerEvents="none");
-
-    if(i===q.answer){
-        el.classList.add("correct");
-        score++;
-    }else{
-        el.classList.add("wrong");
-        document.querySelectorAll(".option")[q.answer].classList.add("correct");
-    }
-    document.querySelector(".next-btn").style.display="block";
+function selectAnswer(btn, i) {
+  clearInterval(timer);
+  revealAnswer(i);
 }
 
-function next(){
-    index++;
-    if(index<questions.length){
-        loadQuestion();
-    }else{
-        endGame();
-    }
+function revealAnswer(choice = -1) {
+  const q = questions[index];
+  const opts = document.querySelectorAll(".option");
+
+  if (choice === q.a) score++; // ✅ CỘNG ĐIỂM
+
+  opts.forEach((o, i) => {
+    if (i === q.a) o.classList.add("correct");
+    if (i === choice && i !== q.a) o.classList.add("wrong");
+    o.onclick = null;
+  });
+
+  const exp = document.getElementById("explanation");
+  exp.innerText = "AI Thinking: " + q.e;
+  exp.style.display = "block";
+  document.querySelector(".next-btn").style.display = "inline-block";
 }
 
-function endGame(){
-    game.innerHTML=`
-        <div class="end-screen">
-            <h2 class="game-title">Completed</h2>
-            <p class="score">${score} / ${questions.length}</p>
-            <p>
-                You explored how AI reasons through logic,<br>
-                ethics, and real-world decision making.
-            </p>
-        </div>
+function nextQuestion() {
+  index++;
+  if (index < questions.length) {
+    loadQuestion();
+  } else {
+    document.querySelector(".game-screen").innerHTML = `
+      <h2 class="game-title">Game Completed!</h2>
+      <p style="text-align:center">You have explored how AI thinks.</p>
+      <div class="final-score">Your Score: ${score} / ${questions.length}</div>
     `;
+  }
 }
 </script>
 
