@@ -11,12 +11,12 @@
 <style>
 body{
   margin:0;
-  font-family: 'Segoe UI',sans-serif;
-  background: radial-gradient(circle at top, #0a0f2c, #050816);
+  font-family:'Segoe UI',sans-serif;
+  background:radial-gradient(circle at top,#0a0f2c,#050816);
   color:#e6e6ff;
 }
 
-/* ===== GAME CONTAINER ===== */
+/* ===== GAME ===== */
 .game-container{
   max-width:900px;
   margin:120px auto 80px;
@@ -40,7 +40,6 @@ body{
   opacity:.85;
 }
 
-/* ===== QUESTION ===== */
 .question{
   font-size:1.4rem;
   margin-bottom:30px;
@@ -61,8 +60,13 @@ body{
 }
 
 .option:hover{
-  background:rgba(125,249,255,0.15);
+  background:rgba(125,249,255,0.18);
   transform:translateX(5px);
+}
+
+.option.disabled{
+  pointer-events:none;
+  opacity:.6;
 }
 
 /* ===== RESULT ===== */
@@ -75,16 +79,31 @@ body{
 
 .correct{
   border:1px solid #4dffb8;
-  box-shadow:0 0 20px rgba(77,255,184,0.5);
+  box-shadow:0 0 25px rgba(77,255,184,0.5);
 }
 
 .wrong{
   border:1px solid #ff6b6b;
-  box-shadow:0 0 20px rgba(255,107,107,0.5);
+  box-shadow:0 0 25px rgba(255,107,107,0.5);
 }
 
-.result h3{
-  margin-top:0;
+/* ===== NEXT BUTTON ===== */
+.next-btn{
+  margin-top:30px;
+  padding:14px 26px;
+  font-size:1rem;
+  border:none;
+  border-radius:30px;
+  background:linear-gradient(135deg,#7df9ff,#4da6ff);
+  color:#050816;
+  font-weight:600;
+  cursor:pointer;
+  display:none;
+  box-shadow:0 0 20px rgba(125,249,255,0.6);
+}
+
+.next-btn:hover{
+  transform:scale(1.05);
 }
 
 /* ===== FOOTER ===== */
@@ -113,13 +132,14 @@ body{
 <div class="game-container">
   <h1 class="game-title">HOW AI THINKS</h1>
   <p class="game-desc">
-    You are the AI. Choose how you would decide — then see how AI really thinks.
+    You are the AI. Choose how you would decide — then learn how AI actually thinks.
   </p>
 
   <div id="questionBox"></div>
   <div class="options" id="optionsBox"></div>
   <div class="result" id="resultBox"></div>
 
+  <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next Question →</button>
 </div>
 
 <div class="footer-game">
@@ -127,87 +147,75 @@ body{
 </div>
 
 <script>
-const questions = [
+const questions=[
 {
-  q:"You are an AI controlling a self-driving car. A sudden obstacle appears. What is your priority?",
-  options:[
-    "Protect passengers at all costs",
-    "Minimize total harm",
-    "Follow traffic laws strictly",
-    "React randomly"
-  ],
-  correct:1,
-  explain:"AI systems are usually optimized to minimize overall harm using probability and risk analysis, not emotions."
+q:"You are an AI controlling a self-driving car. A sudden obstacle appears. What is your priority?",
+options:["Protect passengers at all costs","Minimize total harm","Follow traffic laws strictly","React randomly"],
+correct:1,
+explain:"AI systems optimize decisions using risk analysis to minimize overall harm, not emotions."
 },
 {
-  q:"You are an AI reviewing job applications. What data should you avoid using?",
-  options:[
-    "Skills and experience",
-    "Education history",
-    "Gender and ethnicity",
-    "Work samples"
-  ],
-  correct:2,
-  explain:"Using sensitive attributes can introduce bias. Ethical AI avoids unfair discrimination."
+q:"Which data should an AI avoid using in hiring decisions?",
+options:["Skills","Experience","Gender & ethnicity","Work samples"],
+correct:2,
+explain:"Using sensitive attributes leads to bias. Ethical AI avoids discrimination."
 },
 {
-  q:"You are an AI predicting exam results. One student has unusual data. What do you do?",
-  options:[
-    "Ignore the data",
-    "Force prediction",
-    "Flag low confidence",
-    "Change training data"
-  ],
-  correct:2,
-  explain:"AI should indicate uncertainty when confidence is low instead of guessing."
+q:"When AI is unsure about a prediction, what should it do?",
+options:["Guess confidently","Ignore data","Flag low confidence","Change results"],
+correct:2,
+explain:"Good AI systems communicate uncertainty instead of guessing."
 },
 {
-  q:"An AI assistant gives a confident but incorrect answer. This is called?",
-  options:[
-    "Bias",
-    "Overfitting",
-    "Hallucination",
-    "Neural error"
-  ],
-  correct:2,
-  explain:"Hallucination happens when AI generates believable but incorrect information."
+q:"Confident but false AI answers are called?",
+options:["Bias","Hallucination","Overtraining","Inference error"],
+correct:1,
+explain:"Hallucination is when AI generates believable but incorrect content."
 },
 {
-  q:"You are training an AI face recognition system. Which dataset is best?",
-  options:[
-    "Only one age group",
-    "Only one ethnicity",
-    "Balanced diverse dataset",
-    "Random internet images"
-  ],
-  correct:2,
-  explain:"Balanced datasets reduce bias and improve fairness and accuracy."
+q:"Best dataset for fair AI training?",
+options:["Single group","Random images","Balanced diverse data","Small dataset"],
+correct:2,
+explain:"Diverse data reduces bias and improves fairness."
 }
 ];
 
 let current=0;
 let score=0;
+let answered=false;
 
 function loadQuestion(){
+  answered=false;
+  document.getElementById("nextBtn").style.display="none";
+  document.getElementById("resultBox").style.display="none";
+
   const q=questions[current];
   document.getElementById("questionBox").innerHTML=
     `<div class="question">${q.q}</div>`;
+
   const optBox=document.getElementById("optionsBox");
   optBox.innerHTML="";
   q.options.forEach((opt,i)=>{
     const div=document.createElement("div");
     div.className="option";
     div.innerText=opt;
-    div.onclick=()=>select(i);
+    div.onclick=()=>selectAnswer(i);
     optBox.appendChild(div);
   });
-  document.getElementById("resultBox").style.display="none";
 }
 
-function select(i){
+function selectAnswer(i){
+  if(answered) return;
+  answered=true;
+
   const q=questions[current];
   const result=document.getElementById("resultBox");
+  const options=document.querySelectorAll(".option");
+  options.forEach(o=>o.classList.add("disabled"));
+
   result.style.display="block";
+  document.getElementById("nextBtn").style.display="inline-block";
+
   if(i===q.correct){
     score++;
     result.className="result correct";
@@ -216,20 +224,19 @@ function select(i){
     result.className="result wrong";
     result.innerHTML=`<h3>Not how AI thinks ❌</h3><p>${q.explain}</p>`;
   }
-  setTimeout(next,2500);
 }
 
-function next(){
+function nextQuestion(){
   current++;
   if(current<questions.length){
     loadQuestion();
   }else{
     document.querySelector(".game-container").innerHTML=
-      `<h1 class="game-title">Game Complete</h1>
-       <p class="game-desc">Your score: <b>${score}/${questions.length}</b></p>
-       <p style="text-align:center;opacity:.8">
-       This game shows how AI decisions are based on data, probability, and ethics — not emotions.
-       </p>`;
+    `<h1 class="game-title">Completed</h1>
+     <p class="game-desc">Score: <b>${score}/${questions.length}</b></p>
+     <p style="text-align:center;opacity:.85">
+     You learned how AI decisions are based on data, probability, and ethics.
+     </p>`;
   }
 }
 
