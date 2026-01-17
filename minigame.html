@@ -1,171 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>AI Mini Game</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>How AI Thinks | Minigame</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body {
-            background: radial-gradient(circle at top, #0a0f2c, #050816);
-            color: #e6e6ff;
-            font-family: Arial, sans-serif;
-        }
+<link rel="stylesheet" href="style.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 
-        .game-container {
-            max-width: 800px;
-            margin: 120px auto 80px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(125,249,255,0.2);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 0 30px rgba(125,249,255,0.25);
-        }
+<style>
+body{
+  margin:0;
+  font-family: 'Segoe UI',sans-serif;
+  background: radial-gradient(circle at top, #0a0f2c, #050816);
+  color:#e6e6ff;
+}
 
-        h1 {
-            text-align: center;
-            color: #7df9ff;
-            margin-bottom: 20px;
-        }
+/* ===== GAME CONTAINER ===== */
+.game-container{
+  max-width:900px;
+  margin:120px auto 80px;
+  padding:40px;
+  background:rgba(255,255,255,0.05);
+  border-radius:25px;
+  border:1px solid rgba(125,249,255,0.25);
+  box-shadow:0 0 40px rgba(125,249,255,0.25);
+}
 
-        .question {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            text-align: center;
-        }
+.game-title{
+  text-align:center;
+  font-size:2.6rem;
+  color:#7df9ff;
+  text-shadow:0 0 15px rgba(125,249,255,0.7);
+}
 
-        .answers {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-        }
+.game-desc{
+  text-align:center;
+  margin:15px 0 40px;
+  opacity:.85;
+}
 
-        .answers button {
-            padding: 15px 30px;
-            border-radius: 30px;
-            border: none;
-            font-size: 1rem;
-            cursor: pointer;
-            background: linear-gradient(135deg, #00eaff, #0066ff);
-            color: #fff;
-            transition: 0.3s;
-        }
+/* ===== QUESTION ===== */
+.question{
+  font-size:1.4rem;
+  margin-bottom:30px;
+}
 
-        .answers button:hover {
-            transform: scale(1.08);
-        }
+.options{
+  display:grid;
+  gap:15px;
+}
 
-        .score {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 1.1rem;
-            opacity: 0.85;
-        }
+.option{
+  padding:18px 22px;
+  border-radius:16px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(125,249,255,0.25);
+  cursor:pointer;
+  transition:.3s;
+}
 
-        .result {
-            text-align: center;
-            margin-top: 25px;
-            font-size: 1.2rem;
-            color: #7df9ff;
-        }
+.option:hover{
+  background:rgba(125,249,255,0.15);
+  transform:translateX(5px);
+}
 
-        footer {
-            text-align: center;
-            padding: 30px;
-            border-top: 1px solid rgba(125,249,255,0.2);
-            color: #aaa;
-        }
-    </style>
+/* ===== RESULT ===== */
+.result{
+  margin-top:30px;
+  padding:25px;
+  border-radius:18px;
+  display:none;
+}
+
+.correct{
+  border:1px solid #4dffb8;
+  box-shadow:0 0 20px rgba(77,255,184,0.5);
+}
+
+.wrong{
+  border:1px solid #ff6b6b;
+  box-shadow:0 0 20px rgba(255,107,107,0.5);
+}
+
+.result h3{
+  margin-top:0;
+}
+
+/* ===== FOOTER ===== */
+.footer-game{
+  text-align:center;
+  margin-top:60px;
+  opacity:.7;
+}
+</style>
 </head>
 
 <body>
 
-<!-- ===== NAVBAR ===== -->
 <header class="navbar">
-    <h2 class="logo">AI World</h2>
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="artificialintelligence.html">AI</a>
-        <a href="information.html">Applications</a>
-        <a href="minigame.html" class="active">Mini Game</a>
-    </nav>
+  <div class="nav-left">
+    <span class="logo-text">NhomNayManh</span>
+  </div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="artificialintelligence.html">AI</a>
+    <a href="information.html">Applications</a>
+    <a href="minigame.html" class="active">Minigame</a>
+  </nav>
 </header>
 
-<!-- ===== GAME ===== -->
 <div class="game-container">
-    <h1>🤖 AI or Human?</h1>
+  <h1 class="game-title">HOW AI THINKS</h1>
+  <p class="game-desc">
+    You are the AI. Choose how you would decide — then see how AI really thinks.
+  </p>
 
-    <div class="question" id="question"></div>
+  <div id="questionBox"></div>
+  <div class="options" id="optionsBox"></div>
+  <div class="result" id="resultBox"></div>
 
-    <div class="answers">
-        <button onclick="answer('AI')">AI 🤖</button>
-        <button onclick="answer('Human')">Human 👤</button>
-    </div>
-
-    <div class="result" id="result"></div>
-    <div class="score" id="score">Score: 0 / 0</div>
 </div>
 
-<footer>
-    © 2026 • AI Mini Game Project
-</footer>
+<div class="footer-game">
+  © 2026 • AI Minigame • Created by NhomNayManh
+</div>
 
 <script>
-    const questions = [
-        {
-            text: "The sun dipped below the horizon, painting the sky in shades of orange and pink.",
-            correct: "Human"
-        },
-        {
-            text: "Artificial intelligence enables machines to simulate human intelligence processes.",
-            correct: "AI"
-        },
-        {
-            text: "I woke up late and missed the bus, which made my day stressful.",
-            correct: "Human"
-        },
-        {
-            text: "AI systems analyze large datasets to identify patterns and make predictions.",
-            correct: "AI"
-        },
-        {
-            text: "My favorite memory is playing football with friends after school.",
-            correct: "Human"
-        }
-    ];
+const questions = [
+{
+  q:"You are an AI controlling a self-driving car. A sudden obstacle appears. What is your priority?",
+  options:[
+    "Protect passengers at all costs",
+    "Minimize total harm",
+    "Follow traffic laws strictly",
+    "React randomly"
+  ],
+  correct:1,
+  explain:"AI systems are usually optimized to minimize overall harm using probability and risk analysis, not emotions."
+},
+{
+  q:"You are an AI reviewing job applications. What data should you avoid using?",
+  options:[
+    "Skills and experience",
+    "Education history",
+    "Gender and ethnicity",
+    "Work samples"
+  ],
+  correct:2,
+  explain:"Using sensitive attributes can introduce bias. Ethical AI avoids unfair discrimination."
+},
+{
+  q:"You are an AI predicting exam results. One student has unusual data. What do you do?",
+  options:[
+    "Ignore the data",
+    "Force prediction",
+    "Flag low confidence",
+    "Change training data"
+  ],
+  correct:2,
+  explain:"AI should indicate uncertainty when confidence is low instead of guessing."
+},
+{
+  q:"An AI assistant gives a confident but incorrect answer. This is called?",
+  options:[
+    "Bias",
+    "Overfitting",
+    "Hallucination",
+    "Neural error"
+  ],
+  correct:2,
+  explain:"Hallucination happens when AI generates believable but incorrect information."
+},
+{
+  q:"You are training an AI face recognition system. Which dataset is best?",
+  options:[
+    "Only one age group",
+    "Only one ethnicity",
+    "Balanced diverse dataset",
+    "Random internet images"
+  ],
+  correct:2,
+  explain:"Balanced datasets reduce bias and improve fairness and accuracy."
+}
+];
 
-    let index = 0;
-    let score = 0;
+let current=0;
+let score=0;
 
-    function loadQuestion() {
-        document.getElementById("question").innerText = questions[index].text;
-        document.getElementById("result").innerText = "";
-        document.getElementById("score").innerText = `Score: ${score} / ${index}`;
-    }
+function loadQuestion(){
+  const q=questions[current];
+  document.getElementById("questionBox").innerHTML=
+    `<div class="question">${q.q}</div>`;
+  const optBox=document.getElementById("optionsBox");
+  optBox.innerHTML="";
+  q.options.forEach((opt,i)=>{
+    const div=document.createElement("div");
+    div.className="option";
+    div.innerText=opt;
+    div.onclick=()=>select(i);
+    optBox.appendChild(div);
+  });
+  document.getElementById("resultBox").style.display="none";
+}
 
-    function answer(choice) {
-        if (choice === questions[index].correct) {
-            score++;
-            document.getElementById("result").innerText = "✅ Correct!";
-        } else {
-            document.getElementById("result").innerText = "❌ Wrong!";
-        }
+function select(i){
+  const q=questions[current];
+  const result=document.getElementById("resultBox");
+  result.style.display="block";
+  if(i===q.correct){
+    score++;
+    result.className="result correct";
+    result.innerHTML=`<h3>Correct ✅</h3><p>${q.explain}</p>`;
+  }else{
+    result.className="result wrong";
+    result.innerHTML=`<h3>Not how AI thinks ❌</h3><p>${q.explain}</p>`;
+  }
+  setTimeout(next,2500);
+}
 
-        index++;
-
-        if (index < questions.length) {
-            setTimeout(loadQuestion, 800);
-        } else {
-            setTimeout(() => {
-                document.getElementById("question").innerText =
-                    `🎉 Game Over! Final Score: ${score} / ${questions.length}`;
-                document.querySelector(".answers").style.display = "none";
-            }, 800);
-        }
-    }
-
+function next(){
+  current++;
+  if(current<questions.length){
     loadQuestion();
+  }else{
+    document.querySelector(".game-container").innerHTML=
+      `<h1 class="game-title">Game Complete</h1>
+       <p class="game-desc">Your score: <b>${score}/${questions.length}</b></p>
+       <p style="text-align:center;opacity:.8">
+       This game shows how AI decisions are based on data, probability, and ethics — not emotions.
+       </p>`;
+  }
+}
+
+loadQuestion();
 </script>
 
 </body>
