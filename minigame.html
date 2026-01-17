@@ -5,10 +5,7 @@
   <title>How AI Thinks | Mini Game</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- CSS -->
   <link rel="stylesheet" href="style.css">
-
-  <!-- Icons -->
   <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -17,7 +14,6 @@
       background: radial-gradient(circle at top, #0a0f2c, #050816);
       color: #e6e6ff;
     }
-
     .game-container {
       max-width: 900px;
       margin: 140px auto 80px;
@@ -25,115 +21,79 @@
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(125,249,255,0.25);
       border-radius: 24px;
-      box-shadow: 0 0 40px rgba(125,249,255,0.15);
     }
-
     .game-title {
       text-align: center;
       font-size: 2.5rem;
       color: #7df9ff;
-      margin-bottom: 10px;
     }
-
     .game-desc {
       text-align: center;
       opacity: 0.85;
       margin-bottom: 40px;
     }
-
     .start-btn {
       display: block;
       margin: 40px auto;
       padding: 16px 40px;
-      font-size: 1.1rem;
       border-radius: 30px;
       border: none;
-      cursor: pointer;
-      background: linear-gradient(90deg, #7df9ff, #5c7cff);
-      color: #000;
+      background: linear-gradient(90deg,#7df9ff,#5c7cff);
       font-weight: 600;
-    }
-
-    .question-box {
-      display: none;
-    }
-
-    .timer {
-      text-align: right;
-      font-size: 1.1rem;
-      color: #7df9ff;
-      margin-bottom: 10px;
-    }
-
-    .question {
-      font-size: 1.5rem;
-      margin-bottom: 30px;
-    }
-
-    .options button {
-      width: 100%;
-      padding: 16px;
-      margin-bottom: 15px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(125,249,255,0.3);
-      border-radius: 14px;
-      color: #fff;
-      font-size: 1rem;
       cursor: pointer;
-      transition: 0.3s;
     }
-
-    .options button:hover {
-      background: rgba(125,249,255,0.2);
+    .question-box { display:none; }
+    .timer { text-align:right; color:#7df9ff; margin-bottom:10px; }
+    .question { font-size:1.5rem; margin-bottom:30px; }
+    .options button {
+      width:100%;
+      padding:16px;
+      margin-bottom:15px;
+      background:rgba(255,255,255,0.06);
+      border:1px solid rgba(125,249,255,0.3);
+      border-radius:14px;
+      color:#fff;
+      cursor:pointer;
     }
-
     .options button.correct {
       background: rgba(0,255,150,0.25);
-      border-color: #00ff96;
     }
-
     .options button.wrong {
       background: rgba(255,80,80,0.25);
-      border-color: #ff5050;
     }
-
     .ai-think {
-      margin-top: 25px;
-      padding: 20px;
-      border-left: 4px solid #7df9ff;
+      margin-top:25px;
+      padding:20px;
+      border-left:4px solid #7df9ff;
       background: rgba(125,249,255,0.08);
-      display: none;
+      display:none;
     }
-
     .next-btn {
-      margin-top: 30px;
-      padding: 14px 30px;
-      border-radius: 25px;
-      border: none;
-      cursor: pointer;
-      background: #7df9ff;
-      color: #000;
-      font-weight: 600;
-      display: none;
+      margin-top:30px;
+      padding:14px 30px;
+      border-radius:25px;
+      border:none;
+      background:#7df9ff;
+      font-weight:600;
+      display:none;
+      cursor:pointer;
     }
-
     .result {
-      text-align: center;
-      font-size: 1.8rem;
-      display: none;
+      display:none;
+      text-align:center;
+      font-size:1.8rem;
     }
   </style>
 </head>
 
 <body>
 
-<!-- ===== NAVBAR (Y CHANG INDEX) ===== -->
+<!-- NAVBAR -->
 <header class="navbar">
   <div class="nav-left">
     <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" class="logo-img">
     <span class="logo-text">NhomNayManh</span>
   </div>
-
   <nav>
     <a href="index.html">Home</a>
     <a href="gtvapcnv.html">Author</a>
@@ -145,20 +105,16 @@
 
 <div class="game-container">
   <h1 class="game-title">How AI Thinks</h1>
-  <p class="game-desc">
-    Choose the answer an AI model would most likely select.
-  </p>
+  <p class="game-desc">How would an AI system decide in real-world situations?</p>
 
   <button class="start-btn" onclick="startGame()">Start Game</button>
 
   <div class="question-box">
-    <div class="timer">⏱ Time: <span id="time">12</span>s</div>
+    <div class="timer">⏱ <span id="time">12</span>s</div>
     <div class="question" id="question"></div>
     <div class="options" id="options"></div>
-
     <div class="ai-think" id="aiThink"></div>
-
-    <button class="next-btn" onclick="nextQuestion()">Next Question</button>
+    <button class="next-btn" onclick="nextQuestion()">Next</button>
   </div>
 
   <div class="result" id="result"></div>
@@ -167,144 +123,140 @@
 <script>
 const questions = [
   {
-    q: "Which answer is most logical based on probability?",
-    options: ["The most emotional one", "The statistically most likely one", "The funniest one"],
+    q: "A self-driving car detects a child suddenly crossing the road. What will the AI most likely do?",
+    options: [
+      "Continue driving to follow traffic rules",
+      "Immediately brake and prioritize human safety",
+      "Choose randomly based on speed"
+    ],
     correct: 1,
-    think: "AI evaluates probabilities from data and selects the most likely outcome."
+    think: "AI prioritizes minimizing harm and human safety above efficiency."
   },
   {
-    q: "If data is incomplete, what does AI usually do?",
-    options: ["Guess emotionally", "Refuse instantly", "Infer from patterns"],
+    q: "An AI doctor must choose which patient to treat first. What does it consider?",
+    options: [
+      "Patient's age only",
+      "Who arrived first",
+      "Severity and survival probability"
+    ],
     correct: 2,
-    think: "AI infers missing data by recognizing patterns in similar cases."
+    think: "Medical AI evaluates urgency and success probability."
   },
   {
-    q: "AI prefers which type of answer?",
-    options: ["Clear and structured", "Vague and poetic", "Random"],
-    correct: 0,
-    think: "Structured data is easier for AI to process and reason with."
-  },
-  {
-    q: "When facing a contradiction, AI will?",
-    options: ["Ignore it", "Analyze both sides", "Choose randomly"],
+    q: "An AI hiring system detects bias in past hiring data. What should it do?",
+    options: [
+      "Ignore and continue",
+      "Adjust model to reduce bias",
+      "Reject all candidates"
+    ],
     correct: 1,
-    think: "AI compares conflicting information before responding."
+    think: "Responsible AI attempts to reduce bias and unfairness."
   },
+  {
+    q: "AI security camera is unsure if a person is dangerous. What is the safest action?",
+    options: [
+      "Trigger alarm immediately",
+      "Ignore completely",
+      "Flag for human review"
+    ],
+    correct: 2,
+    think: "AI escalates uncertain cases to humans."
+  },
+
   {
     q: "What guides AI decisions the most?",
-    options: ["Personal feelings", "Training data", "Human intuition"],
+    options: ["Emotions", "Training data", "Luck"],
     correct: 1,
-    think: "AI relies heavily on its training data."
-  },
-
-  /* ===== SITUATION QUESTIONS ===== */
-
-  {
-    q: "A student asks for homework help. What will AI likely do?",
-    options: ["Give direct answers", "Guide step-by-step", "Refuse always"],
-    correct: 1,
-    think: "AI is designed to assist learning, not replace it."
+    think: "AI relies on data and patterns."
   },
   {
-    q: "User asks a dangerous question. AI will?",
-    options: ["Answer anyway", "Avoid and redirect", "Ignore user"],
+    q: "If data is incomplete, AI will?",
+    options: ["Guess emotionally", "Infer from patterns", "Stop forever"],
     correct: 1,
-    think: "AI follows safety policies and redirects harmful requests."
+    think: "AI generalizes from similar data."
   },
   {
-    q: "If two answers are both correct, AI will?",
-    options: ["Pick one randomly", "Explain both", "Stay silent"],
-    correct: 1,
-    think: "AI often provides multiple valid perspectives."
-  },
-  {
-    q: "User input is unclear. AI tends to?",
-    options: ["Ask for clarification", "Make assumptions", "End chat"],
+    q: "AI prefers answers that are?",
+    options: ["Structured", "Poetic", "Random"],
     correct: 0,
-    think: "Clarification improves response accuracy."
+    think: "Structured data is easier to process."
   },
   {
-    q: "AI is unsure about correctness. It will?",
-    options: ["Pretend confident", "Mention uncertainty", "Stop responding"],
+    q: "When unsure, good AI will?",
+    options: ["Lie confidently", "Express uncertainty", "Shut down"],
     correct: 1,
-    think: "Good AI systems express uncertainty when needed."
+    think: "Transparency improves trust."
+  },
+  {
+    q: "AI avoids harmful requests by?",
+    options: ["Answering anyway", "Redirecting safely", "Ignoring user"],
+    correct: 1,
+    think: "Safety rules are built in."
   }
 ];
 
-let index = 0;
-let score = 0;
-let timeLeft = 12;
-let timer;
+let index = 0, score = 0, timeLeft = 12, timer;
 
-function startGame() {
-  document.querySelector(".start-btn").style.display = "none";
-  document.querySelector(".question-box").style.display = "block";
+function startGame(){
+  document.querySelector(".start-btn").style.display="none";
+  document.querySelector(".question-box").style.display="block";
   loadQuestion();
 }
 
-function loadQuestion() {
+function loadQuestion(){
   clearInterval(timer);
-  timeLeft = 12;
-  document.getElementById("time").textContent = timeLeft;
+  timeLeft=12;
+  document.getElementById("time").textContent=timeLeft;
 
-  const q = questions[index];
-  document.getElementById("question").textContent = q.q;
-  const optionsDiv = document.getElementById("options");
-  optionsDiv.innerHTML = "";
-  document.getElementById("aiThink").style.display = "none";
-  document.querySelector(".next-btn").style.display = "none";
+  const q=questions[index];
+  document.getElementById("question").textContent=q.q;
+  const opt=document.getElementById("options");
+  opt.innerHTML="";
+  document.getElementById("aiThink").style.display="none";
+  document.querySelector(".next-btn").style.display="none";
 
-  q.options.forEach((opt, i) => {
-    const btn = document.createElement("button");
-    btn.textContent = opt;
-    btn.onclick = () => selectAnswer(btn, i);
-    optionsDiv.appendChild(btn);
+  q.options.forEach((o,i)=>{
+    const b=document.createElement("button");
+    b.textContent=o;
+    b.onclick=()=>selectAnswer(i,b);
+    opt.appendChild(b);
   });
 
-  timer = setInterval(() => {
+  timer=setInterval(()=>{
     timeLeft--;
-    document.getElementById("time").textContent = timeLeft;
-    if (timeLeft === 0) {
-      clearInterval(timer);
-      revealAnswer();
-    }
-  }, 1000);
+    document.getElementById("time").textContent=timeLeft;
+    if(timeLeft===0){clearInterval(timer);reveal();}
+  },1000);
 }
 
-function selectAnswer(btn, i) {
+function selectAnswer(i,btn){
   clearInterval(timer);
-  revealAnswer(i);
+  reveal(i);
 }
 
-function revealAnswer(choice) {
-  const q = questions[index];
-  const buttons = document.querySelectorAll(".options button");
-
-  buttons.forEach((b, i) => {
-    if (i === q.correct) b.classList.add("correct");
-    if (i === choice && i !== q.correct) b.classList.add("wrong");
-    b.disabled = true;
+function reveal(choice){
+  const q=questions[index];
+  document.querySelectorAll(".options button").forEach((b,i)=>{
+    if(i===q.correct) b.classList.add("correct");
+    if(i===choice && i!==q.correct) b.classList.add("wrong");
+    b.disabled=true;
   });
-
-  if (choice === q.correct) score++;
-
-  const thinkBox = document.getElementById("aiThink");
-  thinkBox.innerHTML = "<strong>AI reasoning:</strong> " + q.think;
-  thinkBox.style.display = "block";
-
-  document.querySelector(".next-btn").style.display = "inline-block";
+  if(choice===q.correct) score++;
+  const t=document.getElementById("aiThink");
+  t.innerHTML="<b>AI reasoning:</b> "+q.think;
+  t.style.display="block";
+  document.querySelector(".next-btn").style.display="inline-block";
 }
 
-function nextQuestion() {
+function nextQuestion(){
   index++;
-  if (index < questions.length) {
-    loadQuestion();
-  } else {
-    document.querySelector(".question-box").style.display = "none";
-    document.getElementById("result").style.display = "block";
-    document.getElementById("result").innerHTML =
-      `🎯 Your score: <b>${score} / ${questions.length}</b><br>
-       <small>${score >= 7 ? "Excellent AI thinking!" : "Good try! Learn how AI reasons."}</small>`;
+  if(index<questions.length) loadQuestion();
+  else{
+    document.querySelector(".question-box").style.display="none";
+    document.getElementById("result").style.display="block";
+    document.getElementById("result").innerHTML=
+      `🎯 Score: <b>${score}/${questions.length}</b><br>
+       ${score>=7?"Excellent AI reasoning!":"Good try!"}`;
   }
 }
 </script>
