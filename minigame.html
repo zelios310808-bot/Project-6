@@ -10,47 +10,30 @@
 body{
   background: radial-gradient(circle at top, #0a0f2c, #050816);
   color:#e6e6ff;
-  font-family: Arial, Helvetica, sans-serif;
 }
 
-.game-wrapper{
+.game-box{
   max-width:900px;
   margin:120px auto 80px;
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(125,249,255,0.25);
-  border-radius:22px;
   padding:40px;
-  box-shadow:0 0 40px rgba(125,249,255,0.25);
+  background:rgba(255,255,255,0.06);
+  border-radius:22px;
+  border:1px solid rgba(125,249,255,0.25);
+  box-shadow:0 0 45px rgba(125,249,255,0.25);
 }
 
-h1{
-  text-align:center;
-  color:#7df9ff;
-  margin-bottom:10px;
-}
+h1{text-align:center;color:#7df9ff;}
+.subtitle{text-align:center;opacity:.85;margin-bottom:30px;}
 
-.subtitle{
-  text-align:center;
-  opacity:.85;
-  margin-bottom:30px;
-}
-
-.top-bar{
+.top{
   display:flex;
   justify-content:space-between;
   margin-bottom:20px;
-  font-size:1rem;
 }
 
-.timer{
-  color:#ffb347;
-  font-weight:bold;
-}
+.timer{color:#ffb347;font-weight:bold;}
 
-.question{
-  font-size:1.3rem;
-  margin-bottom:25px;
-}
+.question{font-size:1.3rem;margin-bottom:25px;}
 
 .answers button{
   width:100%;
@@ -58,44 +41,28 @@ h1{
   margin-bottom:12px;
   border-radius:14px;
   border:1px solid rgba(125,249,255,0.3);
-  background:rgba(255,255,255,0.06);
+  background:rgba(255,255,255,0.07);
   color:#e6e6ff;
   cursor:pointer;
-  transition:.25s;
 }
 
-.answers button:hover{
-  background:rgba(125,249,255,0.15);
-}
-
-.answers button.correct{
-  background:rgba(0,255,150,0.25);
-}
-
-.answers button.wrong{
-  background:rgba(255,80,80,0.25);
-}
+.answers button.correct{background:rgba(0,255,150,0.25);}
+.answers button.wrong{background:rgba(255,80,80,0.25);}
 
 .explain{
   margin-top:20px;
   padding:18px;
-  border-left:4px solid #7df9ff;
   background:rgba(125,249,255,0.08);
+  border-left:4px solid #7df9ff;
   display:none;
 }
 
-.controls{
-  text-align:center;
-  margin-top:30px;
-}
-
+.controls{text-align:center;margin-top:30px;}
 .controls button{
   padding:12px 30px;
   border-radius:20px;
-  border:none;
   background:#7df9ff;
-  color:#050816;
-  font-size:1rem;
+  border:none;
   cursor:pointer;
 }
 
@@ -105,7 +72,6 @@ h1{
 
 <body>
 
-<!-- NAVBAR giống index -->
 <header class="navbar">
   <h2 class="logo">AI World</h2>
   <nav>
@@ -116,146 +82,132 @@ h1{
   </nav>
 </header>
 
-<div class="game-wrapper">
-  <h1>How AI Thinks 🤖</h1>
-  <p class="subtitle">Think like an AI, not like a human</p>
+<div class="game-box">
+<h1>How AI Thinks 🤖</h1>
+<p class="subtitle">AI does not feel — it calculates.</p>
 
-  <div id="startScreen" class="controls">
-    <button onclick="startGame()">Start Game</button>
+<div id="start" class="controls">
+  <button onclick="startGame()">Start</button>
+</div>
+
+<div id="game" class="hidden">
+  <div class="top">
+    <div id="progress"></div>
+    <div class="timer">⏱ <span id="time">12</span>s</div>
   </div>
 
-  <div id="gameScreen" class="hidden">
-    <div class="top-bar">
-      <div id="progress">Question 1 / 10</div>
-      <div class="timer">⏱ <span id="time">12</span>s</div>
-    </div>
+  <div id="question" class="question"></div>
+  <div id="answers" class="answers"></div>
+  <div id="explain" class="explain"></div>
 
-    <div id="question" class="question"></div>
-    <div class="answers" id="answers"></div>
-
-    <div id="explain" class="explain"></div>
-
-    <div class="controls">
-      <button id="nextBtn" onclick="nextQuestion()" class="hidden">Next</button>
-    </div>
+  <div class="controls">
+    <button id="nextBtn" onclick="nextQ()" class="hidden">Next</button>
   </div>
+</div>
 
-  <div id="endScreen" class="hidden controls">
-    <h2 id="scoreText"></h2>
-    <button onclick="location.reload()">Play Again</button>
-  </div>
+<div id="end" class="hidden controls">
+  <h2 id="scoreText"></h2>
+  <p id="rankText"></p>
+</div>
 </div>
 
 <script>
 const questions = [
-{
-q:"A self-driving car sees a child suddenly crossing the road. What does AI do?",
-a:["Swerve emotionally","Follow safety algorithm","Stop thinking"],
-c:1,
-e:"AI follows pre-defined safety rules and probability calculations."
-},
-{
-q:"An AI hiring system detects bias in past data. What is the correct action?",
-a:["Ignore bias","Flag and ask humans","Delete all data"],
-c:1,
-e:"AI should detect bias and involve humans for correction."
-},
-{
-q:"Medical AI finds rare symptoms it has never seen. What happens?",
-a:["Guess confidently","Suggest to a doctor","Shut down"],
-c:1,
-e:"AI assists professionals, not replaces them."
-},
-{
-q:"A chatbot receives hate speech. What should AI do?",
-a:["Respond emotionally","Politely refuse or redirect","Attack back"],
-c:1,
-e:"AI follows safety and moderation policies."
-},
-{
-q:"Facial recognition at night gives unclear data. What does AI do?",
-a:["Guess randomly","Lower confidence","Always correct"],
-c:1,
-e:"AI reduces confidence when data quality is poor."
-},
-{
-q:"An AI predicts a student may fail exams. Ethical use?",
-a:["Punish student","Provide support","Hide result"],
-c:1,
-e:"Predictions should help humans, not judge them."
-},
-{
-q:"Why can AI sound confident but be wrong?",
-a:["It lies","Hallucination","Emotion"],
-c:1,
-e:"Hallucination means generating fluent but incorrect answers."
-},
-{
-q:"Can AI think like humans?",
-a:["Yes","No, it simulates logic","It has feelings"],
-c:1,
-e:"AI simulates reasoning but has no consciousness."
-},
-{
-q:"If two answers are equally probable, what does AI do?",
-a:["Choose emotionally","Pick highest probability","Ask feelings"],
-c:1,
-e:"AI uses probability, not emotions."
-},
-{
-q:"What limits AI decisions most?",
-a:["Fear","Training data","Motivation"],
-c:1,
-e:"AI is limited by the data it was trained on."
-}
+/* ===== 8 TÌNH HUỐNG ===== */
+{q:"A self-driving car sees a child suddenly crossing. What does AI do?",
+a:["Brake based on safety priority","Swerve emotionally","Ignore uncertainty"],
+c:0,e:"AI follows safety rules and risk calculation."},
+
+{q:"AI detects possible cancer but confidence is low. Best action?",
+a:["Hide result","Ask doctor to review","Confirm as cancer"],
+c:1,e:"AI escalates uncertainty to humans."},
+
+{q:"Facial recognition accuracy drops at night. AI should?",
+a:["Lower confidence score","Guess identity","Always say correct"],
+c:0,e:"AI adapts output confidence to data quality."},
+
+{q:"Hiring AI finds biased training data. What now?",
+a:["Ignore bias","Flag and pause decision","Fire candidate"],
+c:1,e:"Ethical AI stops biased outcomes."},
+
+{q:"AI moderation sees hate speech. Response?",
+a:["Reply emotionally","Politely refuse","Attack back"],
+c:1,e:"AI follows moderation policy."},
+
+{q:"AI predicts student failure. Best use?",
+a:["Punish student","Offer support","Hide data"],
+c:1,e:"Predictions should assist, not judge."},
+
+{q:"AI must choose between speed and safety in traffic. Priority?",
+a:["Speed","Safety","Random"],
+c:1,e:"AI prioritizes predefined safety rules."},
+
+{q:"AI is unsure between two actions with similar risk. It will?",
+a:["Choose lower risk","Act randomly","Delay decision"],
+c:0,e:"AI minimizes expected risk."},
+
+/* ===== 4 LOGIC AI ===== */
+{q:"AI predicts rain probability 70%. Best advice?",
+a:["Always bring umbrella","Ignore forecast","Suggest umbrella"],
+c:2,e:"AI recommends based on probability."},
+
+{q:"Two models disagree. Which is chosen?",
+a:["Higher accuracy","Newest model","Random choice"],
+c:0,e:"AI trusts validated performance."},
+
+{q:"If training data is biased, output will be?",
+a:["Neutral","Biased","Emotional"],
+c:1,e:"AI mirrors its data."},
+
+{q:"What limits AI most?",
+a:["Fear","Data quality","Motivation"],
+c:1,e:"Bad data = bad output."}
 ];
 
-let current=0, score=0, timer, timeLeft=12;
+let i=0, score=0, time=12, timer;
 
 function startGame(){
-document.getElementById("startScreen").classList.add("hidden");
-document.getElementById("gameScreen").classList.remove("hidden");
-loadQuestion();
+document.getElementById("start").classList.add("hidden");
+document.getElementById("game").classList.remove("hidden");
+loadQ();
 }
 
-function loadQuestion(){
+function loadQ(){
 clearInterval(timer);
-timeLeft=12;
-document.getElementById("time").innerText=timeLeft;
+time=12;
+document.getElementById("time").innerText=time;
+
 timer=setInterval(()=>{
-timeLeft--;
-document.getElementById("time").innerText=timeLeft;
-if(timeLeft<=0) showAnswer(-1);
+time--;
+document.getElementById("time").innerText=time;
+if(time<=0) showAns(-1);
 },1000);
 
-const q=questions[current];
-document.getElementById("progress").innerText=`Question ${current+1} / ${questions.length}`;
+const q=questions[i];
+document.getElementById("progress").innerText=`Question ${i+1} / ${questions.length}`;
 document.getElementById("question").innerText=q.q;
 
-const ans=document.getElementById("answers");
-ans.innerHTML="";
-q.a.forEach((text,i)=>{
-const btn=document.createElement("button");
-btn.innerText=text;
-btn.onclick=()=>showAnswer(i);
-ans.appendChild(btn);
+const a=document.getElementById("answers");
+a.innerHTML="";
+q.a.forEach((t,idx)=>{
+const b=document.createElement("button");
+b.innerText=t;
+b.onclick=()=>showAns(idx);
+a.appendChild(b);
 });
 
 document.getElementById("explain").style.display="none";
 document.getElementById("nextBtn").classList.add("hidden");
 }
 
-function showAnswer(choice){
+function showAns(choice){
 clearInterval(timer);
-const q=questions[current];
-const buttons=document.querySelectorAll(".answers button");
-
-buttons.forEach((btn,i)=>{
-if(i===q.c) btn.classList.add("correct");
-if(i===choice && i!==q.c) btn.classList.add("wrong");
-btn.disabled=true;
+const q=questions[i];
+document.querySelectorAll(".answers button").forEach((b,idx)=>{
+if(idx===q.c) b.classList.add("correct");
+if(idx===choice && idx!==q.c) b.classList.add("wrong");
+b.disabled=true;
 });
-
 if(choice===q.c) score++;
 
 document.getElementById("explain").innerText="AI thinks: "+q.e;
@@ -263,14 +215,19 @@ document.getElementById("explain").style.display="block";
 document.getElementById("nextBtn").classList.remove("hidden");
 }
 
-function nextQuestion(){
-current++;
-if(current<questions.length){
-loadQuestion();
-}else{
-document.getElementById("gameScreen").classList.add("hidden");
-document.getElementById("endScreen").classList.remove("hidden");
-document.getElementById("scoreText").innerText=`Your Score: ${score} / ${questions.length}`;
+function nextQ(){
+i++;
+if(i<questions.length) loadQ();
+else{
+document.getElementById("game").classList.add("hidden");
+document.getElementById("end").classList.remove("hidden");
+
+let rank="Human Bias Detected";
+if(score>=10) rank="AI Thinker";
+else if(score>=7) rank="Logic Mind";
+
+document.getElementById("scoreText").innerText=`Score: ${score} / ${questions.length}`;
+document.getElementById("rankText").innerText=`Rank: ${rank}`;
 }
 }
 </script>
