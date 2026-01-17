@@ -1,215 +1,236 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>AI Applications</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>AI Applications</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="style.css">
+    <!-- CSS chung -->
+    <link rel="stylesheet" href="style.css">
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 
-  <style>
-    /* ===== FIX NHẸ RIÊNG TRANG NÀY ===== */
-    .ai-tools {
-      margin-top: 80px;
-    }
+    <style>
+        body {
+            background: radial-gradient(circle at top, #0a0f2c, #050816);
+            color: #e6e6ff;
+        }
 
-    .ai-card {
-      cursor: pointer;
-    }
+        .section {
+            padding: 100px 8% 80px;
+        }
 
-    .ai-info {
-      max-height: 0;
-      overflow: hidden;
-      transition: 0.4s ease;
-      opacity: 0.9;
-      font-size: 14px;
-      margin-top: 10px;
-    }
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: #7df9ff;
+            text-shadow: 0 0 15px rgba(125,249,255,0.6);
+        }
 
-    .ai-card.active .ai-info {
-      max-height: 300px;
-    }
+        /* ===== AI CARDS ===== */
+        .ai-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 25px;
+        }
 
-    .ai-info a {
-      display: inline-block;
-      margin-top: 8px;
-      color: #38bdf8;
-      font-weight: 600;
-      text-decoration: none;
-    }
+        .ai-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(125,249,255,0.2);
+            border-radius: 18px;
+            padding: 25px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
 
-    .ai-info a:hover {
-      text-decoration: underline;
-    }
-  </style>
+        .ai-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 25px rgba(125,249,255,0.3);
+        }
+
+        .ai-card h3 {
+            color: #7df9ff;
+            margin-bottom: 10px;
+        }
+
+        .ai-info {
+            max-height: 0;
+            overflow: hidden;
+            transition: 0.4s ease;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .ai-card.active .ai-info {
+            max-height: 300px;
+            margin-top: 15px;
+        }
+
+        /* ===== APPLICATIONS ===== */
+        .app-item {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 40px;
+            align-items: center;
+            margin-bottom: 80px;
+        }
+
+        .app-item img {
+            width: 100%;
+            border-radius: 18px;
+            box-shadow: 0 0 30px rgba(125,249,255,0.25);
+        }
+
+        .app-text h3 {
+            color: #7df9ff;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            border-top: 1px solid rgba(125,249,255,0.2);
+            color: #aaa;
+        }
+
+        @media (max-width: 900px) {
+            .app-item {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<!-- =======================
-     NAVBAR (GIỐNG INDEX)
-======================= -->
+<!-- ===== NAVBAR (GIỐNG HỆT INDEX.HTML) ===== -->
 <header class="navbar">
-  <div class="nav-left">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" class="logo-img">
-    <span class="logo-text">NhomNayManh</span>
-  </div>
+    <div class="nav-left">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" class="logo-img">
+        <span class="logo-text">NhomNayManh</span>
+    </div>
 
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="gtvapcnv.html">Author</a>
-    <a href="artificialintelligence.html">AI</a>
-    <a href="information.html" class="active">Applications</a>
-    <a href="minigame.html">Minigame</a>
-  </nav>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="gtvapcnv.html">Author</a>
+        <a href="artificialintelligence.html">AI</a>
+        <a href="information.html" class="active">Applications</a>
+        <a href="minigame.html">Minigame</a>
+    </nav>
 </header>
 
-<!-- =======================
-     HERO
-======================= -->
-<section class="hero" style="min-height:70vh">
-  <div class="hero-content">
-    <h1>AI APPLICATIONS</h1>
-    <p>
-      Popular AI systems and how artificial intelligence
-      is used in everyday life.
-    </p>
-  </div>
+<!-- ===== POPULAR AI ===== -->
+<section class="section">
+    <h2 class="section-title">Popular AI Systems</h2>
+
+    <div class="ai-grid">
+
+        <div class="ai-card" onclick="toggle(this)">
+            <h3>ChatGPT</h3>
+            <div class="ai-info">
+                <p><b>Strength:</b> Natural language understanding</p>
+                <p><b>Weakness:</b> May hallucinate</p>
+                <p><b>Use:</b> Study, writing, coding</p>
+            </div>
+        </div>
+
+        <div class="ai-card" onclick="toggle(this)">
+            <h3>Midjourney</h3>
+            <div class="ai-info">
+                <p><b>Strength:</b> Artistic AI images</p>
+                <p><b>Weakness:</b> Paid usage</p>
+                <p><b>Use:</b> Art, design</p>
+            </div>
+        </div>
+
+        <div class="ai-card" onclick="toggle(this)">
+            <h3>Google Gemini</h3>
+            <div class="ai-info">
+                <p><b>Strength:</b> Multimodal AI</p>
+                <p><b>Weakness:</b> Region limits</p>
+                <p><b>Use:</b> Search, assistant</p>
+            </div>
+        </div>
+
+        <div class="ai-card" onclick="toggle(this)">
+            <h3>DeepL</h3>
+            <div class="ai-info">
+                <p><b>Strength:</b> Accurate translation</p>
+                <p><b>Weakness:</b> Limited languages</p>
+                <p><b>Use:</b> Language translation</p>
+            </div>
+        </div>
+
+    </div>
 </section>
 
-<!-- =======================
-     POPULAR AI SYSTEMS
-======================= -->
-<section class="ai-section ai-tools">
-  <h2 class="ai-title">Popular AI Systems</h2>
-  <p class="ai-desc">
-    Click on an AI system to view its strengths, weaknesses, and uses.
-  </p>
+<!-- ===== AI IN DAILY LIFE ===== -->
+<section class="section">
+    <h2 class="section-title">AI in Daily Life</h2>
 
-  <div class="ai-grid">
-
-    <div class="ai-card" onclick="toggle(this)">
-      <h3>ChatGPT</h3>
-      <div class="ai-info">
-        <p><b>Strength:</b> Natural language understanding</p>
-        <p><b>Weakness:</b> May hallucinate</p>
-        <p><b>Use:</b> Learning, writing, coding</p>
-        <a href="https://chat.openai.com" target="_blank">Official Website</a>
-      </div>
+    <div class="app-item">
+        <img src="https://images.unsplash.com/photo-1605902711622-cfb43c4437d1">
+        <div class="app-text">
+            <h3>Smart Assistants</h3>
+            <p>AI helps manage schedules, reminders, and voice commands.</p>
+        </div>
     </div>
 
-    <div class="ai-card" onclick="toggle(this)">
-      <h3>Google Gemini</h3>
-      <div class="ai-info">
-        <p><b>Strength:</b> Google ecosystem integration</p>
-        <p><b>Weakness:</b> Limited regions</p>
-        <p><b>Use:</b> Search, productivity</p>
-        <a href="https://gemini.google.com" target="_blank">Official Website</a>
-      </div>
+    <div class="app-item">
+        <!-- FIX ẢNH HEALTHCARE -->
+        <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5">
+        <div class="app-text">
+            <h3>Healthcare</h3>
+            <p>AI supports disease detection, medical imaging, and patient care.</p>
+        </div>
     </div>
 
-    <div class="ai-card" onclick="toggle(this)">
-      <h3>Midjourney</h3>
-      <div class="ai-info">
-        <p><b>Strength:</b> High-quality AI art</p>
-        <p><b>Weakness:</b> Paid usage</p>
-        <p><b>Use:</b> Design, illustration</p>
-        <a href="https://www.midjourney.com" target="_blank">Official Website</a>
-      </div>
+    <div class="app-item">
+        <img src="https://images.unsplash.com/photo-1559526324-593bc073d938">
+        <div class="app-text">
+            <h3>Finance</h3>
+            <p>AI detects fraud, manages investments, and predicts markets.</p>
+        </div>
     </div>
 
-    <div class="ai-card" onclick="toggle(this)">
-      <h3>GitHub Copilot</h3>
-      <div class="ai-info">
-        <p><b>Strength:</b> Coding assistance</p>
-        <p><b>Weakness:</b> Needs human review</p>
-        <p><b>Use:</b> Programming</p>
-        <a href="https://github.com/features/copilot" target="_blank">Official Website</a>
-      </div>
+    <div class="app-item">
+        <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d">
+        <div class="app-text">
+            <h3>Education</h3>
+            <p>Personalized learning and AI tutors enhance education.</p>
+        </div>
     </div>
 
-    <div class="ai-card" onclick="toggle(this)">
-      <h3>IBM Watson</h3>
-      <div class="ai-info">
-        <p><b>Strength:</b> Data analytics</p>
-        <p><b>Weakness:</b> Complex setup</p>
-        <p><b>Use:</b> Healthcare, business</p>
-        <a href="https://www.ibm.com/watson" target="_blank">Official Website</a>
-      </div>
+    <div class="app-item">
+        <img src="https://images.unsplash.com/photo-1492724441997-5dc865305da7">
+        <div class="app-text">
+            <h3>Entertainment</h3>
+            <p>AI recommends content and creates music, videos, and art.</p>
+        </div>
     </div>
 
-    <div class="ai-card" onclick="toggle(this)">
-      <h3>DeepL</h3>
-      <div class="ai-info">
-        <p><b>Strength:</b> Accurate translation</p>
-        <p><b>Weakness:</b> Limited languages</p>
-        <p><b>Use:</b> Language translation</p>
-        <a href="https://www.deepl.com" target="_blank">Official Website</a>
-      </div>
+    <div class="app-item">
+        <img src="https://images.unsplash.com/photo-1526378722484-bd91ca387e72">
+        <div class="app-text">
+            <h3>Cybersecurity</h3>
+            <p>AI detects threats and protects digital systems.</p>
+        </div>
     </div>
 
-  </div>
 </section>
 
-<!-- =======================
-     AI IN DAILY LIFE
-======================= -->
-<section class="content">
-  <h2>AI in Daily Life</h2>
-
-  <div style="display:grid; gap:70px; margin-top:60px">
-
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center">
-      <img src="https://images.unsplash.com/photo-1605902711622-cfb43c4437b5" style="width:100%; border-radius:18px">
-      <div>
-        <h3>Smart Assistants</h3>
-        <p>AI helps manage schedules, reminders, and voice commands.</p>
-      </div>
-    </div>
-
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center">
-      <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5" style="width:100%; border-radius:18px">
-      <div>
-        <h3>Healthcare</h3>
-        <p>AI supports diagnosis, medical imaging, and patient care.</p>
-      </div>
-    </div>
-
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center">
-      <img src="https://images.unsplash.com/photo-1559526324-593bc073d938" style="width:100%; border-radius:18px">
-      <div>
-        <h3>Finance</h3>
-        <p>AI detects fraud, manages investments, and analyzes markets.</p>
-      </div>
-    </div>
-
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center">
-      <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d" style="width:100%; border-radius:18px">
-      <div>
-        <h3>Education</h3>
-        <p>AI provides personalized learning and intelligent tutoring.</p>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- =======================
-     FOOTER
-======================= -->
+<!-- ===== FOOTER ===== -->
 <footer>
-  © 2026 • Artificial Intelligence • Created by NhomNayManh
+    © 2026 • Created by NhomNayManh
 </footer>
 
 <script>
-  function toggle(card) {
-    card.classList.toggle("active");
-  }
+    function toggle(card) {
+        card.classList.toggle("active");
+    }
 </script>
 
 </body>
