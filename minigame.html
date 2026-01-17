@@ -1,14 +1,116 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
 <meta charset="UTF-8">
 <title>How AI Thinks | Mini Game</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <link rel="stylesheet" href="style.css">
+
+<style>
+body{
+  background: radial-gradient(circle at top,#0f2027,#000);
+  color:#e6f1ff;
+  font-family: 'Segoe UI',sans-serif;
+}
+
+.game-wrapper{
+  max-width:900px;
+  margin:120px auto 80px;
+  padding:40px;
+  background:rgba(255,255,255,0.03);
+  backdrop-filter: blur(12px);
+  border-radius:20px;
+  box-shadow:0 0 40px rgba(0,255,255,0.1);
+}
+
+.game-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+#timer{
+  font-size:18px;
+  color:#00f5ff;
+}
+
+.question{
+  font-size:26px;
+  margin-bottom:30px;
+}
+
+.options{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+}
+
+.options button{
+  padding:16px;
+  font-size:16px;
+  border:none;
+  border-radius:12px;
+  background:rgba(0,255,255,0.08);
+  color:#e6f1ff;
+  cursor:pointer;
+  transition:.25s;
+}
+
+.options button:hover{
+  background:rgba(0,255,255,0.18);
+}
+
+.options button.correct{
+  background:#00ff9c;
+  color:#000;
+}
+
+.options button.wrong{
+  background:#ff4d4d;
+}
+
+.result-box{
+  margin-top:25px;
+  font-size:18px;
+  min-height:40px;
+}
+
+.ai-think{
+  margin-top:10px;
+  font-size:15px;
+  color:#9aefff;
+  opacity:.9;
+}
+
+.next-btn{
+  margin-top:30px;
+  padding:14px 28px;
+  font-size:16px;
+  border:none;
+  border-radius:30px;
+  background:linear-gradient(135deg,#00f5ff,#00ff9c);
+  color:#000;
+  cursor:pointer;
+}
+
+.next-btn:disabled{
+  opacity:.4;
+  cursor:not-allowed;
+}
+
+footer{
+  text-align:center;
+  padding:30px;
+  opacity:.6;
+}
+</style>
 </head>
 
 <body>
 
+<!-- NAVBAR GIỐNG INDEX -->
 <header class="navbar">
   <div class="nav-left">
     <span class="logo-text">NhomNayManh</span>
@@ -21,224 +123,161 @@
   </nav>
 </header>
 
-<section class="hero">
-  <div class="hero-content">
-    <h1>HOW AI THINKS</h1>
-    <p>Experience how artificial intelligence makes decisions</p>
-  </div>
-</section>
+<div class="game-wrapper">
 
-<section class="game-container">
-
-  <div class="game-top">
-    <h2 id="question"></h2>
-    <div class="game-controls">
-      <span id="timer">⏳ 10s</span>
-      <button id="teacherToggle">🧑‍🏫 Teacher View: OFF</button>
-    </div>
+  <div class="game-header">
+    <h2>How AI Thinks</h2>
+    <span id="timer">⏳ 10s</span>
   </div>
+
+  <div id="question" class="question"></div>
 
   <div id="options" class="options"></div>
 
-  <div id="feedback" class="feedback"></div>
-  <div id="explain" class="explain"></div>
+  <div class="result-box">
+    <div id="feedback"></div>
+    <div id="aiThink" class="ai-think"></div>
+  </div>
 
   <button id="nextBtn" class="next-btn" disabled>Next Question</button>
 
-</section>
+</div>
 
 <footer>
-© 2026 • AI Mini Game • Created by NhomNayManh
+© 2026 • Created by NhomNayManh
 </footer>
 
 <script>
-const questions = [
+const questions=[
 {
-q:"AI controlling a self-driving car sees danger. What is priority?",
-options:["Protect passenger","Minimize total harm","Follow law","Random"],
-correct:1,
-explain:"AI evaluates outcomes using probability to minimize overall harm."
+q:"Why can AI answer confidently but still be wrong?",
+o:["It lies","It predicts words","It understands truth","It has emotions"],
+c:1,
+t:"AI predicts the most probable word sequence, not factual truth."
 },
 {
-q:"Which data should AI avoid in hiring?",
-options:["Skills","Experience","Gender","Portfolio"],
-correct:2,
-explain:"Sensitive attributes introduce bias and unfair decisions."
+q:"What is the biggest source of AI bias?",
+o:["Hardware","Training data","Algorithms","UI design"],
+c:1,
+t:"AI reflects patterns and bias in its training data."
 },
 {
-q:"Why can AI sound confident but be wrong?",
-options:["It lies","Predicts words","Understands truth","Has emotions"],
-correct:1,
-explain:"AI predicts likely word sequences, not truth."
+q:"Why does AI give different answers to the same question?",
+o:["Bug","Random","Probability sampling","Memory loss"],
+c:2,
+t:"AI samples from probability distributions, causing variation."
 },
 {
-q:"What mainly causes AI bias?",
-options:["Hardware","Training data","Speed","UI"],
-correct:1,
-explain:"Biased datasets lead to biased outcomes."
+q:"What is AI hallucination?",
+o:["System crash","Fake image","Confident false output","Lag"],
+c:2,
+t:"Hallucination is when AI generates believable but incorrect info."
 },
 {
-q:"How does AI select an answer?",
-options:["Emotion","Guess","Probability","Opinion"],
-correct:2,
-explain:"Answers are chosen via probability distributions."
+q:"Best role of AI in society?",
+o:["Replace humans","Decision support","Authority","Judge"],
+c:1,
+t:"AI should assist human decision-making, not replace responsibility."
 },
 {
-q:"Why does AI give different answers?",
-options:["Bug","Random","Probability","Memory loss"],
-correct:2,
-explain:"Sampling probability causes variation."
+q:"Why must AI avoid sensitive personal data?",
+o:["Slow","Illegal","Bias risk","Useless"],
+c:2,
+t:"Sensitive data increases unfair and biased outcomes."
 },
 {
-q:"Best role of AI?",
-options:["Replace humans","Decision support","Authority","Judge"],
-correct:1,
-explain:"AI assists humans, not replaces responsibility."
+q:"What improves AI fairness most?",
+o:["Faster models","Balanced datasets","More parameters","Random data"],
+c:1,
+t:"Balanced data reduces systematic bias."
 },
 {
-q:"What improves AI fairness?",
-options:["More speed","Balanced data","Less data","Random data"],
-correct:1,
-explain:"Balanced datasets reduce bias."
-},
-{
-q:"AI hallucination means?",
-options:["Bug","Fake image","Confident wrong answer","Crash"],
-correct:2,
-explain:"Hallucinations are believable but false outputs."
-},
-{
-q:"When AI is unsure?",
-options:["Guess","Hide","Flag uncertainty","Change answer"],
-correct:2,
-explain:"Responsible AI communicates uncertainty."
+q:"When AI is unsure, what should it do?",
+o:["Guess","Hide","Signal uncertainty","Change answer"],
+c:2,
+t:"Responsible AI communicates uncertainty."
 }
 ];
 
-let current = 0;
-let score = 0;
-let teacherView = false;
-let timeLeft = 10;
-let timerInterval;
-let answered = false;
+let i=0,score=0,time=10,lock=false,interval;
 
-const qEl = document.getElementById("question");
-const optEl = document.getElementById("options");
-const feedback = document.getElementById("feedback");
-const explain = document.getElementById("explain");
-const nextBtn = document.getElementById("nextBtn");
-const toggleBtn = document.getElementById("teacherToggle");
-const timerEl = document.getElementById("timer");
+const qEl=document.getElementById("question");
+const optEl=document.getElementById("options");
+const fb=document.getElementById("feedback");
+const aiThink=document.getElementById("aiThink");
+const next=document.getElementById("nextBtn");
+const timer=document.getElementById("timer");
 
-toggleBtn.onclick = () => {
-  teacherView = !teacherView;
-  toggleBtn.innerText = teacherView
-    ? "🧑‍🏫 Teacher View: ON"
-    : "🧑‍🏫 Teacher View: OFF";
-};
-
-function startTimer() {
-  timeLeft = 10;
-  timerEl.innerText = `⏳ ${timeLeft}s`;
-  timerInterval = setInterval(() => {
-    timeLeft--;
-    timerEl.innerText = `⏳ ${timeLeft}s`;
-    if (timeLeft <= 0) {
-      clearInterval(timerInterval);
-      timeUp();
-    }
-  }, 1000);
+function startTimer(){
+  time=10;
+  timer.innerText=`⏳ ${time}s`;
+  interval=setInterval(()=>{
+    time--;
+    timer.innerText=`⏳ ${time}s`;
+    if(time<=0){clearInterval(interval); reveal(-1);}
+  },1000);
 }
 
-function loadQuestion() {
-  answered = false;
-  clearInterval(timerInterval);
+function load(){
+  lock=false;
+  clearInterval(interval);
   startTimer();
-
-  feedback.innerText = "";
-  explain.innerText = "";
-  nextBtn.disabled = true;
-  optEl.innerHTML = "";
-
-  const q = questions[current];
-  qEl.innerText = `Q${current+1}. ${q.q}`;
-
-  q.options.forEach((opt,i)=>{
-    const btn = document.createElement("button");
-    btn.innerText = opt;
-    btn.onclick = ()=>check(i,btn);
-    optEl.appendChild(btn);
+  fb.innerText="";
+  aiThink.innerText="";
+  next.disabled=true;
+  optEl.innerHTML="";
+  qEl.innerText=`Q${i+1}. ${questions[i].q}`;
+  questions[i].o.forEach((x,idx)=>{
+    let b=document.createElement("button");
+    b.innerText=x;
+    b.onclick=()=>reveal(idx,b);
+    optEl.appendChild(b);
   });
 }
 
-function check(i,btn){
-  if(answered) return;
-  answered = true;
-  clearInterval(timerInterval);
+function reveal(choice,btn){
+  if(lock) return;
+  lock=true;
+  clearInterval(interval);
 
-  const q = questions[current];
-  document.querySelectorAll(".options button")
-    .forEach(b=>b.disabled=true);
+  let q=questions[i];
+  [...optEl.children].forEach(b=>b.disabled=true);
 
-  if(i===q.correct){
+  if(choice===q.c){
     btn.classList.add("correct");
-    feedback.innerText="✔ Correct";
+    fb.innerText="✔ Correct";
     score++;
-  }else{
+  }else if(choice!==-1){
     btn.classList.add("wrong");
-    feedback.innerText="✖ Incorrect";
-  }
-
-  if(teacherView){
-    explain.innerText = "AI Thinking: " + q.explain;
-  }
-
-  nextBtn.disabled = false;
-}
-
-function timeUp(){
-  if(answered) return;
-  answered = true;
-  feedback.innerText = "⏰ Time's up!";
-  document.querySelectorAll(".options button")
-    .forEach(b=>b.disabled=true);
-
-  if(teacherView){
-    explain.innerText = "AI Thinking: " + questions[current].explain;
-  }
-
-  nextBtn.disabled = false;
-}
-
-nextBtn.onclick = ()=>{
-  current++;
-  if(current < questions.length){
-    loadQuestion();
+    fb.innerText="✖ Incorrect";
+    optEl.children[q.c].classList.add("correct");
   }else{
-    showResult();
+    fb.innerText="⏰ Time's up";
+    optEl.children[q.c].classList.add("correct");
   }
+
+  aiThink.innerText="AI thinks: "+q.t;
+  next.disabled=false;
+}
+
+next.onclick=()=>{
+  i++;
+  if(i<questions.length) load();
+  else end();
 };
 
-function showResult(){
-  clearInterval(timerInterval);
-  let percent = Math.round(score/questions.length*100);
-  let rank =
-    percent>=90?"AI Expert":
-    percent>=70?"AI Thinker":
-    percent>=40?"AI Learner":"AI Beginner";
-
-  qEl.innerText = "Result";
-  optEl.innerHTML = `
-    <h3>${score}/${questions.length} correct (${percent}%)</h3>
-    <h2>${rank}</h2>
-  `;
-  feedback.innerText="";
-  explain.innerText="";
-  nextBtn.style.display="none";
-  timerEl.style.display="none";
+function end(){
+  let p=Math.round(score/questions.length*100);
+  let rank=p>=85?"AI Master":p>=60?"AI Thinker":"AI Explorer";
+  qEl.innerText="Result";
+  optEl.innerHTML=`<h2>${score}/${questions.length} (${p}%)</h2><h3>${rank}</h3>`;
+  fb.innerText="";
+  aiThink.innerText="";
+  next.style.display="none";
+  timer.style.display="none";
 }
 
-loadQuestion();
+load();
 </script>
 
 </body>
