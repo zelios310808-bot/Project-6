@@ -494,7 +494,15 @@ footer {
       transparent 1px,
       transparent 6px
     ),
-    repe
+    repeating-linear-gradient(
+      90deg,
+      rgba(56,189,248,0.03) 0px,
+      rgba(56,189,248,0.03) 1px,
+      transparent 1px,
+      transparent 80px
+    );
+}
+
 
 
 
