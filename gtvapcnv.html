@@ -1,1 +1,873 @@
+<!doctype html>
+<html lang="vi" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neon Logic: Order The Future</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&amp;family=Exo+2:wght@300;400;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      font-family: 'Exo 2', sans-serif;
+    }
+    
+    .font-orbitron {
+      font-family: 'Orbitron', monospace;
+    }
+    
+    @keyframes neonPulse {
+      0%, 100% { 
+        box-shadow: 0 0 5px #00FFF0, 0 0 10px #00FFF0, 0 0 20px #00FFF0;
+        border-color: #00FFF0;
+      }
+      50% { 
+        box-shadow: 0 0 10px #9B5CFF, 0 0 20px #9B5CFF, 0 0 30px #9B5CFF;
+        border-color: #9B5CFF;
+      }
+    }
+    
+    @keyframes glitch {
+      0% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(-2px, -2px); }
+      60% { transform: translate(2px, 2px); }
+      80% { transform: translate(2px, -2px); }
+      100% { transform: translate(0); }
+    }
+    
+    @keyframes scanline {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+    
+    @keyframes typewriter {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+    
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes loadingBar {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+    
+    .neon-glow {
+      animation: neonPulse 3s ease-in-out infinite;
+    }
+    
+    .glitch-effect {
+      animation: glitch 0.3s ease-in-out;
+    }
+    
+    .float-animation {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .data-card {
+      background: linear-gradient(135deg, rgba(11, 15, 26, 0.9) 0%, rgba(20, 30, 50, 0.9) 100%);
+      border: 2px solid #00FFF0;
+      box-shadow: 0 0 10px rgba(0, 255, 240, 0.3), inset 0 0 20px rgba(0, 255, 240, 0.1);
+      transition: all 0.3s ease;
+      cursor: grab;
+    }
+    
+    .data-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 20px rgba(0, 255, 240, 0.5), 0 0 40px rgba(155, 92, 255, 0.3), inset 0 0 30px rgba(0, 255, 240, 0.2);
+    }
+    
+    .data-card.dragging {
+      opacity: 0.7;
+      transform: scale(1.05) rotate(2deg);
+      cursor: grabbing;
+      z-index: 1000;
+    }
+    
+    .drop-zone {
+      background: linear-gradient(135deg, rgba(0, 255, 240, 0.05) 0%, rgba(155, 92, 255, 0.05) 100%);
+      border: 2px dashed rgba(0, 255, 240, 0.4);
+      transition: all 0.3s ease;
+    }
+    
+    .drop-zone.drag-over {
+      background: linear-gradient(135deg, rgba(0, 255, 240, 0.15) 0%, rgba(155, 92, 255, 0.15) 100%);
+      border-color: #FF2ED1;
+      box-shadow: 0 0 20px rgba(255, 46, 209, 0.4);
+    }
+    
+    .drop-zone.filled {
+      border-style: solid;
+      background: linear-gradient(135deg, rgba(0, 255, 240, 0.1) 0%, rgba(155, 92, 255, 0.1) 100%);
+    }
+    
+    .circuit-line {
+      background: linear-gradient(90deg, transparent 0%, #00FFF0 50%, transparent 100%);
+      height: 2px;
+      box-shadow: 0 0 10px #00FFF0;
+    }
+    
+    .success-overlay {
+      background: radial-gradient(ellipse at center, rgba(0, 255, 240, 0.2) 0%, rgba(11, 15, 26, 0.95) 100%);
+    }
+    
+    .chip-icon {
+      filter: drop-shadow(0 0 5px #00FFF0);
+    }
+    
+    .scanline::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(180deg, transparent, rgba(0, 255, 240, 0.3), transparent);
+      animation: scanline 4s linear infinite;
+      pointer-events: none;
+    }
+    
+    .loading-bar {
+      animation: loadingBar 2s ease-out forwards;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-[#0B0F1A] text-white overflow-auto">
+  <div id="app" class="h-full w-full relative scanline"><!-- Background Grid -->
+   <div class="absolute inset-0 opacity-10" style="background-image: linear-gradient(rgba(0, 255, 240, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 240, 0.1) 1px, transparent 1px); background-size: 50px 50px;"></div><!-- Main Container -->
+   <div class="relative z-10 min-h-full p-4 md:p-8 flex flex-col"><!-- Header -->
+    <header class="text-center mb-6 md:mb-8">
+     <div class="inline-block"><!-- Chip Icon -->
+      <svg class="w-12 h-12 md:w-16 md:h-16 mx-auto mb-4 chip-icon float-animation" viewbox="0 0 64 64" fill="none"><rect x="16" y="16" width="32" height="32" rx="4" stroke="#00FFF0" stroke-width="2" /> <rect x="24" y="24" width="16" height="16" fill="#9B5CFF" opacity="0.5" /> <circle cx="32" cy="32" r="4" fill="#00FFF0" /> <!-- Pins --> <line x1="8" y1="24" x2="16" y2="24" stroke="#00FFF0" stroke-width="2" /> <line x1="8" y1="32" x2="16" y2="32" stroke="#00FFF0" stroke-width="2" /> <line x1="8" y1="40" x2="16" y2="40" stroke="#00FFF0" stroke-width="2" /> <line x1="48" y1="24" x2="56" y2="24" stroke="#00FFF0" stroke-width="2" /> <line x1="48" y1="32" x2="56" y2="32" stroke="#00FFF0" stroke-width="2" /> <line x1="48" y1="40" x2="56" y2="40" stroke="#00FFF0" stroke-width="2" /> <line x1="24" y1="8" x2="24" y2="16" stroke="#00FFF0" stroke-width="2" /> <line x1="32" y1="8" x2="32" y2="16" stroke="#00FFF0" stroke-width="2" /> <line x1="40" y1="8" x2="40" y2="16" stroke="#00FFF0" stroke-width="2" /> <line x1="24" y1="48" x2="24" y2="56" stroke="#00FFF0" stroke-width="2" /> <line x1="32" y1="48" x2="32" y2="56" stroke="#00FFF0" stroke-width="2" /> <line x1="40" y1="48" x2="40" y2="56" stroke="#00FFF0" stroke-width="2" />
+      </svg>
+      <h1 id="game-title" class="font-orbitron text-3xl md:text-5xl font-black tracking-wider mb-2" style="text-shadow: 0 0 10px #00FFF0, 0 0 20px #00FFF0, 0 0 40px #9B5CFF;">NEON LOGIC</h1>
+      <p id="game-subtitle" class="text-lg md:text-xl tracking-widest" style="color: #9B5CFF;">Reorder the Data Sequence</p><!-- Question Title -->
+      <p id="question-title" class="font-orbitron text-sm md:text-base mt-4 px-4 py-2 inline-block rounded-lg" style="background: rgba(0, 255, 240, 0.1); color: #00FFF0; border: 1px solid rgba(0, 255, 240, 0.3);">Question 1: AI in Modern Life</p><!-- Question Navigation -->
+      <div class="flex items-center justify-center gap-2 mt-4"><button id="prev-question-btn" class="font-orbitron px-3 py-1 text-xs rounded border border-[#9B5CFF] text-[#9B5CFF] hover:bg-[#9B5CFF] hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed"> ← PREV </button> <span id="question-counter" class="font-orbitron text-xs px-3" style="color: #FF2ED1;"> 1 / 6 </span> <button id="next-question-btn" class="font-orbitron px-3 py-1 text-xs rounded border border-[#9B5CFF] text-[#9B5CFF] hover:bg-[#9B5CFF] hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed"> NEXT → </button>
+      </div>
+     </div><!-- Circuit Line -->
+     <div class="circuit-line w-full max-w-md mx-auto mt-4"></div>
+    </header><!-- Game Area -->
+    <div class="flex-1 flex flex-col lg:flex-row gap-6 md:gap-8 max-w-6xl mx-auto w-full"><!-- Drop Zones -->
+     <div class="flex-1 order-1 lg:order-1">
+      <h2 class="font-orbitron text-sm md:text-base mb-4 text-center" style="color: #FF2ED1;">▸ DROP ZONE ◂</h2>
+      <div id="drop-zones" class="space-y-3"><!-- Drop zones will be generated -->
+      </div>
+     </div><!-- Data Cards -->
+     <div class="flex-1 order-2 lg:order-2">
+      <h2 class="font-orbitron text-sm md:text-base mb-4 text-center" style="color: #00FFF0;">▸ DATA FRAGMENTS ◂</h2>
+      <div id="data-cards" class="space-y-3"><!-- Data cards will be generated -->
+      </div>
+     </div>
+    </div><!-- Controls -->
+    <div class="mt-6 md:mt-8 text-center space-y-4"><button id="check-btn" class="font-orbitron px-8 py-3 text-sm md:text-base rounded-lg neon-glow transition-all hover:scale-105" style="background: linear-gradient(135deg, #0B0F1A 0%, #1a2035 100%);"> ⚡ VERIFY SEQUENCE ⚡ </button> <button id="reset-btn" class="font-orbitron px-6 py-2 text-xs md:text-sm rounded-lg border border-[#9B5CFF] text-[#9B5CFF] hover:bg-[#9B5CFF] hover:text-white transition-all ml-4"> ↺ RESET </button>
+     <p id="status-message" class="text-sm mt-4 h-6"></p>
+    </div>
+   </div><!-- Success Overlay -->
+   <div id="success-overlay" class="fixed inset-0 success-overlay z-50 hidden flex-col items-center justify-center p-8">
+    <div class="text-center"><!-- Success Icon -->
+     <svg class="w-24 h-24 md:w-32 md:h-32 mx-auto mb-6" viewbox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="none" stroke="#00FFF0" stroke-width="2" opacity="0.3" /> <circle cx="50" cy="50" r="35" fill="none" stroke="#9B5CFF" stroke-width="2" opacity="0.5" /> <path d="M30 50 L45 65 L70 35" fill="none" stroke="#00FFF0" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 10px #00FFF0);" />
+     </svg>
+     <h2 id="success-title" class="font-orbitron text-3xl md:text-5xl font-black mb-4 glitch-effect" style="text-shadow: 0 0 20px #00FFF0, 0 0 40px #00FFF0;">SYSTEM ONLINE</h2>
+     <p class="font-orbitron text-lg md:text-xl mb-6" style="color: #9B5CFF;">LOGIC SEQUENCE VERIFIED</p><!-- Loading Bar -->
+     <div class="w-64 md:w-80 h-2 mx-auto mb-6 rounded-full overflow-hidden" style="background: rgba(0, 255, 240, 0.2);">
+      <div class="loading-bar h-full rounded-full" style="background: linear-gradient(90deg, #00FFF0, #9B5CFF, #FF2ED1);"></div>
+     </div><!-- Correct Order -->
+     <div id="correct-sequence" class="font-orbitron text-xl md:text-2xl tracking-widest" style="color: #FF2ED1;">
+      C → A → B
+     </div>
+     <div class="mt-6 space-x-3"><button id="next-question-success-btn" class="font-orbitron px-6 py-3 rounded-lg border-2 border-[#9B5CFF] hover:bg-[#9B5CFF] hover:text-white transition-all"> NEXT QUESTION → </button> <button id="play-again-btn" class="font-orbitron px-8 py-3 rounded-lg border-2 border-[#00FFF0] hover:bg-[#00FFF0] hover:text-[#0B0F1A] transition-all"> ↺ RETRY </button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      game_title: 'NEON LOGIC',
+      game_subtitle: 'Reorder the Data Sequence',
+      success_message: 'SYSTEM ONLINE'
+    };
 
+    // Sound System using Web Audio API
+    const AudioSystem = {
+      context: null,
+      enabled: true,
+      
+      init() {
+        try {
+          this.context = new (window.AudioContext || window.webkitAudioContext)();
+        } catch (e) {
+          console.log('Web Audio API not supported');
+          this.enabled = false;
+        }
+      },
+      
+      // Play pickup sound (higher pitch beep)
+      playPickup() {
+        if (!this.enabled || !this.context) return;
+        const oscillator = this.context.createOscillator();
+        const gainNode = this.context.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(this.context.destination);
+        
+        oscillator.frequency.value = 800;
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.15, this.context.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.1);
+        
+        oscillator.start(this.context.currentTime);
+        oscillator.stop(this.context.currentTime + 0.1);
+      },
+      
+      // Play drop sound (lower pitch beep)
+      playDrop() {
+        if (!this.enabled || !this.context) return;
+        const oscillator = this.context.createOscillator();
+        const gainNode = this.context.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(this.context.destination);
+        
+        oscillator.frequency.value = 400;
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.2, this.context.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.15);
+        
+        oscillator.start(this.context.currentTime);
+        oscillator.stop(this.context.currentTime + 0.15);
+      },
+      
+      // Play error sound (buzzer)
+      playError() {
+        if (!this.enabled || !this.context) return;
+        const oscillator = this.context.createOscillator();
+        const gainNode = this.context.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(this.context.destination);
+        
+        oscillator.frequency.value = 200;
+        oscillator.type = 'sawtooth';
+        
+        gainNode.gain.setValueAtTime(0.15, this.context.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.3);
+        
+        oscillator.start(this.context.currentTime);
+        oscillator.stop(this.context.currentTime + 0.3);
+      },
+      
+      // Play success sound (ascending melody)
+      playSuccess() {
+        if (!this.enabled || !this.context) return;
+        const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+        
+        notes.forEach((freq, index) => {
+          const oscillator = this.context.createOscillator();
+          const gainNode = this.context.createGain();
+          
+          oscillator.connect(gainNode);
+          gainNode.connect(this.context.destination);
+          
+          oscillator.frequency.value = freq;
+          oscillator.type = 'sine';
+          
+          const startTime = this.context.currentTime + (index * 0.15);
+          gainNode.gain.setValueAtTime(0.2, startTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 0.3);
+          
+          oscillator.start(startTime);
+          oscillator.stop(startTime + 0.3);
+        });
+      },
+      
+      // Play hover sound (soft click)
+      playHover() {
+        if (!this.enabled || !this.context) return;
+        const oscillator = this.context.createOscillator();
+        const gainNode = this.context.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(this.context.destination);
+        
+        oscillator.frequency.value = 1200;
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.05, this.context.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.05);
+        
+        oscillator.start(this.context.currentTime);
+        oscillator.stop(this.context.currentTime + 0.05);
+      },
+      
+      // Play button click sound
+      playClick() {
+        if (!this.enabled || !this.context) return;
+        const oscillator = this.context.createOscillator();
+        const gainNode = this.context.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(this.context.destination);
+        
+        oscillator.frequency.value = 600;
+        oscillator.type = 'square';
+        
+        gainNode.gain.setValueAtTime(0.1, this.context.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.08);
+        
+        oscillator.start(this.context.currentTime);
+        oscillator.stop(this.context.currentTime + 0.08);
+      }
+    };
+    
+    // Initialize audio system
+    AudioSystem.init();
+
+    // Game Data - Multiple Questions with Random Order
+    const allQuestions = [
+      {
+        id: 1,
+        title: "Question 1: The Rise of AI in Modern Life",
+        fragments: [
+          { id: 1, code: 'DATA_C', text: 'AI algorithms analyze massive amounts of data to provide personalized recommendations instantly.', correctPosition: 1 },
+          { id: 2, code: 'DATA_E', text: 'As a result, AI has become an indispensable tool shaping the future of humanity.', correctPosition: 2 },
+          { id: 3, code: 'DATA_A', text: 'Artificial intelligence is rapidly transforming how people live and work across the globe.', correctPosition: 3 },
+          { id: 4, code: 'DATA_D', text: 'This technological revolution has made information more accessible than ever before.', correctPosition: 4 },
+          { id: 5, code: 'DATA_B', text: 'Smart assistants like Siri and Alexa now help millions manage daily tasks effortlessly.', correctPosition: 5 }
+        ],
+        correctSequence: 'C → E → A → D → B'
+      },
+      {
+        id: 2,
+        title: "Question 2: AI Revolutionizing Education",
+        fragments: [
+          { id: 1, code: 'DATA_B', text: 'Intelligent tutoring systems can identify knowledge gaps and provide targeted support.', correctPosition: 1 },
+          { id: 2, code: 'DATA_D', text: 'However, over-dependence on AI may weaken students\' independent problem-solving abilities.', correctPosition: 2 },
+          { id: 3, code: 'DATA_A', text: 'Educational technology powered by AI is changing how students learn worldwide.', correctPosition: 3 },
+          { id: 4, code: 'DATA_E', text: 'Therefore, educators must balance AI tools with traditional critical thinking development.', correctPosition: 4 },
+          { id: 5, code: 'DATA_C', text: 'Students can now access instant explanations and practice problems adapted to their level.', correctPosition: 5 }
+        ],
+        correctSequence: 'B → D → A → E → C'
+      },
+      {
+        id: 3,
+        title: "Question 3: AI Shaping Daily Decisions",
+        fragments: [
+          { id: 1, code: 'DATA_E', text: 'Consequently, maintaining a balance between AI assistance and personal thinking is crucial.', correctPosition: 1 },
+          { id: 2, code: 'DATA_C', text: 'Shopping platforms employ AI to predict products users might want before they search.', correctPosition: 2 },
+          { id: 3, code: 'DATA_A', text: 'Modern consumers increasingly rely on AI recommendations for everyday choices.', correctPosition: 3 },
+          { id: 4, code: 'DATA_D', text: 'While convenient, this automation may gradually diminish our independent judgment skills.', correctPosition: 4 },
+          { id: 5, code: 'DATA_B', text: 'Navigation apps use machine learning to suggest optimal routes based on real-time traffic.', correctPosition: 5 }
+        ],
+        correctSequence: 'E → C → A → D → B'
+      },
+      {
+        id: 4,
+        title: "Question 4: AI's Impact on Critical Thinking",
+        fragments: [
+          { id: 1, code: 'DATA_D', text: 'People might accept AI conclusions without questioning the underlying logic or biases.', correctPosition: 1 },
+          { id: 2, code: 'DATA_A', text: 'Artificial intelligence offers unprecedented support for complex problem-solving tasks.', correctPosition: 2 },
+          { id: 3, code: 'DATA_C', text: 'Yet excessive reliance on AI-generated answers may erode analytical thinking abilities.', correctPosition: 3 },
+          { id: 4, code: 'DATA_E', text: 'Therefore, AI should enhance human intelligence, not replace our capacity to think deeply.', correctPosition: 4 },
+          { id: 5, code: 'DATA_B', text: 'Professionals can now process information and generate solutions faster than ever.', correctPosition: 5 }
+        ],
+        correctSequence: 'D → A → C → E → B'
+      },
+      {
+        id: 5,
+        title: "Question 5: AI and Social Media Psychology",
+        fragments: [
+          { id: 1, code: 'DATA_C', text: 'Users unconsciously compare their real lives with these carefully filtered online personas.', correctPosition: 1 },
+          { id: 2, code: 'DATA_A', text: 'Social media algorithms powered by AI curate personalized content feeds for billions daily.', correctPosition: 2 },
+          { id: 3, code: 'DATA_E', text: 'Recognizing AI\'s psychological influence is essential for maintaining healthy digital habits.', correctPosition: 3 },
+          { id: 4, code: 'DATA_B', text: 'These systems prioritize posts showing idealized lifestyles, achievements, and beauty standards.', correctPosition: 4 },
+          { id: 5, code: 'DATA_D', text: 'This constant comparison often triggers anxiety, inadequacy, and diminished self-worth.', correctPosition: 5 }
+        ],
+        correctSequence: 'C → A → E → B → D'
+      },
+      {
+        id: 6,
+        title: "Question 6: A Balanced View on AI Adoption",
+        fragments: [
+          { id: 1, code: 'DATA_E', text: 'Ultimately, responsible AI use means augmenting human potential, not substituting human judgment.', correctPosition: 1 },
+          { id: 2, code: 'DATA_B', text: 'In education and business, AI demonstrably enhances productivity and learning outcomes.', correctPosition: 2 },
+          { id: 3, code: 'DATA_D', text: 'However, unchecked AI dependence risks weakening essential human cognitive skills.', correctPosition: 3 },
+          { id: 4, code: 'DATA_A', text: 'The integration of AI into society presents both remarkable opportunities and genuine concerns.', correctPosition: 4 },
+          { id: 5, code: 'DATA_C', text: 'Students access personalized learning while workers automate repetitive tasks efficiently.', correctPosition: 5 }
+        ],
+        correctSequence: 'E → B → D → A → C'
+      }
+    ];
+
+    let currentQuestionIndex = 0;
+    let currentQuestion = allQuestions[currentQuestionIndex];
+    let dataFragments = currentQuestion.fragments;
+
+    // Shuffle array
+    function shuffleArray(array) {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
+
+    let shuffledFragments = shuffleArray(dataFragments);
+    let dropZoneContents = [];
+    
+    // Initialize drop zones based on current question
+    function initializeDropZones() {
+      dropZoneContents = new Array(currentQuestion.fragments.length).fill(null);
+    }
+    
+    initializeDropZones();
+    let draggedElement = null;
+    let draggedData = null;
+
+    // Render Drop Zones
+    function renderDropZones() {
+      const container = document.getElementById('drop-zones');
+      container.innerHTML = '';
+      
+      for (let i = 0; i < currentQuestion.fragments.length; i++) {
+        const zone = document.createElement('div');
+        zone.className = `drop-zone rounded-lg p-3 md:p-4 min-h-[70px] md:min-h-[80px] flex items-center ${dropZoneContents[i] ? 'filled' : ''}`;
+        zone.dataset.position = i;
+        
+        if (dropZoneContents[i]) {
+          const fragment = dropZoneContents[i];
+          zone.innerHTML = `
+            <div class="data-card w-full rounded-lg p-3 md:p-4" data-id="${fragment.id}" draggable="true">
+              <div class="flex items-start gap-3">
+                <div class="flex-shrink-0">
+                  <span class="font-orbitron text-xs px-2 py-1 rounded" style="background: rgba(155, 92, 255, 0.3); color: #9B5CFF;">${fragment.code}</span>
+                </div>
+                <p class="text-sm md:text-base" style="color: #00FFF0;">${fragment.text}</p>
+              </div>
+            </div>
+          `;
+        } else {
+          zone.innerHTML = `
+            <div class="text-center w-full">
+              <span class="font-orbitron text-xs md:text-sm opacity-40" style="color: #00FFF0;">[ ${i + 1} ] Drop Data Here</span>
+            </div>
+          `;
+        }
+        
+        container.appendChild(zone);
+      }
+      
+      addDropZoneListeners();
+    }
+
+    // Render Data Cards
+    function renderDataCards() {
+      const container = document.getElementById('data-cards');
+      container.innerHTML = '';
+      
+      const availableFragments = shuffledFragments.filter(f => !dropZoneContents.includes(f));
+      
+      if (availableFragments.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-8 opacity-50">
+            <svg class="w-12 h-12 mx-auto mb-2" viewBox="0 0 24 24" fill="none" stroke="#9B5CFF" stroke-width="2">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <p class="font-orbitron text-sm" style="color: #9B5CFF;">All fragments placed</p>
+          </div>
+        `;
+        return;
+      }
+      
+      availableFragments.forEach(fragment => {
+        const card = document.createElement('div');
+        card.className = 'data-card rounded-lg p-3 md:p-4';
+        card.draggable = true;
+        card.dataset.id = fragment.id;
+        
+        card.innerHTML = `
+          <div class="flex items-start gap-3">
+            <div class="flex-shrink-0">
+              <span class="font-orbitron text-xs px-2 py-1 rounded" style="background: rgba(0, 255, 240, 0.2); color: #00FFF0;">${fragment.code}</span>
+            </div>
+            <p class="text-sm md:text-base">${fragment.text}</p>
+          </div>
+        `;
+        
+        container.appendChild(card);
+      });
+      
+      addCardListeners();
+    }
+
+    // Add drag listeners to cards
+    function addCardListeners() {
+      document.querySelectorAll('.data-card').forEach(card => {
+        card.addEventListener('dragstart', handleDragStart);
+        card.addEventListener('dragend', handleDragEnd);
+        card.addEventListener('mouseenter', () => AudioSystem.playHover());
+        
+        // Touch support
+        card.addEventListener('touchstart', handleTouchStart, { passive: false });
+        card.addEventListener('touchmove', handleTouchMove, { passive: false });
+        card.addEventListener('touchend', handleTouchEnd);
+      });
+    }
+
+    // Add drop listeners to zones
+    function addDropZoneListeners() {
+      document.querySelectorAll('.drop-zone').forEach(zone => {
+        zone.addEventListener('dragover', handleDragOver);
+        zone.addEventListener('dragleave', handleDragLeave);
+        zone.addEventListener('drop', handleDrop);
+      });
+      
+      // Also make cards in zones draggable again
+      document.querySelectorAll('.drop-zone .data-card').forEach(card => {
+        card.addEventListener('dragstart', handleDragStart);
+        card.addEventListener('dragend', handleDragEnd);
+        card.addEventListener('mouseenter', () => AudioSystem.playHover());
+        card.addEventListener('touchstart', handleTouchStart, { passive: false });
+        card.addEventListener('touchmove', handleTouchMove, { passive: false });
+        card.addEventListener('touchend', handleTouchEnd);
+      });
+    }
+
+    function handleDragStart(e) {
+      draggedElement = e.target.closest('.data-card');
+      draggedData = dataFragments.find(f => f.id === parseInt(draggedElement.dataset.id));
+      draggedElement.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      AudioSystem.playPickup();
+    }
+
+    function handleDragEnd(e) {
+      if (draggedElement) {
+        draggedElement.classList.remove('dragging');
+      }
+      draggedElement = null;
+      draggedData = null;
+      document.querySelectorAll('.drop-zone').forEach(z => z.classList.remove('drag-over'));
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      e.currentTarget.classList.add('drag-over');
+    }
+
+    function handleDragLeave(e) {
+      e.currentTarget.classList.remove('drag-over');
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      const zone = e.currentTarget;
+      zone.classList.remove('drag-over');
+      
+      if (!draggedData) return;
+      
+      const position = parseInt(zone.dataset.position);
+      
+      // Remove from previous position if it was in a drop zone
+      const prevPosition = dropZoneContents.indexOf(draggedData);
+      if (prevPosition !== -1) {
+        dropZoneContents[prevPosition] = null;
+      }
+      
+      // If zone already has content, swap or move to cards
+      if (dropZoneContents[position]) {
+        const existingFragment = dropZoneContents[position];
+        if (prevPosition !== -1) {
+          dropZoneContents[prevPosition] = existingFragment;
+        }
+      }
+      
+      dropZoneContents[position] = draggedData;
+      
+      AudioSystem.playDrop();
+      renderDropZones();
+      renderDataCards();
+      clearStatus();
+    }
+
+    // Touch support
+    let touchStartX, touchStartY;
+    let touchClone = null;
+
+    function handleTouchStart(e) {
+      const touch = e.touches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+      
+      draggedElement = e.target.closest('.data-card');
+      draggedData = dataFragments.find(f => f.id === parseInt(draggedElement.dataset.id));
+      
+      AudioSystem.playPickup();
+      
+      // Create visual clone
+      touchClone = draggedElement.cloneNode(true);
+      touchClone.style.position = 'fixed';
+      touchClone.style.pointerEvents = 'none';
+      touchClone.style.zIndex = '9999';
+      touchClone.style.opacity = '0.8';
+      touchClone.style.transform = 'scale(1.05) rotate(2deg)';
+      touchClone.style.width = draggedElement.offsetWidth + 'px';
+      document.body.appendChild(touchClone);
+      
+      updateClonePosition(touch);
+      
+      draggedElement.style.opacity = '0.3';
+    }
+
+    function handleTouchMove(e) {
+      if (!touchClone) return;
+      e.preventDefault();
+      
+      const touch = e.touches[0];
+      updateClonePosition(touch);
+      
+      // Highlight drop zone under touch
+      document.querySelectorAll('.drop-zone').forEach(zone => {
+        const rect = zone.getBoundingClientRect();
+        if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
+            touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
+          zone.classList.add('drag-over');
+        } else {
+          zone.classList.remove('drag-over');
+        }
+      });
+    }
+
+    function handleTouchEnd(e) {
+      if (!touchClone || !draggedData) return;
+      
+      const touch = e.changedTouches[0];
+      
+      // Find drop zone under touch
+      let targetZone = null;
+      document.querySelectorAll('.drop-zone').forEach(zone => {
+        const rect = zone.getBoundingClientRect();
+        if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
+            touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
+          targetZone = zone;
+        }
+      });
+      
+      if (targetZone) {
+        const position = parseInt(targetZone.dataset.position);
+        
+        // Remove from previous position
+        const prevPosition = dropZoneContents.indexOf(draggedData);
+        if (prevPosition !== -1) {
+          dropZoneContents[prevPosition] = null;
+        }
+        
+        // Handle swap
+        if (dropZoneContents[position]) {
+          const existingFragment = dropZoneContents[position];
+          if (prevPosition !== -1) {
+            dropZoneContents[prevPosition] = existingFragment;
+          }
+        }
+        
+        dropZoneContents[position] = draggedData;
+        
+        AudioSystem.playDrop();
+        renderDropZones();
+        renderDataCards();
+        clearStatus();
+      }
+      
+      // Cleanup
+      if (draggedElement) {
+        draggedElement.style.opacity = '';
+      }
+      if (touchClone) {
+        touchClone.remove();
+        touchClone = null;
+      }
+      
+      document.querySelectorAll('.drop-zone').forEach(z => z.classList.remove('drag-over'));
+      draggedElement = null;
+      draggedData = null;
+    }
+
+    function updateClonePosition(touch) {
+      if (touchClone) {
+        touchClone.style.left = (touch.clientX - 100) + 'px';
+        touchClone.style.top = (touch.clientY - 30) + 'px';
+      }
+    }
+
+    // Check sequence
+    function checkSequence() {
+      AudioSystem.playClick();
+      
+      const allFilled = dropZoneContents.every(c => c !== null);
+      
+      if (!allFilled) {
+        showStatus('⚠ Please place all data fragments!', '#FF2ED1');
+        AudioSystem.playError();
+        return;
+      }
+      
+      const isCorrect = dropZoneContents.every((fragment, index) => 
+        fragment.correctPosition === index + 1
+      );
+      
+      if (isCorrect) {
+        showSuccess();
+      } else {
+        showStatus('✗ Incorrect sequence. Try again!', '#FF2ED1');
+        AudioSystem.playError();
+        // Add glitch effect to cards
+        document.querySelectorAll('.drop-zone .data-card').forEach(card => {
+          card.classList.add('glitch-effect');
+          setTimeout(() => card.classList.remove('glitch-effect'), 300);
+        });
+      }
+    }
+
+    function showStatus(message, color) {
+      const statusEl = document.getElementById('status-message');
+      statusEl.textContent = message;
+      statusEl.style.color = color;
+    }
+
+    function clearStatus() {
+      document.getElementById('status-message').textContent = '';
+    }
+
+    function showSuccess() {
+      const overlay = document.getElementById('success-overlay');
+      document.getElementById('correct-sequence').textContent = currentQuestion.correctSequence;
+      overlay.classList.remove('hidden');
+      overlay.classList.add('flex');
+      
+      AudioSystem.playSuccess();
+      
+      // Update Next Question button visibility
+      const nextBtn = document.getElementById('next-question-success-btn');
+      if (currentQuestionIndex >= allQuestions.length - 1) {
+        nextBtn.style.display = 'none';
+      } else {
+        nextBtn.style.display = 'inline-block';
+      }
+    }
+
+    function hideSuccess() {
+      const overlay = document.getElementById('success-overlay');
+      overlay.classList.add('hidden');
+      overlay.classList.remove('flex');
+    }
+
+    function resetGame() {
+      AudioSystem.playClick();
+      shuffledFragments = shuffleArray(dataFragments);
+      initializeDropZones();
+      renderDropZones();
+      renderDataCards();
+      clearStatus();
+      hideSuccess();
+    }
+    
+    function loadQuestion(index) {
+      AudioSystem.playClick();
+      currentQuestionIndex = index;
+      currentQuestion = allQuestions[currentQuestionIndex];
+      dataFragments = currentQuestion.fragments;
+      shuffledFragments = shuffleArray(dataFragments);
+      initializeDropZones();
+      
+      // Update UI
+      document.getElementById('question-title').textContent = currentQuestion.title;
+      document.getElementById('question-counter').textContent = `${currentQuestionIndex + 1} / ${allQuestions.length}`;
+      
+      // Update navigation buttons
+      document.getElementById('prev-question-btn').disabled = currentQuestionIndex === 0;
+      document.getElementById('next-question-btn').disabled = currentQuestionIndex >= allQuestions.length - 1;
+      
+      renderDropZones();
+      renderDataCards();
+      clearStatus();
+      hideSuccess();
+    }
+    
+    function nextQuestion() {
+      if (currentQuestionIndex < allQuestions.length - 1) {
+        loadQuestion(currentQuestionIndex + 1);
+      }
+    }
+    
+    function prevQuestion() {
+      if (currentQuestionIndex > 0) {
+        loadQuestion(currentQuestionIndex - 1);
+      }
+    }
+
+    // Apply config to UI
+    function applyConfig(config) {
+      document.getElementById('game-title').textContent = config.game_title || defaultConfig.game_title;
+      document.getElementById('game-subtitle').textContent = config.game_subtitle || defaultConfig.game_subtitle;
+      document.getElementById('success-title').textContent = config.success_message || defaultConfig.success_message;
+    }
+
+    // Initialize
+    document.getElementById('check-btn').addEventListener('click', checkSequence);
+    document.getElementById('reset-btn').addEventListener('click', resetGame);
+    document.getElementById('play-again-btn').addEventListener('click', resetGame);
+    document.getElementById('prev-question-btn').addEventListener('click', prevQuestion);
+    document.getElementById('next-question-btn').addEventListener('click', nextQuestion);
+    document.getElementById('next-question-success-btn').addEventListener('click', () => {
+      nextQuestion();
+    });
+
+    renderDropZones();
+    renderDataCards();
+    
+    // Initialize navigation button states
+    document.getElementById('prev-question-btn').disabled = true;
+
+    // Initialize SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          applyConfig(config);
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['game_title', config.game_title || defaultConfig.game_title],
+          ['game_subtitle', config.game_subtitle || defaultConfig.game_subtitle],
+          ['success_message', config.success_message || defaultConfig.success_message]
+        ])
+      });
+    } else {
+      applyConfig(defaultConfig);
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c1720f624ca6ceb',t:'MTc2OTAwMTgzNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
