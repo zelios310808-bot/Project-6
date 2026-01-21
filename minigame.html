@@ -97,11 +97,28 @@
       color: #7df9ff;
     }
 
-    footer {
-      text-align: center;
-      padding: 30px;
-      border-top: 1px solid rgba(125,249,255,0.2);
-      color: #aaa;
+    /* ===== 3 NÚT MINIGAME ===== */
+    .minigame-links {
+      margin-top: 50px;
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    .mini-btn {
+      padding: 12px 28px;
+      border-radius: 24px;
+      text-decoration: none;
+      font-weight: bold;
+      color: #000;
+      background: linear-gradient(135deg, #7df9ff, #4facfe);
+      box-shadow: 0 0 18px rgba(125,249,255,0.5);
+      transition: 0.3s;
+    }
+
+    .mini-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 0 28px rgba(125,249,255,0.8);
     }
   </style>
 </head>
@@ -137,6 +154,13 @@
     <div class="explanation" id="explanation"></div>
     <button class="next-btn" onclick="nextQuestion()">Next</button>
   </div>
+
+  <!-- 3 NÚT CHUYỂN MINIGAME -->
+  <div class="minigame-links">
+    <a href="minigame2.html" class="mini-btn">Minigame 2</a>
+    <a href="minigame3.html" class="mini-btn">Minigame 3</a>
+    <a href="minigame4.html" class="mini-btn">Minigame 4</a>
+  </div>
 </div>
 
 <footer>
@@ -147,64 +171,19 @@
 const questions = [
   { q:"An AI-controlled car detects a child suddenly crossing the road. What should the AI prioritize?",
     o:["Minimal damage overall","Passenger comfort","Speeding up","Ignoring the situation"],
-    a:0,
-    e:"AI minimizes total harm rather than prioritizing comfort."
-  },
+    a:0, e:"AI minimizes total harm rather than prioritizing comfort." },
   { q:"An AI hiring system notices bias in past data. What should it do?",
     o:["Ignore fairness","Adjust to reduce bias","Follow data anyway","Stop learning"],
-    a:1,
-    e:"Bias mitigation is essential in responsible AI."
-  },
+    a:1, e:"Bias mitigation is essential in responsible AI." },
   { q:"A medical AI is unsure about a diagnosis. What is the best action?",
     o:["Ask a human doctor","Guess confidently","Hide uncertainty","Give random output"],
-    a:0,
-    e:"AI should defer to humans when uncertain."
-  },
+    a:0, e:"AI should defer to humans when uncertain." },
   { q:"An AI chatbot receives harmful instructions. What should it do?",
     o:["Generate fake info","Stay silent forever","Refuse safely","Follow them"],
-    a:2,
-    e:"Safe refusal is a core AI safety principle."
-  },
-  { q:"A surveillance AI detects suspicious behavior but lacks proof. What is best?",
-    o:["Punish automatically","Flag for review","Ignore","Immediately report"],
-    a:1,
-    e:"AI should assist human decision-making, not replace it."
-  },
-  { q:"An AI predicts high crime risk in an area. What is ethical?",
-    o:["Label everyone suspicious","Use cautiously","Ignore data","Increase arrests"],
-    a:1,
-    e:"Predictions must not lead to discrimination."
-  },
-  { q:"An AI recommender notices addiction patterns. What should it do?",
-    o:["Warn users","Increase engagement","Do nothing","Hide data"],
-    a:0,
-    e:"Ethical AI values user well-being."
-  },
-  { q:"An AI translator is unsure about cultural meaning. What should it do?",
-    o:["Guess context","Translate literally","Ask for clarification","Remove sentence"],
-    a:2,
-    e:"Acknowledging uncertainty improves reliability."
-  },
+    a:2, e:"Safe refusal is a core AI safety principle." },
   { q:"What allows AI to improve from experience?",
     o:["Manual updates","Random guessing","Hardcoding","Machine Learning"],
-    a:3,
-    e:"Machine learning enables pattern learning."
-  },
-  { q:"Which concept helps AI recognize images?",
-    o:["If-else rules","Spreadsheets","Neural Networks","Databases"],
-    a:2,
-    e:"Neural networks process visual patterns."
-  },
-  { q:"Why can AI hallucinate?",
-    o:["Internet errors","Pattern prediction without understanding","It lies intentionally","Lack of training"],
-    a:1,
-    e:"AI predicts probabilities, not facts."
-  },
-  { q:"What limits current AI?",
-    o:["No consciousness","Slow computers","Lack of electricity","No creativity"],
-    a:0,
-    e:"AI has no awareness or true understanding."
-  }
+    a:3, e:"Machine learning enables pattern learning." }
 ];
 
 let index = 0, score = 0, timer, timeLeft = 12;
@@ -228,7 +207,7 @@ function loadQuestion() {
     const btn=document.createElement("div");
     btn.className="option";
     btn.innerText=text;
-    btn.onclick=()=>selectAnswer(btn,i);
+    btn.onclick=()=>selectAnswer(i);
     options.appendChild(btn);
   });
 
@@ -241,7 +220,7 @@ function loadQuestion() {
   },1000);
 }
 
-function selectAnswer(btn,i){ clearInterval(timer); revealAnswer(i); }
+function selectAnswer(i){ clearInterval(timer); revealAnswer(i); }
 
 function revealAnswer(choice=-1){
   const q=questions[index];
@@ -262,7 +241,6 @@ function nextQuestion(){
   else{
     document.querySelector(".game-screen").innerHTML=
       `<h2 class="game-title">Game Completed!</h2>
-       <p style="text-align:center">You have explored how AI thinks.</p>
        <div class="final-score">Your Score: ${score} / ${questions.length}</div>`;
   }
 }
