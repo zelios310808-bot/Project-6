@@ -1,0 +1,1188 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neural Lexicon - AI Vocabulary</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&amp;family=Rajdhani:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --cyber-yellow: #fcee0a;
+      --cyber-pink: #ff2a6d;
+      --cyber-blue: #05d9e8;
+      --cyber-purple: #7b2cbf;
+      --cyber-dark: #0d0221;
+      --cyber-darker: #05010d;
+    }
+    
+    * {
+      font-family: 'Rajdhani', sans-serif;
+    }
+    
+    .font-cyber {
+      font-family: 'Orbitron', sans-serif;
+    }
+    
+    @keyframes glitch {
+      0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+      20% { clip-path: inset(20% 0 60% 0); transform: translate(-3px, 3px); }
+      40% { clip-path: inset(40% 0 40% 0); transform: translate(3px, -3px); }
+      60% { clip-path: inset(60% 0 20% 0); transform: translate(-3px, 3px); }
+      80% { clip-path: inset(80% 0 0% 0); transform: translate(3px, -3px); }
+    }
+    
+    @keyframes scanline {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+    
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      92% { opacity: 1; }
+      93% { opacity: 0.8; }
+      94% { opacity: 1; }
+      97% { opacity: 0.9; }
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px var(--cyber-pink), 0 0 40px var(--cyber-pink), inset 0 0 20px rgba(255,42,109,0.1); }
+      50% { box-shadow: 0 0 30px var(--cyber-pink), 0 0 60px var(--cyber-pink), inset 0 0 30px rgba(255,42,109,0.2); }
+    }
+    
+    @keyframes border-run {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 200% 0%; }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes data-stream {
+      0% { transform: translateY(-100%) rotate(45deg); opacity: 0; }
+      50% { opacity: 0.3; }
+      100% { transform: translateY(200%) rotate(45deg); opacity: 0; }
+    }
+    
+    .glitch-text {
+      position: relative;
+      animation: flicker 3s infinite;
+    }
+    
+    .glitch-text::before,
+    .glitch-text::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .glitch-text::before {
+      color: var(--cyber-blue);
+      animation: glitch 2s infinite;
+      z-index: -1;
+    }
+    
+    .glitch-text::after {
+      color: var(--cyber-pink);
+      animation: glitch 2s infinite reverse;
+      z-index: -1;
+    }
+    
+    .cyber-card {
+      background: linear-gradient(135deg, rgba(13,2,33,0.95) 0%, rgba(5,1,13,0.98) 100%);
+      border: 1px solid var(--cyber-pink);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .cyber-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyber-yellow), var(--cyber-pink), var(--cyber-blue), transparent);
+      background-size: 200% 100%;
+      animation: border-run 3s linear infinite;
+    }
+    
+    .cyber-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, transparent 0%, rgba(255,42,109,0.03) 50%, transparent 100%);
+      animation: scanline 4s linear infinite;
+      pointer-events: none;
+    }
+    
+    .cyber-btn {
+      position: relative;
+      background: linear-gradient(135deg, var(--cyber-dark) 0%, var(--cyber-darker) 100%);
+      border: 2px solid var(--cyber-pink);
+      color: var(--cyber-yellow);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+    
+    .cyber-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(252,238,10,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+    
+    .cyber-btn:hover::before {
+      left: 100%;
+    }
+    
+    .cyber-btn:hover {
+      background: linear-gradient(135deg, var(--cyber-pink) 0%, var(--cyber-purple) 100%);
+      box-shadow: 0 0 30px var(--cyber-pink), inset 0 0 20px rgba(252,238,10,0.2);
+      transform: translateY(-2px);
+    }
+    
+    .cyber-btn:active {
+      transform: translateY(0);
+    }
+    
+    .cyber-input {
+      background: rgba(13,2,33,0.8);
+      border: 1px solid var(--cyber-blue);
+      color: var(--cyber-yellow);
+      transition: all 0.3s ease;
+    }
+    
+    .cyber-input:focus {
+      outline: none;
+      border-color: var(--cyber-pink);
+      box-shadow: 0 0 20px rgba(255,42,109,0.3), inset 0 0 10px rgba(5,217,232,0.1);
+    }
+    
+    .cyber-input::placeholder {
+      color: rgba(5,217,232,0.5);
+    }
+    
+    .mode-card {
+      background: linear-gradient(135deg, rgba(13,2,33,0.9) 0%, rgba(5,1,13,0.95) 100%);
+      border: 2px solid transparent;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .mode-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(from 0deg, transparent, var(--cyber-pink), transparent 30%);
+      animation: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .mode-card:hover::before {
+      animation: spin 3s linear infinite;
+      opacity: 1;
+    }
+    
+    .mode-card::after {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      background: linear-gradient(135deg, rgba(13,2,33,0.95) 0%, rgba(5,1,13,0.98) 100%);
+      border-radius: inherit;
+      z-index: 0;
+    }
+    
+    .mode-card:hover {
+      border-color: var(--cyber-pink);
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(255,42,109,0.3);
+    }
+    
+    .mode-card > * {
+      position: relative;
+      z-index: 1;
+    }
+    
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+    
+    .progress-bar {
+      background: rgba(13,2,33,0.8);
+      border: 1px solid var(--cyber-blue);
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      background: linear-gradient(90deg, var(--cyber-pink), var(--cyber-yellow), var(--cyber-blue));
+      background-size: 200% 100%;
+      animation: border-run 2s linear infinite;
+      transition: width 0.5s ease;
+    }
+    
+    .stat-glow {
+      text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+    }
+    
+    .floating {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .data-stream {
+      position: absolute;
+      width: 2px;
+      height: 100px;
+      background: linear-gradient(180deg, transparent, var(--cyber-blue), transparent);
+      animation: data-stream 3s linear infinite;
+    }
+    
+    .correct-flash {
+      animation: correct-pulse 0.5s ease;
+    }
+    
+    @keyframes correct-pulse {
+      0%, 100% { background-color: transparent; }
+      50% { background-color: rgba(5,217,232,0.3); }
+    }
+    
+    .wrong-flash {
+      animation: wrong-pulse 0.5s ease;
+    }
+    
+    @keyframes wrong-pulse {
+      0%, 100% { background-color: transparent; }
+      50% { background-color: rgba(255,42,109,0.3); }
+    }
+    
+    .term-card {
+      transition: all 0.3s ease;
+    }
+    
+    .term-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 30px rgba(252,238,10,0.3);
+    }
+    
+    .mastered-badge {
+      background: linear-gradient(135deg, var(--cyber-blue), var(--cyber-purple));
+      animation: pulse-glow 2s infinite;
+    }
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: var(--cyber-darker);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, var(--cyber-pink), var(--cyber-purple));
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, var(--cyber-yellow), var(--cyber-pink));
+    }
+    
+    .hex-bg {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ff2a6d' fill-opacity='0.03'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="h-full bg-[#05010d] text-white hex-bg overflow-auto">
+  <div id="app" class="min-h-full w-full relative"><!-- Data streams decoration -->
+   <div class="data-stream" style="left: 10%; animation-delay: 0s;"></div>
+   <div class="data-stream" style="left: 30%; animation-delay: 1s;"></div>
+   <div class="data-stream" style="left: 70%; animation-delay: 2s;"></div>
+   <div class="data-stream" style="left: 90%; animation-delay: 0.5s;"></div><!-- Main Menu -->
+   <div id="menu-screen" class="min-h-full flex flex-col items-center justify-center p-4 sm:p-8"><!-- Back Button -->
+    <div class="absolute top-4 left-4 sm:top-8 sm:left-8"><a href="index.html" class="cyber-btn px-4 py-2 rounded font-cyber text-sm inline-block"> ← BACK </a>
+    </div>
+    <div class="text-center mb-8 sm:mb-12 floating">
+     <h1 id="main-title" class="font-cyber text-4xl sm:text-6xl lg:text-7xl font-black glitch-text mb-4" data-text="NEURAL LEXICON" style="color: var(--cyber-yellow);">NEURAL LEXICON</h1>
+     <p id="welcome-msg" class="text-lg sm:text-xl" style="color: var(--cyber-blue);">// JACK INTO THE AI KNOWLEDGE MATRIX //</p>
+    </div><!-- Stats Overview -->
+    <div class="cyber-card rounded-lg p-4 sm:p-6 mb-8 w-full max-w-2xl">
+     <div class="flex flex-wrap justify-center gap-6 sm:gap-12">
+      <div class="text-center">
+       <p class="text-xs uppercase tracking-widest mb-1" style="color: var(--cyber-pink);">Terms Mastered</p>
+       <p id="stats-mastered" class="font-cyber text-2xl sm:text-3xl stat-glow" style="color: var(--cyber-yellow);">0</p>
+      </div>
+      <div class="text-center">
+       <p class="text-xs uppercase tracking-widest mb-1" style="color: var(--cyber-pink);">Total Terms</p>
+       <p id="stats-total" class="font-cyber text-2xl sm:text-3xl stat-glow" style="color: var(--cyber-blue);">30</p>
+      </div>
+      <div class="text-center">
+       <p class="text-xs uppercase tracking-widest mb-1" style="color: var(--cyber-pink);">Accuracy</p>
+       <p id="stats-accuracy" class="font-cyber text-2xl sm:text-3xl stat-glow" style="color: var(--cyber-yellow);">--%</p>
+      </div>
+     </div>
+    </div><!-- Game Modes -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full max-w-5xl px-4">
+     <div class="mode-card rounded-xl p-6 cursor-pointer" onclick="startGame('flashcard')">
+      <div class="text-4xl sm:text-5xl mb-4">
+       🧠
+      </div>
+      <h3 class="font-cyber text-lg sm:text-xl font-bold mb-2" style="color: var(--cyber-yellow);">NEURAL FLASH</h3>
+      <p class="text-sm" style="color: var(--cyber-blue);">Flip through AI terms like a chrome-jacked netrunner</p>
+      <div class="mt-4 text-xs uppercase tracking-widest" style="color: var(--cyber-pink);">
+       [ Flashcard Mode ]
+      </div>
+     </div>
+     <div class="mode-card rounded-xl p-6 cursor-pointer" onclick="startGame('quiz')">
+      <div class="text-4xl sm:text-5xl mb-4">
+       ⚡
+      </div>
+      <h3 class="font-cyber text-lg sm:text-xl font-bold mb-2" style="color: var(--cyber-yellow);">SYNAPSE TEST</h3>
+      <p class="text-sm" style="color: var(--cyber-blue);">4 choices. One correct. Don't flatline, choom.</p>
+      <div class="mt-4 text-xs uppercase tracking-widest" style="color: var(--cyber-pink);">
+       [ Quiz Mode ]
+      </div>
+     </div>
+     <div class="mode-card rounded-xl p-6 cursor-pointer" onclick="startGame('typing')">
+      <div class="text-4xl sm:text-5xl mb-4">
+       ⌨️
+      </div>
+      <h3 class="font-cyber text-lg sm:text-xl font-bold mb-2" style="color: var(--cyber-yellow);">MEMORY JACK</h3>
+      <p class="text-sm" style="color: var(--cyber-blue);">Type the term from memory. Pure recall protocol.</p>
+      <div class="mt-4 text-xs uppercase tracking-widest" style="color: var(--cyber-pink);">
+       [ Typing Mode ]
+      </div>
+     </div>
+     <div class="mode-card rounded-xl p-6 cursor-pointer" onclick="startGame('match')">
+      <div class="text-4xl sm:text-5xl mb-4">
+       🔗
+      </div>
+      <h3 class="font-cyber text-lg sm:text-xl font-bold mb-2" style="color: var(--cyber-yellow);">LINK PROTOCOL</h3>
+      <p class="text-sm" style="color: var(--cyber-blue);">Connect terms to definitions. Speed matters.</p>
+      <div class="mt-4 text-xs uppercase tracking-widest" style="color: var(--cyber-pink);">
+       [ Matching Mode ]
+      </div>
+     </div>
+     <div class="mode-card rounded-xl p-6 cursor-pointer" onclick="startGame('survival')">
+      <div class="text-4xl sm:text-5xl mb-4">
+       💀
+      </div>
+      <h3 class="font-cyber text-lg sm:text-xl font-bold mb-2" style="color: var(--cyber-yellow);">CYBERPSYCHO</h3>
+      <p class="text-sm" style="color: var(--cyber-blue);">3 lives. Endless questions. How long can you survive?</p>
+      <div class="mt-4 text-xs uppercase tracking-widest" style="color: var(--cyber-pink);">
+       [ Survival Mode ]
+      </div>
+     </div>
+     <div class="mode-card rounded-xl p-6 cursor-pointer" onclick="showDictionary()">
+      <div class="text-4xl sm:text-5xl mb-4">
+       📚
+      </div>
+      <h3 class="font-cyber text-lg sm:text-xl font-bold mb-2" style="color: var(--cyber-yellow);">DATA VAULT</h3>
+      <p class="text-sm" style="color: var(--cyber-blue);">Browse all AI terms in the neural database</p>
+      <div class="mt-4 text-xs uppercase tracking-widest" style="color: var(--cyber-pink);">
+       [ Dictionary ]
+      </div>
+     </div>
+    </div>
+   </div><!-- Game Screen -->
+   <div id="game-screen" class="hidden min-h-full flex flex-col p-4 sm:p-8"><!-- Header -->
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-6"><button onclick="backToMenu()" class="cyber-btn px-4 py-2 rounded font-cyber text-sm"> ← EXIT </button>
+     <div id="game-mode-title" class="font-cyber text-xl sm:text-2xl" style="color: var(--cyber-yellow);"></div>
+     <div class="flex items-center gap-4">
+      <div id="game-lives" class="hidden font-cyber text-xl" style="color: var(--cyber-pink);"></div>
+      <div id="game-score" class="font-cyber text-xl" style="color: var(--cyber-blue);">
+       0 / 0
+      </div>
+     </div>
+    </div><!-- Progress -->
+    <div class="progress-bar h-2 rounded-full mb-6">
+     <div id="progress-fill" class="progress-fill h-full rounded-full" style="width: 0%;"></div>
+    </div><!-- Game Content -->
+    <div id="game-content" class="flex-1 flex items-center justify-center"><!-- Dynamic content will be inserted here -->
+    </div>
+   </div><!-- Dictionary Screen -->
+   <div id="dictionary-screen" class="hidden min-h-full flex flex-col p-4 sm:p-8">
+    <div class="flex items-center justify-between mb-6"><button onclick="backToMenu()" class="cyber-btn px-4 py-2 rounded font-cyber text-sm"> ← EXIT </button>
+     <h2 class="font-cyber text-2xl sm:text-3xl" style="color: var(--cyber-yellow);">DATA VAULT</h2>
+     <div class="w-20"></div>
+    </div><!-- Search -->
+    <div class="mb-6"><input type="text" id="dict-search" class="cyber-input w-full px-4 py-3 rounded-lg font-cyber" placeholder="// SEARCH NEURAL DATABASE //" oninput="filterDictionary()">
+    </div><!-- Category Filter -->
+    <div class="flex flex-wrap gap-2 mb-6" id="category-filters"><!-- Categories will be inserted here -->
+    </div><!-- Terms Grid -->
+    <div id="dictionary-content" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto"><!-- Terms will be inserted here -->
+    </div>
+   </div><!-- Result Modal -->
+   <div id="result-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
+    <div class="cyber-card rounded-xl p-8 max-w-md w-full text-center">
+     <div id="result-icon" class="text-6xl mb-4">
+      🏆
+     </div>
+     <h3 id="result-title" class="font-cyber text-3xl mb-4" style="color: var(--cyber-yellow);">SESSION COMPLETE</h3>
+     <div id="result-stats" class="space-y-2 mb-6"></div>
+     <div class="flex flex-col sm:flex-row gap-4 justify-center"><button onclick="restartGame()" class="cyber-btn px-6 py-3 rounded font-cyber">RETRY</button> <button onclick="closeResult()" class="cyber-btn px-6 py-3 rounded font-cyber">EXIT</button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    // AI Vocabulary Database
+    const AI_TERMS = [
+      // Core Concepts
+      { id: 'ai', term: 'Artificial Intelligence', category: 'Core', viet: 'Trí tuệ nhân tạo', definition: 'The simulation of human intelligence by machines, enabling them to learn, reason, and make decisions.' },
+      { id: 'ml', term: 'Machine Learning', category: 'Core', viet: 'Học máy', definition: 'A subset of AI where systems learn and improve from experience without being explicitly programmed.' },
+      { id: 'dl', term: 'Deep Learning', category: 'Core', viet: 'Học sâu', definition: 'A subset of ML using neural networks with multiple layers to analyze complex patterns in data.' },
+      { id: 'nn', term: 'Neural Network', category: 'Core', viet: 'Mạng nơ-ron', definition: 'Computing systems inspired by biological neural networks, consisting of interconnected nodes (neurons).' },
+      { id: 'algorithm', term: 'Algorithm', category: 'Core', viet: 'Thuật toán', definition: 'A set of step-by-step instructions for solving a problem or completing a task.' },
+      
+      // Training & Data
+      { id: 'training', term: 'Training Data', category: 'Data', viet: 'Dữ liệu huấn luyện', definition: 'The dataset used to teach a machine learning model to recognize patterns and make predictions.' },
+      { id: 'dataset', term: 'Dataset', category: 'Data', viet: 'Tập dữ liệu', definition: 'A collection of data used for training, validating, or testing machine learning models.' },
+      { id: 'labeling', term: 'Data Labeling', category: 'Data', viet: 'Gán nhãn dữ liệu', definition: 'The process of adding meaningful tags or annotations to raw data for supervised learning.' },
+      { id: 'preprocessing', term: 'Data Preprocessing', category: 'Data', viet: 'Tiền xử lý dữ liệu', definition: 'Cleaning and transforming raw data into a format suitable for model training.' },
+      { id: 'augmentation', term: 'Data Augmentation', category: 'Data', viet: 'Tăng cường dữ liệu', definition: 'Techniques to increase training data diversity by creating modified versions of existing data.' },
+      
+      // Model Types
+      { id: 'llm', term: 'Large Language Model', category: 'Models', viet: 'Mô hình ngôn ngữ lớn', definition: 'AI models trained on vast text data to understand and generate human-like language.' },
+      { id: 'transformer', term: 'Transformer', category: 'Models', viet: 'Bộ chuyển đổi', definition: 'A neural network architecture that uses self-attention mechanisms, foundational for modern AI.' },
+      { id: 'gpt', term: 'GPT', category: 'Models', viet: 'GPT', definition: 'Generative Pre-trained Transformer - a type of LLM that generates text based on input prompts.' },
+      { id: 'cnn', term: 'CNN', category: 'Models', viet: 'Mạng tích chập', definition: 'Convolutional Neural Network - specialized for processing structured grid data like images.' },
+      { id: 'rnn', term: 'RNN', category: 'Models', viet: 'Mạng hồi quy', definition: 'Recurrent Neural Network - designed for sequential data like time series or text.' },
+      
+      // Learning Types
+      { id: 'supervised', term: 'Supervised Learning', category: 'Learning', viet: 'Học có giám sát', definition: 'Training with labeled data where the model learns to map inputs to known outputs.' },
+      { id: 'unsupervised', term: 'Unsupervised Learning', category: 'Learning', viet: 'Học không giám sát', definition: 'Training on unlabeled data where the model finds hidden patterns without guidance.' },
+      { id: 'reinforcement', term: 'Reinforcement Learning', category: 'Learning', viet: 'Học tăng cường', definition: 'Learning through trial and error, receiving rewards or penalties for actions taken.' },
+      { id: 'transfer', term: 'Transfer Learning', category: 'Learning', viet: 'Học chuyển giao', definition: 'Using knowledge from one trained model to improve learning on a different but related task.' },
+      { id: 'finetuning', term: 'Fine-tuning', category: 'Learning', viet: 'Tinh chỉnh', definition: 'Adjusting a pre-trained model on specific data to improve performance for particular tasks.' },
+      
+      // Technical Terms
+      { id: 'epoch', term: 'Epoch', category: 'Technical', viet: 'Vòng lặp', definition: 'One complete pass through the entire training dataset during model training.' },
+      { id: 'batch', term: 'Batch Size', category: 'Technical', viet: 'Kích thước lô', definition: 'The number of training samples processed before the model updates its parameters.' },
+      { id: 'lr', term: 'Learning Rate', category: 'Technical', viet: 'Tốc độ học', definition: 'A hyperparameter controlling how much model weights change during each training step.' },
+      { id: 'loss', term: 'Loss Function', category: 'Technical', viet: 'Hàm mất mát', definition: 'A function measuring how far model predictions are from actual values.' },
+      { id: 'gradient', term: 'Gradient Descent', category: 'Technical', viet: 'Hạ gradient', definition: 'An optimization algorithm that minimizes loss by iteratively adjusting model parameters.' },
+      
+      // Applications
+      { id: 'nlp', term: 'NLP', category: 'Applications', viet: 'Xử lý ngôn ngữ', definition: 'Natural Language Processing - AI techniques for understanding and generating human language.' },
+      { id: 'cv', term: 'Computer Vision', category: 'Applications', viet: 'Thị giác máy', definition: 'AI field enabling machines to interpret and understand visual information from the world.' },
+      { id: 'genai', term: 'Generative AI', category: 'Applications', viet: 'AI tạo sinh', definition: 'AI systems that create new content like text, images, music, or code.' },
+      { id: 'chatbot', term: 'Chatbot', category: 'Applications', viet: 'Chatbot', definition: 'An AI program designed to simulate conversation with human users through text or voice.' },
+      { id: 'prompt', term: 'Prompt Engineering', category: 'Applications', viet: 'Kỹ thuật prompt', definition: 'The art of crafting effective instructions to get desired outputs from AI models.' }
+    ];
+    
+    const CATEGORIES = [...new Set(AI_TERMS.map(t => t.category))];
+    
+    // App State
+    let config = {};
+    let userProgress = [];
+    let currentGame = null;
+    let gameState = {};
+    
+    const defaultConfig = {
+      game_title: 'NEURAL LEXICON',
+      welcome_text: '// JACK INTO THE AI KNOWLEDGE MATRIX //'
+    };
+    
+    // Data Handler for SDK
+    const dataHandler = {
+      onDataChanged(data) {
+        userProgress = data;
+        updateStatsDisplay();
+      }
+    };
+    
+    // Initialize SDKs
+    async function initApp() {
+      // Initialize Element SDK
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange: async (newConfig) => {
+            config = { ...defaultConfig, ...newConfig };
+            document.getElementById('main-title').textContent = config.game_title || defaultConfig.game_title;
+            document.getElementById('main-title').setAttribute('data-text', config.game_title || defaultConfig.game_title);
+            document.getElementById('welcome-msg').textContent = config.welcome_text || defaultConfig.welcome_text;
+          },
+          mapToCapabilities: (cfg) => ({
+            recolorables: [],
+            borderables: [],
+            fontEditable: undefined,
+            fontSizeable: undefined
+          }),
+          mapToEditPanelValues: (cfg) => new Map([
+            ['game_title', cfg.game_title || defaultConfig.game_title],
+            ['welcome_text', cfg.welcome_text || defaultConfig.welcome_text]
+          ])
+        });
+        config = { ...defaultConfig, ...window.elementSdk.config };
+      } else {
+        config = { ...defaultConfig };
+      }
+      
+      // Initialize Data SDK
+      if (window.dataSdk) {
+        const result = await window.dataSdk.init(dataHandler);
+        if (!result.isOk) {
+          console.error('Failed to initialize Data SDK');
+        }
+      }
+      
+      renderCategories();
+      updateStatsDisplay();
+    }
+    
+    // Stats functions
+    function getTermProgress(termId) {
+      return userProgress.find(p => p.term_id === termId);
+    }
+    
+    function updateStatsDisplay() {
+      const mastered = userProgress.filter(p => p.mastered).length;
+      const totalCorrect = userProgress.reduce((sum, p) => sum + (p.correct_count || 0), 0);
+      const totalWrong = userProgress.reduce((sum, p) => sum + (p.wrong_count || 0), 0);
+      const accuracy = totalCorrect + totalWrong > 0 
+        ? Math.round((totalCorrect / (totalCorrect + totalWrong)) * 100) 
+        : 0;
+      
+      document.getElementById('stats-mastered').textContent = mastered;
+      document.getElementById('stats-total').textContent = AI_TERMS.length;
+      document.getElementById('stats-accuracy').textContent = accuracy > 0 ? accuracy + '%' : '--%';
+    }
+    
+    async function recordAnswer(termId, correct) {
+      if (!window.dataSdk) return;
+      
+      const existing = getTermProgress(termId);
+      
+      if (existing) {
+        const newCorrect = (existing.correct_count || 0) + (correct ? 1 : 0);
+        const newWrong = (existing.wrong_count || 0) + (correct ? 0 : 1);
+        const mastered = newCorrect >= 3 && newCorrect > newWrong * 2;
+        
+        await window.dataSdk.update({
+          ...existing,
+          correct_count: newCorrect,
+          wrong_count: newWrong,
+          mastered: mastered,
+          last_practiced: new Date().toISOString()
+        });
+      } else {
+        if (userProgress.length >= 999) {
+          return;
+        }
+        await window.dataSdk.create({
+          term_id: termId,
+          correct_count: correct ? 1 : 0,
+          wrong_count: correct ? 0 : 1,
+          mastered: false,
+          last_practiced: new Date().toISOString()
+        });
+      }
+    }
+    
+    // Navigation
+    function showScreen(screenId) {
+      document.querySelectorAll('#menu-screen, #game-screen, #dictionary-screen').forEach(el => {
+        el.classList.add('hidden');
+      });
+      document.getElementById(screenId).classList.remove('hidden');
+    }
+    
+    function backToMenu() {
+      showScreen('menu-screen');
+      updateStatsDisplay();
+    }
+    
+    // Game functions
+    function startGame(mode) {
+      currentGame = mode;
+      gameState = {
+        terms: shuffleArray([...AI_TERMS]),
+        currentIndex: 0,
+        score: 0,
+        total: 0,
+        lives: 3,
+        startTime: Date.now()
+      };
+      
+      const titles = {
+        flashcard: 'NEURAL FLASH',
+        quiz: 'SYNAPSE TEST',
+        typing: 'MEMORY JACK',
+        match: 'LINK PROTOCOL',
+        survival: 'CYBERPSYCHO'
+      };
+      
+      document.getElementById('game-mode-title').textContent = titles[mode];
+      document.getElementById('game-lives').classList.toggle('hidden', mode !== 'survival');
+      
+      if (mode === 'survival') {
+        document.getElementById('game-lives').innerHTML = '❤️'.repeat(3);
+      }
+      
+      showScreen('game-screen');
+      renderGameContent();
+    }
+    
+    function renderGameContent() {
+      const content = document.getElementById('game-content');
+      
+      switch(currentGame) {
+        case 'flashcard':
+          renderFlashcard(content);
+          break;
+        case 'quiz':
+          renderQuiz(content);
+          break;
+        case 'typing':
+          renderTyping(content);
+          break;
+        case 'match':
+          renderMatch(content);
+          break;
+        case 'survival':
+          renderSurvival(content);
+          break;
+      }
+      
+      updateProgress();
+    }
+    
+    function updateProgress() {
+      const total = currentGame === 'match' ? 5 : gameState.terms.length;
+      const current = currentGame === 'match' ? gameState.matchedPairs || 0 : gameState.currentIndex;
+      const percent = Math.min((current / total) * 100, 100);
+      document.getElementById('progress-fill').style.width = percent + '%';
+      document.getElementById('game-score').textContent = `${gameState.score} / ${gameState.total}`;
+    }
+    
+    // Flashcard Mode
+    function renderFlashcard(container) {
+      if (gameState.currentIndex >= gameState.terms.length) {
+        showResult();
+        return;
+      }
+      
+      const term = gameState.terms[gameState.currentIndex];
+      const progress = getTermProgress(term.id);
+      const isMastered = progress?.mastered;
+      
+      container.innerHTML = `
+        <div class="cyber-card rounded-xl p-8 max-w-2xl w-full cursor-pointer transition-all duration-500 ${gameState.flipped ? 'scale-105' : ''}" 
+             onclick="flipCard()" style="min-height: 300px;">
+          ${isMastered ? '<div class="absolute top-4 right-4 mastered-badge px-3 py-1 rounded text-xs font-cyber">MASTERED</div>' : ''}
+          
+          <div class="text-center">
+            <p class="text-xs uppercase tracking-widest mb-4" style="color: var(--cyber-pink);">
+              ${gameState.flipped ? 'Definition' : 'Term'} • ${term.category}
+            </p>
+            
+            ${!gameState.flipped ? `
+              <h2 class="font-cyber text-2xl sm:text-4xl mb-4" style="color: var(--cyber-yellow);">${term.term}</h2>
+              <p class="text-lg" style="color: var(--cyber-blue);">${term.viet}</p>
+              <p class="mt-8 text-sm" style="color: var(--cyber-pink);">[ CLICK TO REVEAL ]</p>
+            ` : `
+              <h2 class="font-cyber text-xl sm:text-2xl mb-4" style="color: var(--cyber-yellow);">${term.term}</h2>
+              <p class="text-lg leading-relaxed" style="color: var(--cyber-blue);">${term.definition}</p>
+            `}
+          </div>
+        </div>
+        
+        ${gameState.flipped ? `
+          <div class="flex gap-4 mt-6">
+            <button onclick="flashcardAnswer(false)" class="cyber-btn px-8 py-4 rounded-lg font-cyber flex-1" style="border-color: var(--cyber-pink);">
+              ❌ STILL LEARNING
+            </button>
+            <button onclick="flashcardAnswer(true)" class="cyber-btn px-8 py-4 rounded-lg font-cyber flex-1" style="border-color: var(--cyber-blue);">
+              ✓ GOT IT
+            </button>
+          </div>
+        ` : ''}
+      `;
+    }
+    
+    function flipCard() {
+      gameState.flipped = !gameState.flipped;
+      renderGameContent();
+    }
+    
+    async function flashcardAnswer(correct) {
+      const term = gameState.terms[gameState.currentIndex];
+      await recordAnswer(term.id, correct);
+      
+      gameState.total++;
+      if (correct) gameState.score++;
+      
+      gameState.currentIndex++;
+      gameState.flipped = false;
+      renderGameContent();
+    }
+    
+    // Quiz Mode
+    function renderQuiz(container) {
+      if (gameState.currentIndex >= gameState.terms.length) {
+        showResult();
+        return;
+      }
+      
+      const term = gameState.terms[gameState.currentIndex];
+      const wrongOptions = AI_TERMS
+        .filter(t => t.id !== term.id)
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 3);
+      
+      const options = shuffleArray([term, ...wrongOptions]);
+      
+      container.innerHTML = `
+        <div class="w-full max-w-3xl">
+          <div class="cyber-card rounded-xl p-6 sm:p-8 mb-6 text-center">
+            <p class="text-xs uppercase tracking-widest mb-4" style="color: var(--cyber-pink);">
+              What is this term? • ${term.category}
+            </p>
+            <p class="text-lg sm:text-xl leading-relaxed" style="color: var(--cyber-blue);">${term.definition}</p>
+          </div>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            ${options.map((opt, i) => `
+              <button onclick="quizAnswer('${opt.id}', '${term.id}')" 
+                      class="cyber-btn p-4 sm:p-6 rounded-lg text-left transition-all quiz-option"
+                      data-option="${opt.id}">
+                <span class="font-cyber text-lg" style="color: var(--cyber-yellow);">${opt.term}</span>
+                <br>
+                <span class="text-sm" style="color: var(--cyber-blue);">${opt.viet}</span>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+    
+    async function quizAnswer(selectedId, correctId) {
+      const correct = selectedId === correctId;
+      const term = AI_TERMS.find(t => t.id === correctId);
+      
+      await recordAnswer(correctId, correct);
+      
+      gameState.total++;
+      if (correct) gameState.score++;
+      
+      // Visual feedback
+      document.querySelectorAll('.quiz-option').forEach(btn => {
+        const optId = btn.dataset.option;
+        if (optId === correctId) {
+          btn.style.borderColor = 'var(--cyber-blue)';
+          btn.style.background = 'rgba(5,217,232,0.2)';
+        } else if (optId === selectedId && !correct) {
+          btn.style.borderColor = 'var(--cyber-pink)';
+          btn.style.background = 'rgba(255,42,109,0.2)';
+        }
+        btn.disabled = true;
+      });
+      
+      setTimeout(() => {
+        gameState.currentIndex++;
+        renderGameContent();
+      }, 1000);
+    }
+    
+    // Typing Mode
+    function renderTyping(container) {
+      if (gameState.currentIndex >= gameState.terms.length) {
+        showResult();
+        return;
+      }
+      
+      const term = gameState.terms[gameState.currentIndex];
+      
+      container.innerHTML = `
+        <div class="w-full max-w-2xl">
+          <div class="cyber-card rounded-xl p-6 sm:p-8 mb-6 text-center">
+            <p class="text-xs uppercase tracking-widest mb-4" style="color: var(--cyber-pink);">
+              Type the term • ${term.category}
+            </p>
+            <p class="text-lg sm:text-xl leading-relaxed mb-4" style="color: var(--cyber-blue);">${term.definition}</p>
+            <p class="font-cyber text-xl" style="color: var(--cyber-yellow);">${term.viet}</p>
+          </div>
+          
+          <div id="typing-feedback" class="mb-4 text-center h-8"></div>
+          
+          <form onsubmit="checkTyping(event)" class="flex flex-col sm:flex-row gap-4">
+            <input type="text" id="typing-input" 
+                   class="cyber-input flex-1 px-4 py-3 rounded-lg font-cyber text-lg"
+                   placeholder="// TYPE YOUR ANSWER //"
+                   autocomplete="off" autocapitalize="off" spellcheck="false">
+            <button type="submit" class="cyber-btn px-8 py-3 rounded-lg font-cyber">
+              SUBMIT
+            </button>
+          </form>
+          
+          <button onclick="showTypingHint()" class="mt-4 text-sm underline" style="color: var(--cyber-pink);">
+            Need a hint?
+          </button>
+        </div>
+      `;
+      
+      document.getElementById('typing-input').focus();
+    }
+    
+    function showTypingHint() {
+      const term = gameState.terms[gameState.currentIndex];
+      const hint = term.term.split(' ').map(word => 
+        word[0] + '_'.repeat(word.length - 1)
+      ).join(' ');
+      
+      document.getElementById('typing-feedback').innerHTML = `
+        <span style="color: var(--cyber-blue);">Hint: ${hint}</span>
+      `;
+    }
+    
+    async function checkTyping(e) {
+      e.preventDefault();
+      const input = document.getElementById('typing-input').value.trim().toLowerCase();
+      const term = gameState.terms[gameState.currentIndex];
+      const correct = input === term.term.toLowerCase();
+      
+      await recordAnswer(term.id, correct);
+      
+      gameState.total++;
+      if (correct) gameState.score++;
+      
+      const feedback = document.getElementById('typing-feedback');
+      if (correct) {
+        feedback.innerHTML = `<span style="color: var(--cyber-blue);">✓ CORRECT!</span>`;
+      } else {
+        feedback.innerHTML = `<span style="color: var(--cyber-pink);">✗ Answer: ${term.term}</span>`;
+      }
+      
+      setTimeout(() => {
+        gameState.currentIndex++;
+        renderGameContent();
+      }, 1500);
+    }
+    
+    // Match Mode
+    function renderMatch(container) {
+      if (!gameState.matchTerms) {
+        // Initialize match game with 5 pairs
+        gameState.matchTerms = shuffleArray([...AI_TERMS]).slice(0, 5);
+        gameState.matchedPairs = 0;
+        gameState.selectedTerm = null;
+        gameState.selectedDef = null;
+      }
+      
+      if (gameState.matchedPairs >= 5) {
+        showResult();
+        return;
+      }
+      
+      const shuffledTerms = shuffleArray([...gameState.matchTerms]);
+      const shuffledDefs = shuffleArray([...gameState.matchTerms]);
+      
+      container.innerHTML = `
+        <div class="w-full max-w-5xl">
+          <p class="text-center mb-6" style="color: var(--cyber-pink);">
+            Match terms with their definitions • ${gameState.matchedPairs}/5 matched
+          </p>
+          
+          <div class="grid grid-cols-2 gap-4 sm:gap-8">
+            <div class="space-y-3" id="match-terms">
+              ${shuffledTerms.map(t => `
+                <div class="cyber-card rounded-lg p-3 sm:p-4 cursor-pointer transition-all match-item ${t.matched ? 'opacity-30' : ''}"
+                     data-id="${t.id}" data-type="term" onclick="selectMatch(this, 'term', '${t.id}')"
+                     ${t.matched ? 'style="pointer-events: none;"' : ''}>
+                  <p class="font-cyber text-sm sm:text-base" style="color: var(--cyber-yellow);">${t.term}</p>
+                  <p class="text-xs" style="color: var(--cyber-blue);">${t.viet}</p>
+                </div>
+              `).join('')}
+            </div>
+            
+            <div class="space-y-3" id="match-defs">
+              ${shuffledDefs.map(t => `
+                <div class="cyber-card rounded-lg p-3 sm:p-4 cursor-pointer transition-all match-item ${t.matched ? 'opacity-30' : ''}"
+                     data-id="${t.id}" data-type="def" onclick="selectMatch(this, 'def', '${t.id}')"
+                     ${t.matched ? 'style="pointer-events: none;"' : ''}>
+                  <p class="text-xs sm:text-sm" style="color: var(--cyber-blue);">${t.definition.substring(0, 80)}...</p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    
+    async function selectMatch(element, type, id) {
+      // Clear previous selections of same type
+      document.querySelectorAll(`.match-item[data-type="${type}"]`).forEach(el => {
+        el.style.borderColor = 'var(--cyber-pink)';
+      });
+      
+      element.style.borderColor = 'var(--cyber-yellow)';
+      
+      if (type === 'term') {
+        gameState.selectedTerm = id;
+      } else {
+        gameState.selectedDef = id;
+      }
+      
+      // Check for match
+      if (gameState.selectedTerm && gameState.selectedDef) {
+        const correct = gameState.selectedTerm === gameState.selectedDef;
+        
+        await recordAnswer(gameState.selectedTerm, correct);
+        gameState.total++;
+        
+        if (correct) {
+          gameState.score++;
+          gameState.matchedPairs++;
+          
+          // Mark as matched
+          const term = gameState.matchTerms.find(t => t.id === gameState.selectedTerm);
+          if (term) term.matched = true;
+          
+          // Flash correct
+          document.querySelectorAll('.match-item[style*="yellow"]').forEach(el => {
+            el.classList.add('correct-flash');
+          });
+        } else {
+          // Flash wrong
+          document.querySelectorAll('.match-item[style*="yellow"]').forEach(el => {
+            el.classList.add('wrong-flash');
+          });
+        }
+        
+        gameState.selectedTerm = null;
+        gameState.selectedDef = null;
+        
+        setTimeout(() => {
+          renderGameContent();
+        }, 500);
+      }
+    }
+    
+    // Survival Mode
+    function renderSurvival(container) {
+      if (gameState.lives <= 0) {
+        showResult();
+        return;
+      }
+      
+      // Cycle through all terms
+      const termIndex = gameState.currentIndex % gameState.terms.length;
+      const term = gameState.terms[termIndex];
+      
+      const wrongOptions = AI_TERMS
+        .filter(t => t.id !== term.id)
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 3);
+      
+      const options = shuffleArray([term, ...wrongOptions]);
+      
+      container.innerHTML = `
+        <div class="w-full max-w-3xl">
+          <div class="cyber-card rounded-xl p-6 sm:p-8 mb-6 text-center">
+            <p class="text-xs uppercase tracking-widest mb-4" style="color: var(--cyber-pink);">
+              SURVIVE • Score: ${gameState.score}
+            </p>
+            <p class="text-lg sm:text-xl leading-relaxed" style="color: var(--cyber-blue);">${term.definition}</p>
+          </div>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            ${options.map((opt, i) => `
+              <button onclick="survivalAnswer('${opt.id}', '${term.id}')" 
+                      class="cyber-btn p-4 sm:p-6 rounded-lg text-left transition-all survival-option"
+                      data-option="${opt.id}">
+                <span class="font-cyber text-lg" style="color: var(--cyber-yellow);">${opt.term}</span>
+                <br>
+                <span class="text-sm" style="color: var(--cyber-blue);">${opt.viet}</span>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+    
+    async function survivalAnswer(selectedId, correctId) {
+      const correct = selectedId === correctId;
+      await recordAnswer(correctId, correct);
+      
+      gameState.total++;
+      
+      if (correct) {
+        gameState.score++;
+      } else {
+        gameState.lives--;
+        document.getElementById('game-lives').innerHTML = '❤️'.repeat(gameState.lives) + '🖤'.repeat(3 - gameState.lives);
+      }
+      
+      // Visual feedback
+      document.querySelectorAll('.survival-option').forEach(btn => {
+        const optId = btn.dataset.option;
+        if (optId === correctId) {
+          btn.style.borderColor = 'var(--cyber-blue)';
+          btn.style.background = 'rgba(5,217,232,0.2)';
+        } else if (optId === selectedId && !correct) {
+          btn.style.borderColor = 'var(--cyber-pink)';
+          btn.style.background = 'rgba(255,42,109,0.2)';
+        }
+        btn.disabled = true;
+      });
+      
+      setTimeout(() => {
+        gameState.currentIndex++;
+        renderGameContent();
+      }, 800);
+    }
+    
+    // Results
+    function showResult() {
+      const duration = Math.round((Date.now() - gameState.startTime) / 1000);
+      const accuracy = gameState.total > 0 ? Math.round((gameState.score / gameState.total) * 100) : 0;
+      
+      let icon = '💀';
+      let title = 'FLATLINED';
+      
+      if (accuracy >= 90) { icon = '🏆'; title = 'LEGENDARY'; }
+      else if (accuracy >= 70) { icon = '⚡'; title = 'CHROME-JACKED'; }
+      else if (accuracy >= 50) { icon = '🔧'; title = 'NEED MORE CHROME'; }
+      
+      document.getElementById('result-icon').textContent = icon;
+      document.getElementById('result-title').textContent = title;
+      document.getElementById('result-stats').innerHTML = `
+        <p style="color: var(--cyber-blue);">Score: <span class="font-cyber" style="color: var(--cyber-yellow);">${gameState.score}/${gameState.total}</span></p>
+        <p style="color: var(--cyber-blue);">Accuracy: <span class="font-cyber" style="color: var(--cyber-yellow);">${accuracy}%</span></p>
+        <p style="color: var(--cyber-blue);">Time: <span class="font-cyber" style="color: var(--cyber-yellow);">${duration}s</span></p>
+      `;
+      
+      document.getElementById('result-modal').classList.remove('hidden');
+    }
+    
+    function restartGame() {
+      document.getElementById('result-modal').classList.add('hidden');
+      startGame(currentGame);
+    }
+    
+    function closeResult() {
+      document.getElementById('result-modal').classList.add('hidden');
+      backToMenu();
+    }
+    
+    // Dictionary
+    function showDictionary() {
+      showScreen('dictionary-screen');
+      renderDictionary();
+    }
+    
+    function renderCategories() {
+      const container = document.getElementById('category-filters');
+      container.innerHTML = `
+        <button onclick="filterByCategory('all')" class="cyber-btn px-4 py-2 rounded text-sm active-cat" data-cat="all">ALL</button>
+        ${CATEGORIES.map(cat => `
+          <button onclick="filterByCategory('${cat}')" class="cyber-btn px-4 py-2 rounded text-sm" data-cat="${cat}">${cat.toUpperCase()}</button>
+        `).join('')}
+      `;
+    }
+    
+    let currentCategory = 'all';
+    
+    function filterByCategory(category) {
+      currentCategory = category;
+      document.querySelectorAll('[data-cat]').forEach(btn => {
+        btn.style.background = btn.dataset.cat === category ? 'var(--cyber-pink)' : '';
+      });
+      renderDictionary();
+    }
+    
+    function filterDictionary() {
+      renderDictionary();
+    }
+    
+    function renderDictionary() {
+      const search = document.getElementById('dict-search').value.toLowerCase();
+      const container = document.getElementById('dictionary-content');
+      
+      let filtered = AI_TERMS;
+      
+      if (currentCategory !== 'all') {
+        filtered = filtered.filter(t => t.category === currentCategory);
+      }
+      
+      if (search) {
+        filtered = filtered.filter(t => 
+          t.term.toLowerCase().includes(search) ||
+          t.definition.toLowerCase().includes(search) ||
+          t.viet.toLowerCase().includes(search)
+        );
+      }
+      
+      container.innerHTML = filtered.map(term => {
+        const progress = getTermProgress(term.id);
+        const isMastered = progress?.mastered;
+        
+        return `
+          <div class="term-card cyber-card rounded-lg p-4 relative">
+            ${isMastered ? '<div class="absolute top-2 right-2 mastered-badge px-2 py-1 rounded text-xs font-cyber">✓</div>' : ''}
+            <p class="text-xs uppercase tracking-widest mb-2" style="color: var(--cyber-pink);">${term.category}</p>
+            <h3 class="font-cyber text-lg mb-1" style="color: var(--cyber-yellow);">${term.term}</h3>
+            <p class="text-sm mb-2" style="color: var(--cyber-blue);">${term.viet}</p>
+            <p class="text-xs" style="color: rgba(5,217,232,0.7);">${term.definition}</p>
+            ${progress ? `
+              <div class="mt-3 pt-3 border-t border-pink-500/30 text-xs">
+                <span style="color: var(--cyber-blue);">✓ ${progress.correct_count || 0}</span>
+                <span class="mx-2" style="color: var(--cyber-pink);">✗ ${progress.wrong_count || 0}</span>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+      
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full text-center py-12">
+            <p class="font-cyber text-2xl" style="color: var(--cyber-pink);">NO DATA FOUND</p>
+            <p style="color: var(--cyber-blue);">Try a different search term</p>
+          </div>
+        `;
+      }
+    }
+    
+    // Utility
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+    
+    // Initialize
+    initApp();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c53e08c16080ced',t:'MTc2OTYzODgyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
