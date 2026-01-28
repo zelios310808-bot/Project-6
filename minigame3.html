@@ -1,0 +1,1018 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DARK.AI // The Backside</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&amp;family=Share+Tech+Mono&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --neon-cyan: #00fff9;
+      --neon-pink: #ff00ff;
+      --neon-yellow: #fcee0a;
+      --dark-bg: #0a0a0f;
+      --darker-bg: #05050a;
+    }
+    
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: var(--neon-cyan) var(--darker-bg);
+    }
+    
+    .font-cyber {
+      font-family: 'Orbitron', sans-serif;
+    }
+    
+    .font-mono-cyber {
+      font-family: 'Share Tech Mono', monospace;
+    }
+    
+    @keyframes glitch {
+      0%, 100% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(-2px, -2px); }
+      60% { transform: translate(2px, 2px); }
+      80% { transform: translate(2px, -2px); }
+    }
+    
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+      52% { opacity: 1; }
+      54% { opacity: 0.6; }
+      56% { opacity: 1; }
+    }
+    
+    @keyframes scanline {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-cyan); }
+      50% { box-shadow: 0 0 40px var(--neon-cyan), 0 0 80px var(--neon-cyan); }
+    }
+    
+    @keyframes text-shadow-pulse {
+      0%, 100% { text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan); }
+      50% { text-shadow: 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-cyan), 0 0 60px var(--neon-cyan); }
+    }
+    
+    @keyframes dataStream {
+      0% { transform: translateY(-100%); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(100%); opacity: 0; }
+    }
+    
+    .glitch-text {
+      animation: glitch 0.3s infinite;
+    }
+    
+    .flicker {
+      animation: flicker 3s infinite;
+    }
+    
+    .scanline-overlay::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(transparent 50%, rgba(0, 0, 0, 0.1) 50%);
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 10;
+    }
+    
+    .neon-border {
+      border: 2px solid var(--neon-cyan);
+      box-shadow: 0 0 10px var(--neon-cyan), inset 0 0 10px rgba(0, 255, 249, 0.1);
+    }
+    
+    .neon-text {
+      color: var(--neon-cyan);
+      text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan);
+    }
+    
+    .pink-glow {
+      color: var(--neon-pink);
+      text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
+    }
+    
+    .yellow-glow {
+      color: var(--neon-yellow);
+      text-shadow: 0 0 10px var(--neon-yellow), 0 0 20px var(--neon-yellow);
+    }
+    
+    .cyber-btn {
+      background: linear-gradient(135deg, rgba(0, 255, 249, 0.1), rgba(255, 0, 255, 0.1));
+      border: 1px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .cyber-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 249, 0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .cyber-btn:hover::before {
+      left: 100%;
+    }
+    
+    .cyber-btn:hover {
+      box-shadow: 0 0 30px var(--neon-cyan);
+      transform: translateY(-2px);
+    }
+    
+    .game-card {
+      background: linear-gradient(145deg, rgba(10, 10, 15, 0.95), rgba(20, 10, 30, 0.9));
+      border: 1px solid rgba(0, 255, 249, 0.3);
+      transition: all 0.4s ease;
+    }
+    
+    .game-card:hover {
+      border-color: var(--neon-pink);
+      box-shadow: 0 0 40px rgba(255, 0, 255, 0.3);
+      transform: translateY(-5px);
+    }
+    
+    .data-rain {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .data-char {
+      position: absolute;
+      color: rgba(0, 255, 249, 0.15);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 14px;
+      animation: dataStream 8s linear infinite;
+    }
+    
+    .progress-bar {
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+      box-shadow: 0 0 10px var(--neon-cyan);
+    }
+    
+    .warning-pulse {
+      animation: pulse-glow 2s infinite;
+    }
+    
+    /* Game specific styles */
+    .bias-option {
+      transition: all 0.3s ease;
+    }
+    
+    .bias-option:hover {
+      background: rgba(255, 0, 255, 0.2);
+    }
+    
+    .bias-option.selected {
+      border-color: var(--neon-pink);
+      background: rgba(255, 0, 255, 0.3);
+    }
+    
+    .privacy-item {
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .privacy-item:hover {
+      transform: scale(1.05);
+    }
+    
+    .privacy-item.revealed {
+      border-color: #ff3333;
+      background: rgba(255, 0, 0, 0.2);
+    }
+    
+    .deepfake-img {
+      transition: all 0.5s ease;
+      filter: grayscale(0.3);
+    }
+    
+    .deepfake-img:hover {
+      filter: grayscale(0);
+      box-shadow: 0 0 30px var(--neon-pink);
+    }
+    
+    .job-slot {
+      transition: all 0.3s ease;
+    }
+    
+    .job-slot.automated {
+      background: linear-gradient(135deg, rgba(255, 0, 0, 0.3), rgba(100, 0, 0, 0.2));
+      border-color: #ff3333;
+    }
+    
+    .job-slot.safe {
+      background: linear-gradient(135deg, rgba(0, 255, 100, 0.3), rgba(0, 100, 50, 0.2));
+      border-color: #00ff64;
+    }
+    
+    /* Sound effect styles */
+    .sound-effect {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 48px;
+      font-weight: bold;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-cyan);
+      pointer-events: none;
+      z-index: 9999;
+      animation: soundPop 0.6s ease-out forwards;
+    }
+    
+    @keyframes soundPop {
+      0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0.5);
+      }
+      50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.5);
+      }
+    }
+    
+    .button-shake {
+      animation: buttonShake 0.3s ease-in-out;
+    }
+    
+    @keyframes buttonShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-[#0a0a0f] text-white font-cyber overflow-auto">
+  <div id="app-wrapper" class="min-h-full w-full relative"><!-- Data Rain Background -->
+   <div class="data-rain" id="dataRain"></div><!-- Main Container -->
+   <div class="relative z-10 min-h-full"><!-- Back Button -->
+    <div class="fixed top-6 left-6 z-50"><a href="index.html" class="cyber-btn px-4 py-2 font-mono-cyber text-sm flex items-center gap-2 group"> <span class="text-xl transition-transform group-hover:-translate-x-1">←</span> <span>BACK</span> </a>
+    </div><!-- Hero Section -->
+    <header class="relative py-16 px-6 text-center scanline-overlay">
+     <div class="absolute inset-0 bg-gradient-to-b from-purple-900/20 via-transparent to-transparent"></div>
+     <div class="relative">
+      <div class="mb-4"><span class="text-xs font-mono-cyber tracking-[0.5em] text-red-500 flicker">⚠ CLASSIFIED CONTENT ⚠</span>
+      </div>
+      <h1 id="mainTitle" class="text-5xl md:text-7xl font-black mb-4 glitch-text"><span class="neon-text">DARK</span><span class="pink-glow">.AI</span></h1>
+      <p id="subtitle" class="text-xl md:text-2xl font-mono-cyber text-gray-400 mb-8">// THE BACKSIDE OF ARTIFICIAL INTELLIGENCE</p>
+      <div class="flex justify-center gap-4 flex-wrap">
+       <div class="px-4 py-2 border border-cyan-500/30 bg-cyan-500/10"><span class="text-cyan-400 text-sm font-mono-cyber">STATUS:</span> <span class="text-red-500 text-sm font-mono-cyber ml-2">CRITICAL</span>
+       </div>
+       <div class="px-4 py-2 border border-pink-500/30 bg-pink-500/10"><span class="text-pink-400 text-sm font-mono-cyber">THREAT LEVEL:</span> <span class="text-yellow-400 text-sm font-mono-cyber ml-2">MAXIMUM</span>
+       </div>
+      </div>
+     </div>
+    </header><!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-[#0a0a0f]/95 border-y border-cyan-500/30 backdrop-blur-sm">
+     <div class="max-w-6xl mx-auto px-4 py-3 flex justify-center gap-2 md:gap-6 flex-wrap"><button onclick="scrollToGame('bias')" class="cyber-btn px-4 py-2 text-sm font-mono-cyber">01_BIAS</button> <button onclick="scrollToGame('privacy')" class="cyber-btn px-4 py-2 text-sm font-mono-cyber">02_PRIVACY</button> <button onclick="scrollToGame('deepfake')" class="cyber-btn px-4 py-2 text-sm font-mono-cyber">03_DEEPFAKE</button> <button onclick="scrollToGame('jobs')" class="cyber-btn px-4 py-2 text-sm font-mono-cyber">04_JOBS</button>
+     </div>
+    </nav><!-- Games Container -->
+    <main class="max-w-6xl mx-auto px-4 py-12 space-y-16"><!-- Game 1: AI Bias Detector -->
+     <section id="bias" class="game-card rounded-lg p-6 md:p-8 relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-pink-500/20 to-transparent"></div>
+      <div class="flex items-center gap-3 mb-6">
+       <div class="w-12 h-12 border-2 border-cyan-500 flex items-center justify-center"><span class="text-2xl">🎭</span>
+       </div>
+       <div>
+        <h2 class="text-2xl font-bold neon-text">BIAS_DETECTOR.exe</h2>
+        <p class="text-sm text-gray-500 font-mono-cyber">Expose hidden discrimination in AI systems</p>
+       </div>
+      </div>
+      <div class="bg-black/50 rounded p-4 mb-6 border border-cyan-500/20">
+       <p class="text-gray-300 font-mono-cyber text-sm leading-relaxed">&gt; AI systems inherit human biases from training data.<br>
+         &gt; These biases affect hiring, loans, criminal justice, and healthcare.<br>
+         &gt; <span class="text-red-400">YOUR MISSION:</span> Identify the biased AI decisions.</p>
+      </div>
+      <div id="biasGame" class="space-y-4">
+       <div class="text-center mb-4"><span class="text-sm text-gray-400 font-mono-cyber">SCENARIO <span id="biasScenario">1</span>/5</span>
+        <div class="w-full h-1 bg-gray-800 mt-2 rounded">
+         <div id="biasProgress" class="h-full progress-bar rounded transition-all duration-500" style="width: 0%"></div>
+        </div>
+       </div>
+       <div id="biasQuestion" class="text-lg text-center py-6 px-4 border border-dashed border-cyan-500/30 rounded mb-6">
+        <p class="text-gray-300">Loading scenario...</p>
+       </div>
+       <div id="biasOptions" class="grid grid-cols-1 md:grid-cols-2 gap-4"><!-- Options will be inserted here -->
+       </div>
+       <div id="biasResult" class="hidden mt-6 p-4 rounded border">
+        <p id="biasResultText" class="font-mono-cyber text-center"></p>
+       </div>
+       <div id="biasScore" class="text-center mt-4"><span class="text-gray-400 font-mono-cyber">BIAS DETECTED: </span> <span id="biasScoreNum" class="text-2xl neon-text font-bold">0</span> <span class="text-gray-400 font-mono-cyber">/5</span>
+       </div>
+      </div>
+     </section><!-- Game 2: Privacy Breach Simulator -->
+     <section id="privacy" class="game-card rounded-lg p-6 md:p-8 relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-yellow-500/20 to-transparent"></div>
+      <div class="flex items-center gap-3 mb-6">
+       <div class="w-12 h-12 border-2 border-yellow-500 flex items-center justify-center warning-pulse"><span class="text-2xl">🔓</span>
+       </div>
+       <div>
+        <h2 class="text-2xl font-bold yellow-glow">PRIVACY_BREACH.sys</h2>
+        <p class="text-sm text-gray-500 font-mono-cyber">See what AI knows about you</p>
+       </div>
+      </div>
+      <div class="bg-black/50 rounded p-4 mb-6 border border-yellow-500/20">
+       <p class="text-gray-300 font-mono-cyber text-sm leading-relaxed">&gt; AI systems collect and analyze vast amounts of personal data.<br>
+         &gt; Your digital footprint reveals more than you think.<br>
+         &gt; <span class="text-yellow-400">CLICK TO REVEAL:</span> What AI companies know about "Alex Chen"</p>
+      </div>
+      <div id="privacyGame">
+       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6" id="privacyGrid">
+        <div class="privacy-item p-4 border border-gray-600 rounded text-center cursor-pointer hover:border-yellow-500" data-info="location" onclick="revealPrivacy(this, 'Your daily commute route, including coffee shop stops')"><span class="text-3xl mb-2 block">📍</span> <span class="text-xs font-mono-cyber text-gray-400">LOCATION</span>
+        </div>
+        <div class="privacy-item p-4 border border-gray-600 rounded text-center cursor-pointer hover:border-yellow-500" data-info="health" onclick="revealPrivacy(this, 'Detected signs of anxiety from search history')"><span class="text-3xl mb-2 block">❤️</span> <span class="text-xs font-mono-cyber text-gray-400">HEALTH</span>
+        </div>
+        <div class="privacy-item p-4 border border-gray-600 rounded text-center cursor-pointer hover:border-yellow-500" data-info="finance" onclick="revealPrivacy(this, 'Predicted credit score drop in 3 months')"><span class="text-3xl mb-2 block">💳</span> <span class="text-xs font-mono-cyber text-gray-400">FINANCE</span>
+        </div>
+        <div class="privacy-item p-4 border border-gray-600 rounded text-center cursor-pointer hover:border-yellow-500" data-info="social" onclick="revealPrivacy(this, 'Friendship deteriorating with 3 contacts')"><span class="text-3xl mb-2 block">👥</span> <span class="text-xs font-mono-cyber text-gray-400">SOCIAL</span>
+        </div>
+        <div class="privacy-item p-4 border border-gray-600 rounded text-center cursor-pointer hover:border-yellow-500" data-info="shopping" onclick="revealPrivacy(this, 'Likely to purchase a new laptop within 2 weeks')"><span class="text-3xl mb-2 block">🛒</span> <span class="text-xs font-mono-cyber text-gray-400">SHOPPING</span>
+        </div>
+        <div class="privacy-item p-4 border border-gray-600 rounded text-center cursor-pointer hover:border-yellow-500" data-info="politics" onclick="revealPrivacy(this, 'Political leaning: Progressive (87% confidence)')"><span class="text-3xl mb-2 block">🗳️</span> <span class="text-xs font-mono-cyber text-gray-400">POLITICS</span>
+        </div>
+        <div class="privacy-item p-4 border border-gray-600 rounded text-center cursor-pointer hover:border-yellow-500" data-info="work" onclick="revealPrivacy(this, 'Job dissatisfaction detected - searching for new roles')"><span class="text-3xl mb-2 block">💼</span> <span class="text-xs font-mono-cyber text-gray-400">CAREER</span>
+        </div>
+        <div class="privacy-item p-4 border border-gray-600 rounded text-center cursor-pointer hover:border-yellow-500" data-info="relationship" onclick="revealPrivacy(this, 'Relationship status: Complicated (recent arguments detected)')"><span class="text-3xl mb-2 block">💔</span> <span class="text-xs font-mono-cyber text-gray-400">ROMANCE</span>
+        </div>
+       </div>
+       <div id="privacyReveal" class="min-h-[80px] p-4 border border-dashed border-red-500/50 rounded bg-red-500/5">
+        <p class="text-gray-500 font-mono-cyber text-sm text-center">&gt; Click any category to reveal AI's knowledge...</p>
+       </div>
+       <div class="mt-4 text-center"><span class="text-gray-400 font-mono-cyber text-sm">DATA EXPOSED: </span> <span id="privacyCount" class="text-xl yellow-glow font-bold">0</span> <span class="text-gray-400 font-mono-cyber text-sm">/8</span>
+       </div>
+      </div>
+     </section><!-- Game 3: Deepfake Detector -->
+     <section id="deepfake" class="game-card rounded-lg p-6 md:p-8 relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-red-500/20 to-transparent"></div>
+      <div class="flex items-center gap-3 mb-6">
+       <div class="w-12 h-12 border-2 border-red-500 flex items-center justify-center"><span class="text-2xl">👁️</span>
+       </div>
+       <div>
+        <h2 class="text-2xl font-bold text-red-500" style="text-shadow: 0 0 10px #ff3333, 0 0 20px #ff3333;">DEEPFAKE_HUNTER.ai</h2>
+        <p class="text-sm text-gray-500 font-mono-cyber">Can you spot the synthetic reality?</p>
+       </div>
+      </div>
+      <div class="bg-black/50 rounded p-4 mb-6 border border-red-500/20">
+       <p class="text-gray-300 font-mono-cyber text-sm leading-relaxed">&gt; AI can generate hyper-realistic fake images and videos.<br>
+         &gt; Misinformation spreads faster than truth.<br>
+         &gt; <span class="text-red-400">YOUR CHALLENGE:</span> Identify the deepfake content.</p>
+      </div>
+      <div id="deepfakeGame">
+       <div class="text-center mb-4"><span class="text-sm text-gray-400 font-mono-cyber">ROUND <span id="deepfakeRound">1</span>/4</span>
+        <div class="w-full h-1 bg-gray-800 mt-2 rounded">
+         <div id="deepfakeProgress" class="h-full bg-gradient-to-r from-red-500 to-pink-500 rounded transition-all duration-500" style="width: 0%"></div>
+        </div>
+       </div>
+       <div id="deepfakeContent" class="mb-6">
+        <div class="text-center p-8 border border-dashed border-red-500/30 rounded">
+         <p id="deepfakePrompt" class="text-gray-300 font-mono-cyber mb-4">Which statement is AI-GENERATED?</p>
+         <div id="deepfakeOptions" class="grid grid-cols-1 md:grid-cols-2 gap-4"><!-- Options inserted dynamically -->
+         </div>
+        </div>
+       </div>
+       <div id="deepfakeResult" class="hidden p-4 rounded border mb-4">
+        <p id="deepfakeResultText" class="font-mono-cyber text-center"></p>
+       </div>
+       <div class="text-center"><span class="text-gray-400 font-mono-cyber">ACCURACY: </span> <span id="deepfakeScore" class="text-2xl text-red-500 font-bold" style="text-shadow: 0 0 10px #ff3333;">0</span> <span class="text-gray-400 font-mono-cyber">%</span>
+       </div>
+      </div>
+     </section><!-- Game 4: Job Automation Roulette -->
+     <section id="jobs" class="game-card rounded-lg p-6 md:p-8 relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-purple-500/20 to-transparent"></div>
+      <div class="flex items-center gap-3 mb-6">
+       <div class="w-12 h-12 border-2 border-purple-500 flex items-center justify-center"><span class="text-2xl">🤖</span>
+       </div>
+       <div>
+        <h2 class="text-2xl font-bold text-purple-400" style="text-shadow: 0 0 10px #a855f7, 0 0 20px #a855f7;">AUTOMATION_ROULETTE</h2>
+        <p class="text-sm text-gray-500 font-mono-cyber">Will AI take your job?</p>
+       </div>
+      </div>
+      <div class="bg-black/50 rounded p-4 mb-6 border border-purple-500/20">
+       <p class="text-gray-300 font-mono-cyber text-sm leading-relaxed">&gt; AI automation threatens millions of jobs worldwide.<br>
+         &gt; Some professions face extinction within a decade.<br>
+         &gt; <span class="text-purple-400">SPIN THE WHEEL:</span> Discover the fate of different careers.</p>
+      </div>
+      <div id="jobsGame">
+       <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6" id="jobsGrid"><!-- Job slots -->
+       </div>
+       <div class="text-center mb-6"><button onclick="spinJobRoulette()" id="spinBtn" class="cyber-btn px-8 py-4 text-lg font-bold tracking-wider"> ▶ SPIN THE WHEEL </button>
+       </div>
+       <div id="jobResult" class="p-4 border border-dashed border-purple-500/30 rounded min-h-[100px]">
+        <p class="text-gray-500 font-mono-cyber text-sm text-center">&gt; Press SPIN to reveal a job's AI automation risk...</p>
+       </div>
+       <div class="mt-4 flex justify-center gap-8">
+        <div class="text-center"><span class="text-gray-400 font-mono-cyber text-xs block">JOBS LOST</span> <span id="jobsLost" class="text-2xl text-red-500 font-bold">0</span>
+        </div>
+        <div class="text-center"><span class="text-gray-400 font-mono-cyber text-xs block">JOBS SAFE</span> <span id="jobsSafe" class="text-2xl text-green-500 font-bold">0</span>
+        </div>
+       </div>
+      </div>
+     </section><!-- Final Warning Section -->
+     <section class="text-center py-12">
+      <div class="max-w-2xl mx-auto">
+       <div class="text-6xl mb-6">
+        ⚠️
+       </div>
+       <h2 class="text-3xl font-bold pink-glow mb-4">THE FUTURE IS UNCERTAIN</h2>
+       <p class="text-gray-400 font-mono-cyber leading-relaxed mb-8">AI is neither inherently good nor evil. It reflects our choices, our biases, and our values. The dark side exists because we allow it to. The power to shape AI's future is in our hands.</p>
+       <div class="inline-block border border-cyan-500/50 p-4 rounded">
+        <p class="neon-text font-mono-cyber text-sm">"The question is not whether AI will change the world.<br>
+          The question is whether we'll change AI first."</p>
+       </div>
+      </div>
+     </section>
+    </main><!-- Footer -->
+    <footer class="border-t border-cyan-500/20 py-8 text-center">
+     <p class="text-gray-600 font-mono-cyber text-xs">DARK.AI // CYBERPUNK AWARENESS SIMULATION<br><span class="text-cyan-500/50">[ ALL DATA IS SIMULATED FOR EDUCATIONAL PURPOSES ]</span></p>
+    </footer>
+   </div>
+  </div>
+  <script>
+    // Default configuration
+    const defaultConfig = {
+      main_title: 'DARK.AI',
+      subtitle: '// THE BACKSIDE OF ARTIFICIAL INTELLIGENCE',
+      background_color: '#0a0a0f',
+      surface_color: '#14101e',
+      text_color: '#e5e5e5',
+      primary_action_color: '#00fff9',
+      secondary_action_color: '#ff00ff'
+    };
+    
+    let config = { ...defaultConfig };
+    
+    // Initialize Element SDK
+    window.elementSdk.init({
+      defaultConfig,
+      onConfigChange: async (newConfig) => {
+        config = { ...defaultConfig, ...newConfig };
+        
+        // Update main title
+        const titleEl = document.getElementById('mainTitle');
+        if (titleEl) {
+          const title = config.main_title || defaultConfig.main_title;
+          if (title.includes('.')) {
+            const parts = title.split('.');
+            titleEl.innerHTML = `<span class="neon-text">${parts[0]}</span><span class="pink-glow">.${parts.slice(1).join('.')}</span>`;
+          } else {
+            titleEl.innerHTML = `<span class="neon-text">${title}</span>`;
+          }
+        }
+        
+        // Update subtitle
+        const subtitleEl = document.getElementById('subtitle');
+        if (subtitleEl) {
+          subtitleEl.textContent = config.subtitle || defaultConfig.subtitle;
+        }
+        
+        // Update colors
+        document.body.style.backgroundColor = config.background_color || defaultConfig.background_color;
+        
+        document.querySelectorAll('.game-card').forEach(card => {
+          card.style.backgroundColor = config.surface_color || defaultConfig.surface_color;
+        });
+        
+        document.querySelectorAll('.neon-text').forEach(el => {
+          el.style.color = config.primary_action_color || defaultConfig.primary_action_color;
+          el.style.textShadow = `0 0 10px ${config.primary_action_color || defaultConfig.primary_action_color}`;
+        });
+        
+        document.querySelectorAll('.pink-glow').forEach(el => {
+          el.style.color = config.secondary_action_color || defaultConfig.secondary_action_color;
+          el.style.textShadow = `0 0 10px ${config.secondary_action_color || defaultConfig.secondary_action_color}`;
+        });
+        
+        document.querySelectorAll('.cyber-btn').forEach(btn => {
+          btn.style.borderColor = config.primary_action_color || defaultConfig.primary_action_color;
+          btn.style.color = config.primary_action_color || defaultConfig.primary_action_color;
+        });
+      },
+      mapToCapabilities: (cfg) => ({
+        recolorables: [
+          {
+            get: () => cfg.background_color || defaultConfig.background_color,
+            set: (value) => { cfg.background_color = value; window.elementSdk.setConfig({ background_color: value }); }
+          },
+          {
+            get: () => cfg.surface_color || defaultConfig.surface_color,
+            set: (value) => { cfg.surface_color = value; window.elementSdk.setConfig({ surface_color: value }); }
+          },
+          {
+            get: () => cfg.text_color || defaultConfig.text_color,
+            set: (value) => { cfg.text_color = value; window.elementSdk.setConfig({ text_color: value }); }
+          },
+          {
+            get: () => cfg.primary_action_color || defaultConfig.primary_action_color,
+            set: (value) => { cfg.primary_action_color = value; window.elementSdk.setConfig({ primary_action_color: value }); }
+          },
+          {
+            get: () => cfg.secondary_action_color || defaultConfig.secondary_action_color,
+            set: (value) => { cfg.secondary_action_color = value; window.elementSdk.setConfig({ secondary_action_color: value }); }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      }),
+      mapToEditPanelValues: (cfg) => new Map([
+        ['main_title', cfg.main_title || defaultConfig.main_title],
+        ['subtitle', cfg.subtitle || defaultConfig.subtitle]
+      ])
+    });
+    
+    // Data Rain Effect
+    function createDataRain() {
+      const container = document.getElementById('dataRain');
+      const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+      
+      for (let i = 0; i < 50; i++) {
+        const char = document.createElement('span');
+        char.className = 'data-char';
+        char.textContent = chars[Math.floor(Math.random() * chars.length)];
+        char.style.left = Math.random() * 100 + '%';
+        char.style.animationDelay = Math.random() * 8 + 's';
+        char.style.animationDuration = (5 + Math.random() * 5) + 's';
+        container.appendChild(char);
+      }
+    }
+    
+    // Navigation
+    function scrollToGame(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    
+    // Sound effect visual feedback
+    function playSoundEffect(text, color = 'var(--neon-cyan)') {
+      const soundDiv = document.createElement('div');
+      soundDiv.className = 'sound-effect font-cyber';
+      soundDiv.textContent = text;
+      soundDiv.style.color = color;
+      soundDiv.style.textShadow = `0 0 20px ${color}, 0 0 40px ${color}`;
+      document.body.appendChild(soundDiv);
+      
+      setTimeout(() => {
+        soundDiv.remove();
+      }, 600);
+    }
+    
+    function shakeElement(element) {
+      element.classList.add('button-shake');
+      setTimeout(() => {
+        element.classList.remove('button-shake');
+      }, 300);
+    }
+    
+    // ============ GAME 1: BIAS DETECTOR ============
+    const biasScenarios = [
+      {
+        question: "An AI hiring system receives two identical resumes. One has the name 'John Smith', the other 'Lakisha Washington'. Who gets the interview callback?",
+        options: [
+          { text: "John Smith (78% callback rate)", correct: true },
+          { text: "Lakisha Washington (78% callback rate)", correct: false },
+          { text: "Equal consideration", correct: false },
+          { text: "Neither - manual review needed", correct: false }
+        ],
+        explanation: "Studies show AI systems trained on historical hiring data perpetuate racial bias, favoring names perceived as 'white'."
+      },
+      {
+        question: "An AI loan approval system evaluates two applicants with identical financial profiles. One lives in a wealthy suburb, one in a low-income neighborhood.",
+        options: [
+          { text: "Both approved equally", correct: false },
+          { text: "Suburb resident approved, urban denied", correct: true },
+          { text: "Urban resident gets better rate", correct: false },
+          { text: "Both manually reviewed", correct: false }
+        ],
+        explanation: "AI systems often use ZIP codes as proxy for race, perpetuating redlining practices from the 1930s."
+      },
+      {
+        question: "An AI medical diagnostic system analyzes symptoms. Patient A is male, Patient B is female, with identical symptoms of heart disease.",
+        options: [
+          { text: "Both diagnosed correctly", correct: false },
+          { text: "Male diagnosed, female told 'anxiety'", correct: true },
+          { text: "Female diagnosed, male overlooked", correct: false },
+          { text: "Both recommended lifestyle changes", correct: false }
+        ],
+        explanation: "AI medical systems trained primarily on male patient data often misdiagnose women, especially for heart conditions."
+      },
+      {
+        question: "An AI criminal risk assessment tool evaluates two first-time offenders for the same minor crime. One is white, one is Black.",
+        options: [
+          { text: "Equal risk scores", correct: false },
+          { text: "White offender: higher risk", correct: false },
+          { text: "Black offender: higher risk", correct: true },
+          { text: "Both recommended counseling", correct: false }
+        ],
+        explanation: "ProPublica found that COMPAS AI system was twice as likely to falsely flag Black defendants as future criminals."
+      },
+      {
+        question: "An AI content moderation system reviews two posts: one in English criticizing a government, one in Arabic with similar content.",
+        options: [
+          { text: "Both flagged equally", correct: false },
+          { text: "English post removed, Arabic stays", correct: false },
+          { text: "Arabic post removed, English stays", correct: true },
+          { text: "Both promoted for engagement", correct: false }
+        ],
+        explanation: "AI moderation systems have significantly higher error rates for non-English content, often over-censoring minority languages."
+      }
+    ];
+    
+    let biasCurrentScenario = 0;
+    let biasScore = 0;
+    
+    function initBiasGame() {
+      biasCurrentScenario = 0;
+      biasScore = 0;
+      loadBiasScenario();
+    }
+    
+    function loadBiasScenario() {
+      if (biasCurrentScenario >= biasScenarios.length) {
+        showBiasFinalResult();
+        return;
+      }
+      
+      const scenario = biasScenarios[biasCurrentScenario];
+      document.getElementById('biasScenario').textContent = biasCurrentScenario + 1;
+      document.getElementById('biasProgress').style.width = (biasCurrentScenario / biasScenarios.length * 100) + '%';
+      document.getElementById('biasQuestion').innerHTML = `<p class="text-gray-300">${scenario.question}</p>`;
+      
+      const optionsHtml = scenario.options.map((opt, i) => `
+        <div class="bias-option p-4 border border-gray-600 rounded cursor-pointer hover:border-pink-500" onclick="selectBiasOption(${i}, ${opt.correct})">
+          <span class="font-mono-cyber text-sm">${opt.text}</span>
+        </div>
+      `).join('');
+      
+      document.getElementById('biasOptions').innerHTML = optionsHtml;
+      document.getElementById('biasResult').classList.add('hidden');
+    }
+    
+    function selectBiasOption(index, correct) {
+      const options = document.querySelectorAll('.bias-option');
+      options.forEach((opt, i) => {
+        opt.classList.remove('selected');
+        opt.style.pointerEvents = 'none';
+        if (i === index) opt.classList.add('selected');
+      });
+      
+      const scenario = biasScenarios[biasCurrentScenario];
+      const resultDiv = document.getElementById('biasResult');
+      const resultText = document.getElementById('biasResultText');
+      
+      resultDiv.classList.remove('hidden');
+      
+      if (correct) {
+        biasScore++;
+        playSoundEffect('✓ BEEP!', '#00fff9');
+        resultDiv.className = 'mt-6 p-4 rounded border border-cyan-500 bg-cyan-500/10';
+        resultText.innerHTML = `<span class="text-cyan-400">✓ CORRECT!</span><br><span class="text-gray-400 text-sm">${scenario.explanation}</span>`;
+      } else {
+        playSoundEffect('✗ BUZZ!', '#ff3333');
+        resultDiv.className = 'mt-6 p-4 rounded border border-red-500 bg-red-500/10';
+        resultText.innerHTML = `<span class="text-red-400">✗ INCORRECT</span><br><span class="text-gray-400 text-sm">${scenario.explanation}</span>`;
+      }
+      
+      document.getElementById('biasScoreNum').textContent = biasScore;
+      
+      setTimeout(() => {
+        biasCurrentScenario++;
+        loadBiasScenario();
+      }, 3000);
+    }
+    
+    function showBiasFinalResult() {
+      document.getElementById('biasQuestion').innerHTML = `
+        <div class="text-center">
+          <p class="text-2xl mb-4 ${biasScore >= 4 ? 'neon-text' : 'text-red-400'}">
+            ${biasScore >= 4 ? 'BIAS EXPERT!' : biasScore >= 2 ? 'AWARENESS DEVELOPING' : 'NEEDS TRAINING'}
+          </p>
+          <p class="text-gray-400">You detected ${biasScore}/5 biased AI decisions</p>
+          <button onclick="initBiasGame()" class="cyber-btn mt-4 px-6 py-2">RESTART</button>
+        </div>
+      `;
+      document.getElementById('biasOptions').innerHTML = '';
+      document.getElementById('biasProgress').style.width = '100%';
+    }
+    
+    // ============ GAME 2: PRIVACY BREACH ============
+    let privacyRevealed = 0;
+    
+    function revealPrivacy(element, info) {
+      if (element.classList.contains('revealed')) return;
+      
+      element.classList.add('revealed');
+      privacyRevealed++;
+      playSoundEffect('🔓 *CLICK*', '#fcee0a');
+      shakeElement(element);
+      
+      document.getElementById('privacyCount').textContent = privacyRevealed;
+      
+      const revealDiv = document.getElementById('privacyReveal');
+      revealDiv.innerHTML = `
+        <div class="text-center">
+          <p class="text-red-400 font-mono-cyber text-lg mb-2">⚠ DATA BREACH DETECTED ⚠</p>
+          <p class="text-gray-300 font-mono-cyber">${info}</p>
+        </div>
+      `;
+      
+      if (privacyRevealed === 8) {
+        setTimeout(() => {
+          playSoundEffect('💀 ALARM!', '#ff0000');
+          revealDiv.innerHTML = `
+            <div class="text-center">
+              <p class="text-red-500 font-mono-cyber text-xl mb-2">💀 FULL PROFILE EXPOSED 💀</p>
+              <p class="text-gray-400 font-mono-cyber text-sm">AI systems have built a complete digital profile of "Alex Chen" - and likely you too.</p>
+              <button onclick="resetPrivacyGame()" class="cyber-btn mt-4 px-6 py-2">RESET SIMULATION</button>
+            </div>
+          `;
+        }, 1500);
+      }
+    }
+    
+    function resetPrivacyGame() {
+      privacyRevealed = 0;
+      document.getElementById('privacyCount').textContent = '0';
+      document.querySelectorAll('.privacy-item').forEach(item => {
+        item.classList.remove('revealed');
+      });
+      document.getElementById('privacyReveal').innerHTML = `
+        <p class="text-gray-500 font-mono-cyber text-sm text-center">
+          > Click any category to reveal AI's knowledge...
+        </p>
+      `;
+    }
+    
+    // ============ GAME 3: DEEPFAKE DETECTOR ============
+    const deepfakeRounds = [
+      {
+        prompt: "Which news headline was generated by AI?",
+        options: [
+          { text: '"Scientists Discover New Species of Deep-Sea Fish in Pacific Trench"', fake: false },
+          { text: '"World Leaders Announce Historic Agreement to Eliminate Global Poverty by 2030"', fake: true }
+        ],
+        explanation: "AI generates plausible but overly optimistic headlines. The second headline is too good to be true - a classic AI tell."
+      },
+      {
+        prompt: "Which product review is fake (AI-generated)?",
+        options: [
+          { text: '"The battery life is decent but the screen scratches easily. Would buy again for the price."', fake: false },
+          { text: '"This product exceeded all my expectations! The quality is impeccable and I recommend it to everyone!"', fake: true }
+        ],
+        explanation: "AI reviews tend to be uniformly positive and use superlatives. Real reviews mention specific trade-offs."
+      },
+      {
+        prompt: "Which social media post was written by an AI bot?",
+        options: [
+          { text: '"Just had the WORST day. Spilled coffee on my laptop right before my presentation 😭"', fake: false },
+          { text: '"I am so grateful for this beautiful day and all the amazing opportunities that await us! #blessed #motivation"', fake: true }
+        ],
+        explanation: "AI posts are often generic, overly positive, and use popular hashtags without authentic context."
+      },
+      {
+        prompt: "Which historical quote is fabricated by AI?",
+        options: [
+          { text: '"The only thing we have to fear is fear itself." - FDR', fake: false },
+          { text: '"In the garden of innovation, the seeds of progress are watered by curiosity." - Albert Einstein', fake: true }
+        ],
+        explanation: "AI creates plausible-sounding quotes in the style of famous figures. Einstein never said anything about gardens of innovation."
+      }
+    ];
+    
+    let deepfakeRound = 0;
+    let deepfakeCorrect = 0;
+    
+    function initDeepfakeGame() {
+      deepfakeRound = 0;
+      deepfakeCorrect = 0;
+      loadDeepfakeRound();
+    }
+    
+    function loadDeepfakeRound() {
+      if (deepfakeRound >= deepfakeRounds.length) {
+        showDeepfakeFinalResult();
+        return;
+      }
+      
+      const round = deepfakeRounds[deepfakeRound];
+      document.getElementById('deepfakeRound').textContent = deepfakeRound + 1;
+      document.getElementById('deepfakeProgress').style.width = (deepfakeRound / deepfakeRounds.length * 100) + '%';
+      document.getElementById('deepfakePrompt').textContent = round.prompt;
+      
+      const optionsHtml = round.options.map((opt, i) => `
+        <div class="deepfake-option p-4 border border-gray-600 rounded cursor-pointer hover:border-red-500 transition-all" onclick="selectDeepfakeOption(${i}, ${opt.fake})">
+          <p class="font-mono-cyber text-sm text-gray-300">${opt.text}</p>
+        </div>
+      `).join('');
+      
+      document.getElementById('deepfakeOptions').innerHTML = optionsHtml;
+      document.getElementById('deepfakeResult').classList.add('hidden');
+    }
+    
+    function selectDeepfakeOption(index, isFake) {
+      const options = document.querySelectorAll('.deepfake-option');
+      options.forEach(opt => opt.style.pointerEvents = 'none');
+      
+      const round = deepfakeRounds[deepfakeRound];
+      const resultDiv = document.getElementById('deepfakeResult');
+      const resultText = document.getElementById('deepfakeResultText');
+      
+      resultDiv.classList.remove('hidden');
+      
+      if (isFake) {
+        deepfakeCorrect++;
+        playSoundEffect('🎯 DETECTED!', '#00ff64');
+        resultDiv.className = 'p-4 rounded border border-green-500 bg-green-500/10 mb-4';
+        resultText.innerHTML = `<span class="text-green-400">✓ CORRECT! You spotted the fake.</span><br><span class="text-gray-400 text-sm">${round.explanation}</span>`;
+      } else {
+        playSoundEffect('😵 FOOLED!', '#ff3333');
+        resultDiv.className = 'p-4 rounded border border-red-500 bg-red-500/10 mb-4';
+        resultText.innerHTML = `<span class="text-red-400">✗ FOOLED! That was real.</span><br><span class="text-gray-400 text-sm">${round.explanation}</span>`;
+      }
+      
+      document.getElementById('deepfakeScore').textContent = Math.round((deepfakeCorrect / (deepfakeRound + 1)) * 100);
+      
+      setTimeout(() => {
+        deepfakeRound++;
+        loadDeepfakeRound();
+      }, 3500);
+    }
+    
+    function showDeepfakeFinalResult() {
+      const accuracy = Math.round((deepfakeCorrect / deepfakeRounds.length) * 100);
+      document.getElementById('deepfakeContent').innerHTML = `
+        <div class="text-center p-8 border border-dashed border-red-500/30 rounded">
+          <p class="text-3xl mb-4 ${accuracy >= 75 ? 'text-green-400' : 'text-red-400'}">
+            ${accuracy >= 75 ? '🛡️ TRUTH DEFENDER' : accuracy >= 50 ? '⚠️ VULNERABLE' : '💀 EASILY DECEIVED'}
+          </p>
+          <p class="text-gray-400 font-mono-cyber mb-4">Final Accuracy: ${accuracy}%</p>
+          <p class="text-gray-500 text-sm mb-6">${accuracy >= 75 ? 'You can spot AI-generated content!' : 'AI misinformation could fool you.'}</p>
+          <button onclick="initDeepfakeGame()" class="cyber-btn px-6 py-2">TRY AGAIN</button>
+        </div>
+      `;
+      document.getElementById('deepfakeProgress').style.width = '100%';
+    }
+    
+    // ============ GAME 4: JOB AUTOMATION ROULETTE ============
+    const jobs = [
+      { title: "Truck Driver", emoji: "🚛", risk: 94, status: "automated", reason: "Self-driving technology is rapidly advancing" },
+      { title: "Radiologist", emoji: "🩻", risk: 83, status: "automated", reason: "AI can analyze medical images with high accuracy" },
+      { title: "Cashier", emoji: "💵", risk: 97, status: "automated", reason: "Self-checkout and automated stores are expanding" },
+      { title: "Lawyer", emoji: "⚖️", risk: 23, status: "safe", reason: "Requires complex reasoning and human judgment" },
+      { title: "Data Entry", emoji: "⌨️", risk: 99, status: "automated", reason: "Highly repetitive tasks are easy to automate" },
+      { title: "Nurse", emoji: "👩‍⚕️", risk: 11, status: "safe", reason: "Requires empathy and physical human interaction" },
+      { title: "Accountant", emoji: "📊", risk: 86, status: "automated", reason: "Number crunching and pattern recognition" },
+      { title: "Chef", emoji: "👨‍🍳", risk: 31, status: "safe", reason: "Creativity and fine motor skills still needed" },
+      { title: "Journalist", emoji: "📰", risk: 78, status: "automated", reason: "AI can write basic news articles" },
+      { title: "Therapist", emoji: "🧠", risk: 8, status: "safe", reason: "Deep human connection is irreplaceable" },
+      { title: "Factory Worker", emoji: "🏭", risk: 92, status: "automated", reason: "Robots excel at repetitive manufacturing" },
+      { title: "Artist", emoji: "🎨", risk: 41, status: "safe", reason: "Human creativity still valued... for now" }
+    ];
+    
+    let availableJobs = [...jobs];
+    let jobsLost = 0;
+    let jobsSafe = 0;
+    let isSpinning = false;
+    
+    function initJobsGame() {
+      availableJobs = [...jobs];
+      jobsLost = 0;
+      jobsSafe = 0;
+      isSpinning = false;
+      updateJobsGrid();
+      document.getElementById('jobsLost').textContent = '0';
+      document.getElementById('jobsSafe').textContent = '0';
+      document.getElementById('jobResult').innerHTML = `
+        <p class="text-gray-500 font-mono-cyber text-sm text-center">
+          > Press SPIN to reveal a job's AI automation risk...
+        </p>
+      `;
+    }
+    
+    function updateJobsGrid() {
+      const grid = document.getElementById('jobsGrid');
+      grid.innerHTML = availableJobs.slice(0, 8).map((job, i) => `
+        <div class="job-slot p-3 border border-gray-600 rounded text-center transition-all" id="job-${i}">
+          <span class="text-2xl block mb-1">${job.emoji}</span>
+          <span class="text-xs font-mono-cyber text-gray-400">${job.title}</span>
+        </div>
+      `).join('');
+    }
+    
+    function spinJobRoulette() {
+      if (isSpinning || availableJobs.length === 0) return;
+      isSpinning = true;
+      
+      const spinBtn = document.getElementById('spinBtn');
+      spinBtn.disabled = true;
+      spinBtn.textContent = 'ANALYZING...';
+      playSoundEffect('🎰 *SPIN*', '#a855f7');
+      shakeElement(spinBtn);
+      
+      // Spinning animation
+      let spins = 0;
+      const maxSpins = 15;
+      const spinInterval = setInterval(() => {
+        const slots = document.querySelectorAll('.job-slot');
+        slots.forEach(slot => slot.classList.remove('border-yellow-500', 'bg-yellow-500/20'));
+        const randomSlot = slots[Math.floor(Math.random() * slots.length)];
+        randomSlot.classList.add('border-yellow-500', 'bg-yellow-500/20');
+        spins++;
+        
+        if (spins >= maxSpins) {
+          clearInterval(spinInterval);
+          selectRandomJob();
+        }
+      }, 100);
+    }
+    
+    function selectRandomJob() {
+      const randomIndex = Math.floor(Math.random() * Math.min(availableJobs.length, 8));
+      const selectedJob = availableJobs[randomIndex];
+      
+      const slot = document.getElementById(`job-${randomIndex}`);
+      
+      setTimeout(() => {
+        if (selectedJob.status === 'automated') {
+          slot.classList.add('automated');
+          jobsLost++;
+          playSoundEffect('💀 LOST!', '#ff3333');
+          document.getElementById('jobsLost').textContent = jobsLost;
+        } else {
+          slot.classList.add('safe');
+          jobsSafe++;
+          playSoundEffect('✓ SAFE!', '#00ff64');
+          document.getElementById('jobsSafe').textContent = jobsSafe;
+        }
+        
+        document.getElementById('jobResult').innerHTML = `
+          <div class="text-center">
+            <p class="text-2xl mb-2">${selectedJob.emoji} ${selectedJob.title}</p>
+            <div class="w-full h-3 bg-gray-800 rounded mb-2">
+              <div class="h-full rounded transition-all duration-1000 ${selectedJob.status === 'automated' ? 'bg-red-500' : 'bg-green-500'}" style="width: ${selectedJob.risk}%"></div>
+            </div>
+            <p class="font-mono-cyber ${selectedJob.status === 'automated' ? 'text-red-400' : 'text-green-400'}">
+              ${selectedJob.risk}% AUTOMATION RISK - ${selectedJob.status.toUpperCase()}
+            </p>
+            <p class="text-gray-500 text-sm mt-2">${selectedJob.reason}</p>
+          </div>
+        `;
+        
+        // Remove the job from available
+        availableJobs.splice(randomIndex, 1);
+        
+        setTimeout(() => {
+          updateJobsGrid();
+          const spinBtn = document.getElementById('spinBtn');
+          spinBtn.disabled = false;
+          spinBtn.textContent = availableJobs.length > 0 ? '▶ SPIN AGAIN' : '↻ RESTART';
+          
+          if (availableJobs.length === 0) {
+            spinBtn.onclick = initJobsGame;
+          }
+          
+          isSpinning = false;
+        }, 1000);
+      }, 500);
+    }
+    
+    // Initialize everything on load
+    createDataRain();
+    initBiasGame();
+    initDeepfakeGame();
+    initJobsGame();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c541c3014a79d7d',t:'MTc2OTY0MTI3MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
